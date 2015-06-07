@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--shifted-0.xml-->
+<!--Standard 2-Dim domain shifted Schwefel function [0,1000]-->
+<CellMLTimeSeriesFit>
+	<GA InitialPopulation="100" MaxPopulation="100" Generations="100" Mutation_proportion="0.2" Crossover_proportion="0.70">
+		<Alleles>
+			<Allele Name="x1" LowerBound="0.0" UpperBound="1e3"/>
+			<Allele Name="x2" LowerBound="0.0" UpperBound="1e3"/>
+		</Alleles>
+	</GA>
+	<VirtualExperiments>
+		<VirtualExperiment TestFunction="shifted" ModelFilePath="ShiftedSchwefel2D.cellml" ResultColumn="3">
+			<!--Only the TestFunction attribute is accessed by the program if SEQMODE defined-->
+			<AssessmentPoints>
+				<AssessmentPoint time="0.0" target="1" />
+				<AssessmentPoint time="0.34" target="1" />
+				<AssessmentPoint time="1.34" target="1" />
+				<AssessmentPoint time="2.0" target="1" />
+				<AssessmentPoint time="2.34" target="1" />
+				<AssessmentPoint time="3.0" target="1" />
+				<AssessmentPoint time="3.34" target="1" />
+				<AssessmentPoint time="4.0" target="1" />
+				<AssessmentPoint time="4.34" target="1" />
+				<AssessmentPoint time="5.0" target="1" />
+				<AssessmentPoint time="5.34" target="1" />
+			</AssessmentPoints>
+		</VirtualExperiment>
+	</VirtualExperiments>
+</CellMLTimeSeriesFit>
+
