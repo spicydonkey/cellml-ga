@@ -46,12 +46,13 @@
 ### Fixes to GAEngine.h
 * Genome::same contained bitwise AND where logical AND more appropriate
 * GAEngine::print_stage to output fittest genome in each generation
-	verbosity:
+
 verbosity | output
 --|------------
 0 | fittest run
 1 | fittest gen & fittest so far & fittest run
 1< | pop of each gen & fittest run
+
 	* test if "fittest gen" is correctly being summarised
 	* Tested. working correctly
 * modify print_stage output to:
