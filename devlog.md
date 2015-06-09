@@ -7,12 +7,14 @@
 * BUG in select_weighted function in GAEngine.h
 * test function: inf_schwefel
 * Bug seems to be fixed by assigning summand of an invalid genome to 0 not 99999... 
+
 ### Negative valued genomes
 * GA implementaion in GAEngine.h expects non-negative fitness
 * test function: neg_schwefel
 * Negative fit genomes are correctly ranked higher in population but never selected?
 * 0 fit genomes are assigned 1.0/0.00...01 in calculation of cum-sum which is reasonable
 * edit print_stage to tag negative fitness genomes with "!"
+
 ### INFINITE vs very large (~999999999.9999) valued fitness
 * inf_schwefel tests never show the population (nor fittest)
 * converge with original GA implementation
@@ -31,6 +33,7 @@ experiment.cpp
 	* unused VariableHolder "params"
 	* var_template's dynamics in program
 	* unreferenced object "comps"
+
 GAEngine.h
 	* Genome::same function uses bitwise & on bools
 	* Each generation's fittest should be output as a summary
@@ -40,6 +43,7 @@ GAEngine.h
 ## 09.06.2015
 ### Git version control
 * Unable to get connection to remote repo on GitHub from Cluster
+
 ### Fixes to GAEngine.h
 * Genome::same contained bitwise AND where logical AND more appropriate
 * GAEngine::print_stage to output fittest genome in each generation
@@ -54,6 +58,7 @@ GAEngine.h
 		0:	fittest in the whole run (NO CHANGES)
 		1:	fittest of each generation & fittest in the whole run
 		1<:	population of each generation & fittest in the whole run (NO CHANGES)
+
 ### Add detailed feedback on genetic operations for verbosity > 2
 * Selection: printf("Adding %d to population\n",mem);
 
