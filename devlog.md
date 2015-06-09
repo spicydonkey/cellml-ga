@@ -53,13 +53,13 @@ verbosity	|	output
 1		| fittest gen & fittest so far & fittest run
 1<		| pop of each gen & fittest run
 
-  * test if "fittest gen" is correctly being summarised
-  * Tested. working correctly
-* modify print_stage output to:
-	verbosity:
-		0:	fittest in the whole run (NO CHANGES)
-		1:	fittest of each generation & fittest in the whole run
-		1<:	population of each generation & fittest in the whole run (NO CHANGES)
+* modify print_stage output:
+
+verbosity	|	output
+----------------|----------------
+0		| fittest in the whole run (NO CHANGES)
+1		| **fittest of each generation & fittest in the whole run**
+1<		| population of each generation & fittest in the whole run (NO CHANGES)
 
 ### Add detailed feedback on genetic operations for verbosity > 2
 * Selection: printf("Adding %d to population\n",mem);
