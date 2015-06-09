@@ -29,16 +29,15 @@
 * InitialPopulation value is used as population for GA; may require alt naming. e.g. Population
 	
 ### TODO
-experiment.cpp
-	* unused VariableHolder "params"
-	* var_template's dynamics in program
-	* unreferenced object "comps"
-
-GAEngine.h
-	* Genome::same function uses bitwise & on bools
-	* Each generation's fittest should be output as a summary
-	* Multiple-degree CROSSOVER can be dangerous!
-	* build_rnd_sample is a core routine in GA - check for validity
+* experiment.cpp
+  * unused VariableHolder "params"
+  * var_template's dynamics in program
+  * unreferenced object "comps"
+* GAEngine.h
+  * Genome::same function uses bitwise & on bools
+  * Each generation's fittest should be output as a summary
+  * Multiple-degree CROSSOVER can be dangerous!
+  * build_rnd_sample is a core routine in GA - check for validity
 
 ## 09.06.2015
 ### Git version control
