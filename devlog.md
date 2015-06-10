@@ -30,9 +30,9 @@
 	
 ### TODO
 * experiment.cpp
-  [] unused VariableHolder "params"
-  [] var_template's dynamics in program
-  [] unreferenced object "comps"
+[] unused VariableHolder "params"
+[] var_template's dynamics in program
+[] unreferenced object "comps"
 * GAEngine.h
   * Genome::same function uses bitwise & on bools
   * Each generation's fittest should be output as a summary
