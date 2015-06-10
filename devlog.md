@@ -29,12 +29,12 @@
 * InitialPopulation value is used as population for GA; may require alt naming. e.g. Population
 	
 ### TODO
-* experiment.cpp
+* [ ] experiment.cpp
   * [ ] unused VariableHolder "params"
   * [ ] var_template's dynamics in program
   * [ ] unreferenced object "comps"
 
-* GAEngine.h
+* [ ] GAEngine.h
   * [ ] Genome::same function uses bitwise & on bools
   * [ ] Each generation's fittest should be output as a summary
   * [ ] Multiple-degree CROSSOVER can be dangerous!
