@@ -736,11 +736,9 @@ class GAEngine
 					do
 					{
 						v=(int)(rnd_generate(0.0,limit));
-					}
-					while(check_valid && !m_Population[v].valid())
+					} while (check_valid && !m_Population[v].valid());
 #endif
-                }
-                while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
+                } while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
                 //Found next genome
                 sample.push_back(v);
             }
