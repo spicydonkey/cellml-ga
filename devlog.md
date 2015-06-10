@@ -37,8 +37,8 @@
 * [ ] GAEngine.h
   * [x] Genome::same function uses bitwise & on bools
   * [x] Each generation's fittest should be output as a summary
-  * [ ] Multiple-degree CROSSOVER can be dangerous!
-  * [ ] build_rnd_sample is a core routine in GA - check for validity
+  * [x] Multiple-degree CROSSOVER can be dangerous!
+  * [x] build_rnd_sample is a core routine in GA - check for validity
 
 ## 09.06.2015
 ### Git version control
