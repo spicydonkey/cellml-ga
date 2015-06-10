@@ -34,7 +34,7 @@
   * [ ] var_template's dynamics in program
   * [ ] unreferenced object "comps"
 
-* [ ] GAEngine.h
+* [x] GAEngine.h
   * [x] Genome::same function uses bitwise & on bools
   * [x] Each generation's fittest should be output as a summary
   * [x] Multiple-degree CROSSOVER can be dangerous!
@@ -91,3 +91,4 @@ Limitations surely exist for simulations that can frequently breakdown.
 
 ### Mutation
 * Unknown reason for line *m_Population[sample[i]].set(v);*
+
