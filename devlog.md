@@ -66,8 +66,8 @@ verbosity	|	output
 * Selection: printf("Adding %d to population\n",mem);
 
 ### TODO
-* Refine genetic operators code
-* Feedback of GO behaviour with 2< verbosity
+* [ ]Refine genetic operators code
+* [ ]Feedback of GO behaviour with 2< verbosity
 
 ## 10.06.2015
 ### Clean-up select_weighted code
