@@ -387,8 +387,9 @@ class GAEngine
                 {
                     int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
 #ifdef SEQMODE
+					// Genetic operator feedback
 					if(verbosity>2)
-						printf("Adding %d to population\n",mem);
+						printf("SELX: Adding %d to population\n",mem);
 #else
                     //printf("Adding %d to population\n",mem);
 #endif
@@ -796,24 +797,40 @@ class GAEngine
 		// select_weighted
         int select_weighted(POPULATION& p)
         {
-            //double limit=(double)p.size()-0.5;
-            double sum=0.0;
+			/* TODO unreferenced
+			double limit=(double)p.size()-0.5;
+            */
+			double sum=0.0;
 
+#ifdef SEQMODE
+			double zero_lim=0.000000000001;
+#endif
 			// total sum of population's fitness	(sum is inf if p[i].fitness == 0 or p[i] invalid)
             for(int i=0;i<p.size();i++)
-			//sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);		// BUG
-			sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):0.0);
-
+			{	
+				/* TODO BUG
+				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
+				*/
+#ifdef SEQMODE
+				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);
+#else
+				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):0.0);
+#endif
+			}
 			// use a randomly selected threshold for cum-sum to select i
             double choice=sum*rnd_generate(0.0,1.0);
             for(int i=0;i<p.size();i++)
             {
-                choice-=1.0/(p[i].fitness()?p[i].fitness():0.000000000001);
+#ifdef SEQMODE
+				choice-=1.0/(p[i].fitness()?p[i].fitness():zero_lim);
+#else
+				choice-=1.0/(p[i].fitness()?p[i].fitness():0.000000000001);
+#endif
                 if(choice<=0.0)
 					return i;
             }
 			// choice is larger than cum-sum
-            return p.size()-1;	// return the index to least-fit genome
+            return p.size()-1;	// return the index to last (least-fit) genome
         }
 };
 

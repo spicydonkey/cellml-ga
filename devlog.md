@@ -76,4 +76,4 @@ GA is implemented to minimisation of *non-negative* fitness, so selection weight
 Exceptions occur for invalid genomes, which are assigned (bug) NULL (999~999.999) weight, and global-minima which replace fitness in previous calculation with 0.0~01.
 Such *magic numbers* are to be cleaned-up.
 ```
-### 
+### Crossover
