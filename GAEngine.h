@@ -397,15 +397,14 @@ class GAEngine
                 }
 
                 // CROSSOVER
-				// BUG! Multiple crossovers can happen in one generation!
-				//
+				// Caution: Multiple crossovers allowed in single generation iteration
                 if(m_crossPartition)
                 {
 					// vector of genome indices selected for genetic operations
                     std::vector<int> sample;
 
                     if(!m_UseBlockSample)
-                        build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);		// fill sample with indices to perform crossover. samplesize <= popsize
+                        build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);		// fill sample with unique and valid indices to genomes for performing crossover
                     else
                         build_rnd_sample(sample,m_crossPartition,true,true);			// disallow duplicates in building sample (size m_crossPartition)
 
@@ -415,10 +414,10 @@ class GAEngine
                         
                         arena.push_back(sample[i]);	//ith sample enters arena 
 						//bulid tournament sample
-                        build_rnd_sample(arena,1,true,true); //another sample enters arena from population, avoiding self for crossbreeding
+                        build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
 
-						//cross the Genomes in arena at a randomly selected crosspoint
-						// BUG TODO: prone to multiple degree crossover in a single generation iteration
+						// cross the genomes in arena at a randomly selected crosspoint
+						// TODO - prone to multiple degree crossover in a single generation iteration! Dangeous?
 	    				cross(m_Population[arena[0]],m_Population[arena[1]],
 							(int)rnd_generate(1.0,m_Population[sample[i]].size()));		//crosspoint in [1,allele length of ith sample genome]
 
@@ -428,7 +427,7 @@ class GAEngine
 #ifndef SEQMODE
                             Distributor::instance().remove_key(arena[j]);	//remove previously requested processing
 #else
-							Processor::instance().remove_key(arena[j]);		// remove previously requested processing
+							Processor::instance().remove_key(arena[j]);		// remove previously requested processing on this genome
 #endif
 							// Set-up workitem for Xover'd genome job
 							WorkItem *w=var_to_workitem(v);
@@ -443,26 +442,26 @@ class GAEngine
                     }
 				}
 
-
                 // MUTATION
                 if(m_mutatePartition)
                 {
                     std::vector<int> sample;
 
+					// Mutation welcomes invalid genomes
                     if(!m_UseBlockSample)
                         build_rnd_sample_rnd(sample,m_MutationProbability*100.0,false);	// invalid Genomes may be picked into sample
                     else
-                        build_rnd_sample(sample,m_mutatePartition,false,false); //allow duplicates and invalid genomes to build sample (size m_mutatePartition)
+                        build_rnd_sample(sample,m_mutatePartition,false,false);	// allow duplicates and invalid genomes to build sample (size m_mutatePartition)
 
-					//Treatment of invalid genomes in the population
+					// Treatment of invalid genomes in the population
                     for(int i=0;i<m_Population.size();i++)
                     {
-						//add all unselected invalid genomes into sample
+						// add all unselected invalid genomes into sample
 						if(!m_Population[i].valid() && std::find(sample.begin(),sample.end(),i)==sample.end())
 							sample.push_back(i);
                     }
 
-					// Mutate the genomes selection in sample
+					// Mutate the selected genomes
                     for(int i=0;i<sample.size();i++)
                     {
 	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
@@ -470,10 +469,10 @@ class GAEngine
 #ifndef SEQMODE
                         Distributor::instance().remove_key(sample[i]); //remove previously requested processing
 #else
-						Processor::instance().remove_key(sample[i]);
+						Processor::instance().remove_key(sample[i]);	// remove previously requested processing for the this genome
 #endif
 						WorkItem *w=var_to_workitem(v);
-                        m_Population[sample[i]].set(v);		// TODO??
+                        m_Population[sample[i]].set(v);		// TODO - what's the reason?
 						w->key=sample[i];
 #ifndef SEQMODE
 						Distributor::instance().push(w);
@@ -605,6 +604,9 @@ class GAEngine
 		}
 
 		// mutate
+		// if		name is non-emtpy wstring, only the allele with matching name is mutated at the mutation rate
+		// else if	name is an empty wstring, mutate all alleles
+		// setting mutate_all to false will mutate approx. just 1 allele
         void mutate(const std::wstring& name,Genome& g,bool mutate_all=false)
         {
             double prob=(mutate_all?101.0:100.0/g.size());
@@ -617,15 +619,6 @@ class GAEngine
                 if(p>prob)		// chance to skip mutation
                    continue;
 
-				/*
-				 *	Mutation rate (%):
-				 *		100					if mutate_all == true		i.e. mutate all allele
-				 *		100.0/g.size()		if mutate_all == false		i.e. mutate approx. just 1 allele		
-				 */
-
-
-				// if		name is non-emtpy wstring, only the allele with matching name is mutated at the mutation rate
-				// else if	name is an empty wstring, mutate all alleles
                 if(!name.size() || g.name(i)==name)		
                 {
                     LIMITS::iterator it=m_Limits.find(g.name(i));	// check for param limits of this allele
@@ -642,7 +635,7 @@ class GAEngine
                     }
                     g.allele(i,val);	// set the RNG value to allele
 
-                    if(name.size())		// stop mutation if name is non-emtpy (only mutated one allele)
+                    if(name.size())		// only mutate this allele if name specified
                         break;
                 }
             }
@@ -694,9 +687,9 @@ class GAEngine
 			// check if genomes' alleles have same size and crosspoint lies in valid range
             if(one.size()!=two.size() || one.size()<crosspoint+1)
                 return false;
+			// genomes equal size and crosspoint valid
 
-			// genomes same size and valid crosspoint
-			// swap the alleles before crosspoint
+			// swap alleles before the crosspoint
             for(int i=0;i<crosspoint;i++)
             {
                 n1[i]=two[i];
@@ -716,36 +709,40 @@ class GAEngine
         }
 
 		// build_rnd_sample
-		// IMPORTANT BUT MAY CONTAIN BUGS!
+		// append a defined number of randomly selected indices to genomes onto sample
+		// TODO - IMPORTANT BUT MAY CONTAIN BUGS!
         void build_rnd_sample(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid)
         {
             double limit=(double)m_Population.size()-0.5;
 
-			// append "count" number of randomly selected integers (index for m_Pop) onto sample
             for(;count>0;count--)
             {
                 int v;
 
 				// randomly assign an int to v 
-					// if reject_duplicates true, build_rnd_sample will not add duplicates to sample
+				// if reject_duplicates set true, add a unique index to sample
+				// if check_valid set true, add a valid index
                 do
                 {
-					v=(int)(rnd_generate(0.0,limit));	// v in [0, m_Pop.size()-1]
-                    if(check_valid && !m_Population[v].valid())
-						continue;		//??if check_valid true, loop until v is a valid Genome? 
-						// TODO (BUG - invalid genomes will still be pushed back onto sample)
+#ifndef SEQMODE
+					v=(int)(rnd_generate(0.0,limit));	// TODO v in [0, m_Pop.size()-1] - slightly disfavours the last index
 
-					/*// THE FIX BELOW! TODO
+					// if check_valid is set true, loop until v is a valid Genome
+					// TODO (BUG - invalid genomes will still be pushed back onto sample)
+                    if(check_valid && !m_Population[v].valid())
+						continue;			
+#else
+					// THE FIX - nested do-while! TODO
 					do
 					{
-						v=(int)(rnd_generate(0.0,limit));	// v in [0, m_Pop.size()-1]
+						v=(int)(rnd_generate(0.0,limit));
 					}
 					while(check_valid && !m_Population[v].valid())
-					//*/
+#endif
                 }
                 while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
-                //Found next value
-                sample.push_back(v);	// push onto sample vector
+                //Found next genome
+                sample.push_back(v);
             }
         }
 		

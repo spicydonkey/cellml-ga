@@ -77,3 +77,17 @@ Exceptions occur for invalid genomes, which are assigned (bug) NULL (999~999.999
 Such *magic numbers* are to be cleaned-up.
 ```
 ### Crossover
+* Reference to *build_rnd_sample* to set up arena for breeding
+  * [x] fix invalid-passing bug in build_rnd_sample
+* The multiple Xover issue is definitely present, but unlikely to be harmful to GA and left with a TODO tag
+
+```
+Caution:
+The population selected before crossover does not contain any invalid genomes.
+Crossover **can** produce invalid genomes immediately synced by the population.
+Not all steps were taken to eliminate run-time errors arising from the whole population turning invalid.
+Limitations surely exist for simulations that can frequently breakdown.
+```
+
+### Mutation
+* Unknown reason for line *m_Population[sample[i]].set(v);*
