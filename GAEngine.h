@@ -389,7 +389,7 @@ class GAEngine
 #ifdef SEQMODE
 					// Genetic operator feedback
 					if(verbosity>2)
-						printf("SELX: Adding %d to population\n",mem);
+						printf("SELECT: Adding %d to population\n",mem);
 #else
                     //printf("Adding %d to population\n",mem);
 #endif
@@ -416,10 +416,49 @@ class GAEngine
 						//bulid tournament sample
                         build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
 
+#ifdef SEQMODE
+						// Genetic operator feedback
+						// Output genomes in arena pre-crossover
+						if(verbosity>2)
+						{
+							/*
+							CROSSOVER
+							-[i] x1=_________ x2=__________
+							-[j] x1=_________ x2=__________
+							*/
+							// TODO
+							printf("CROSSOVER:\n");
+							for(int j=0;j<arena.size();j++)
+							{
+								printf("-");
+								print_genome(arena[j]);
+							}
+						}
+#endif
+
 						// cross the genomes in arena at a randomly selected crosspoint
 						// TODO - prone to multiple degree crossover in a single generation iteration! Dangeous?
 	    				cross(m_Population[arena[0]],m_Population[arena[1]],
 							(int)rnd_generate(1.0,m_Population[sample[i]].size()));		//crosspoint in [1,allele length of ith sample genome]
+
+#ifdef SEQMODE
+						// Genetic operator feedback
+						// Output genomes in arena pre-crossover
+						if(verbosity>2)
+						{
+							/*
+							+[i] x1=_________ x2=__________
+							+[j] x1=_________ x2=__________
+							-----------------------------------
+							*/
+							for(int j=0;j<arena.size();j++)
+							{
+								printf("+");
+								print_genome(arena[j]);
+							}
+							printf("---------------------------------------\n");
+						}
+#endif
 
                         for(int j=0;j<2;j++)
                         {
@@ -511,6 +550,27 @@ class GAEngine
         typedef std::map<std::wstring,std::pair<double,double> > LIMITS;
         LIMITS m_Limits;
 
+#ifdef SEQMODE
+		// Print a genome sequence
+		// A genome can be sequenced at any stage of the program, since it does not ask for its fitness, validity, generation, etc.
+		void print_genome(int ind_genome)
+		{
+			VariablesHolder v;
+			m_Population[ind_genome].var(v);	// store alleles data in a temporary variable
+			printf("[%d] ", ind_genome);
+			for(int i=0;;i++)
+			{
+				std::wstring name=v.name(i);
+				// sequence all alleles in genome
+				if(name.empty())
+					break;
+				printf("%s=%lf   ",convert(name).c_str(),v(name));
+			}
+			printf("\n");
+		}
+#endif
+
+		// Output a current summary for GA
         void print_stage(int g)
         {
 			//verbose summary of GA: print all chromosomes of curr gen
