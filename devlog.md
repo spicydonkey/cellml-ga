@@ -66,7 +66,7 @@ verbosity	|	output
 * Selection: printf("Adding %d to population\n",mem);
 
 ### TODO
-* [ ] Refine genetic operators code
+* [*] Refine genetic operators code
 * [ ] Feedback of GO behaviour with 2< verbosity
 
 ## 10.06.2015
@@ -91,4 +91,40 @@ Limitations surely exist for simulations that can frequently breakdown.
 
 ### Mutation
 * Unknown reason for line *m_Population[sample[i]].set(v);*
+
+## 11.06.2015
+### Update output for more verbose setting
+The dynamics of individual genome in population should be *visible* to the user for a more verbose setting. 
+* [x] Selection
+
+```
+#ifdef SEQMODE
+					// Genetic operator feedback
+					if(verbosity>2)
+						printf("SELECT: Adding %d to population\n",mem);
+#else
+```
+
+* [x] Crossover
+
+```
+//output format
+
+CROSSOVER:
+-[i] x1=________   x2=______   ...   xN=________
+-[j] x1=________   x2=______   ...   xN=________
++[i] x1=________   x2=______   ...   xN=________
+-[j] x1=________   x2=______   ...   xN=________
+--------------------------------------------------
+```
+
+* [ ] Mutation
+
+
+
+### Create genome sequencing member function
+* [x] *print_genome(int index_to_genome);* to output a genome's alleles and corresponding values in order
+
+## 12.06.2015
+### Complete GO feedback functionality
 
