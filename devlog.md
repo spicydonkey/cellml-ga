@@ -67,7 +67,7 @@ verbosity	|	output
 
 ### TODO
 * [*] Refine genetic operators code
-* [ ] Feedback of GO behaviour with 2< verbosity
+* [*] Feedback of GO behaviour with 2< verbosity
 
 ## 10.06.2015
 ### Clean-up select_weighted code
@@ -96,6 +96,12 @@ Limitations surely exist for simulations that can frequently breakdown.
 ### Update output for more verbose setting
 The dynamics of individual genome in population should be *visible* to the user for a more verbose setting. 
 * [x] Selection
+
+```
+//output format
+
+SELECT: Adding 'genome_index' to population
+```
 
 ```
 #ifdef SEQMODE
@@ -141,3 +147,6 @@ Dynamics of the individual genome/population at the Selection, Crossover, and Mu
 **NOTE**: Genetic operators act on genomes in 'current' population, accessing population members via index.
 At this stage, care should be taken in interpreting genome's index from the output, since the population summary is effectively for the 'previous' generation.
 The selection operation is exactly the stage where a gene-pool for a new generation is picked. Hence, the index labelling the genomic sequence in this functionality do not correspond to the preceding population summary.
+
+
+### A new change
