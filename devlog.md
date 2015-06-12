@@ -29,10 +29,10 @@
 * InitialPopulation value is used as population for GA; may require alt naming. e.g. Population
 	
 ### TODO
-* [ ] experiment.cpp
-  * [ ] unused VariableHolder "params"
-  * [ ] var_template's dynamics in program
-  * [ ] unreferenced object "comps"
+* [x] experiment.cpp
+  * [x] unused VariableHolder "params"
+  * [x] var_template's dynamics in program
+  * [x] unreferenced object "comps"
 
 * [x] GAEngine.h
   * [x] Genome::same function uses bitwise & on bools
@@ -66,8 +66,8 @@ verbosity	|	output
 * Selection: printf("Adding %d to population\n",mem);
 
 ### TODO
-* [*] Refine genetic operators code
-* [*] Feedback of GO behaviour with 2< verbosity
+* [x] Refine genetic operators code
+* [x] Feedback of GO behaviour with 2< verbosity
 
 ## 10.06.2015
 ### Clean-up select_weighted code
@@ -148,5 +148,3 @@ Dynamics of the individual genome/population at the Selection, Crossover, and Mu
 At this stage, care should be taken in interpreting genome's index from the output, since the population summary is effectively for the 'previous' generation.
 The selection operation is exactly the stage where a gene-pool for a new generation is picked. Hence, the index labelling the genomic sequence in this functionality do not correspond to the preceding population summary.
 
-
-### A new change
