@@ -118,13 +118,26 @@ CROSSOVER:
 --------------------------------------------------
 ```
 
-* [ ] Mutation
+* [x] Mutation
 
+```
+//output format
 
+MUTATION:
+-[i] x1=_________ x2=__________
++[i] x1=_________ x2=__________
+-----------------------------------
+```
 
 ### Create genome sequencing member function
 * [x] *print_genome(int index_to_genome);* to output a genome's alleles and corresponding values in order
 
 ## 12.06.2015
 ### Complete GO feedback functionality
+Added user-feedback functionality to observe the dynamics of the genetic algorithm, namely at the *Genetic Operations* (GO).
+User needs to ask for a very-verbose run of the experiment (greater than 2) to activate GO feedback. 
+Dynamics of the individual genome/population at the Selection, Crossover, and Mutation stages are output appropriately.
 
+NOTE: Genetic operators act on genomes in 'current' population, accessing population members via index.
+At this stage, care should be taken in interpreting genome's index from the output, since the population summary is effectively for the 'previous' generation.
+The selection operation is exactly the stage where a gene-pool for a new generation is picked. Hence, the index labelling the genomic sequence in this functionality do not correspond to the preceding population summary.
