@@ -155,3 +155,17 @@ verbosity	|	output
 2		| population of each generation & fittest in the whole run
 2<		| population & **Genetic Operators** & fittest in run
 
+### Genetic Algorithm Tests
+#### Parameters
+* Population size
+* Mutation rate
+* Crossover rate
+* Generation
+* ~Sampling~ *default to non-block sampling*
+* Genome length: solution space dimension
+* Allele limits
+* Allele names
+
+```
+NOTE: parameters listed above show significant interaction in a GA
+```
