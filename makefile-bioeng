@@ -1,7 +1,7 @@
 CC=g++
 
-CFLAGS=-I /home/mobaxterm/MyDocuments/NeSI/dshi046/clusterhub/AdvXMLParser -O #/home/spicydonkey/Documents/NeSI/AdvXMLParser -O #/home/dshi046/UOA00322/david.shin/AdvXMLParser -O
-LFLAGS=-L /home/mobaxterm/MyDocuments/NeSI/dshi046/clusterhub/AdvXMLParser -ladvxml #/home/spicydonkey/Documents/NeSI/AdvXMLParser -ladvxml #/home/dshi046/UOA00322/david.shin/AdvXMLParser -ladvxml 
+CFLAGS=-I /home/mobaxterm/MyDocuments/NeSI/dshi046/clusterhub/AdvXMLParser -O 
+LFLAGS=-L /home/mobaxterm/MyDocuments/NeSI/dshi046/clusterhub/AdvXMLParser -ladvxml 
 SOURCES=experiment.cpp virtexp.cpp utils.cpp processor.cpp 
 INCLUDES=virtexp.h utils.h GAEngine.h processor.h GATESTER.h 
 
