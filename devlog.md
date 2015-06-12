@@ -138,6 +138,6 @@ Added user-feedback functionality to observe the dynamics of the genetic algorit
 User needs to ask for a very-verbose run of the experiment (greater than 2) to activate GO feedback. 
 Dynamics of the individual genome/population at the Selection, Crossover, and Mutation stages are output appropriately.
 
-NOTE: Genetic operators act on genomes in 'current' population, accessing population members via index.
+**NOTE**: Genetic operators act on genomes in 'current' population, accessing population members via index.
 At this stage, care should be taken in interpreting genome's index from the output, since the population summary is effectively for the 'previous' generation.
 The selection operation is exactly the stage where a gene-pool for a new generation is picked. Hence, the index labelling the genomic sequence in this functionality do not correspond to the preceding population summary.
