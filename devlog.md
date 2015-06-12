@@ -169,3 +169,6 @@ verbosity	|	output
 ```
 NOTE: parameters listed above show significant interaction in a GA
 ```
+
+1. No mutation and no crossover
+  * nomutacross.xml
