@@ -148,3 +148,10 @@ Dynamics of the individual genome/population at the Selection, Crossover, and Mu
 At this stage, care should be taken in interpreting genome's index from the output, since the population summary is effectively for the 'previous' generation.
 The selection operation is exactly the stage where a gene-pool for a new generation is picked. Hence, the index labelling the genomic sequence in this functionality do not correspond to the preceding population summary.
 
+verbosity	|	output
+----------------|----------------
+0		| fittest in the whole run 
+1		| fittest of each generation & fittest in the whole run
+2		| population of each generation & fittest in the whole run
+2<		| population & **Genetic Operators** & fittest in run
+
