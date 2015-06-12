@@ -426,7 +426,6 @@ class GAEngine
 							-[i] x1=_________ x2=__________
 							-[j] x1=_________ x2=__________
 							*/
-							// TODO
 							printf("CROSSOVER:\n");
 							for(int j=0;j<arena.size();j++)
 							{
@@ -442,8 +441,7 @@ class GAEngine
 							(int)rnd_generate(1.0,m_Population[sample[i]].size()));		//crosspoint in [1,allele length of ith sample genome]
 
 #ifdef SEQMODE
-						// Genetic operator feedback
-						// Output genomes in arena pre-crossover
+						// Output genomes in arena post-crossover
 						if(verbosity>2)
 						{
 							/*
@@ -503,7 +501,33 @@ class GAEngine
 					// Mutate the selected genomes
                     for(int i=0;i<sample.size();i++)
                     {
+#ifdef SEQMODE
+						// Genetic operator feedback
+						// Output genomes pre-mutation
+						if(verbosity>2)
+						{
+							/*
+							MUTATION:
+							-[i] x1=_________ x2=__________
+							+[i] x1=_________ x2=__________
+							-----------------------------------
+							*/
+							printf("MUTATION:\n");
+							printf("-");
+							print_genome(sample[i]);
+						}
+#endif
+
 	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
+#ifdef SEQMODE
+						// Output genomes post-mutation
+						if(verbosity>2)
+						{
+							printf("+");
+							print_genome(sample[i]);
+							printf("---------------------------------------\n");
+						}
+#endif
 						m_Population[sample[i]].var(v);
 #ifndef SEQMODE
                         Distributor::instance().remove_key(sample[i]); //remove previously requested processing
