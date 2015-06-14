@@ -172,3 +172,16 @@ NOTE: parameters listed above show significant interaction in a GA
 
 1. No mutation and no crossover
   * nomutacross.xml
+
+## 15.06.2015
+### Meeting minutes
+* To finish testing ported GA (sequentialised version) for any overseen bugs
+* Running CellML simulations on OpenCOR and exporting *csv* output
+* Alleles from CellML to be non-negative
+* Fitness evaluation likely to be non-negative when integrating with CellML (squared residual like method)
+* Model target variable to compare to VE defined in XML's **ResultColumn** attribute
+* ResultColumn variable can be set appropriately by looking at the *csv* file
+
+### GA Tests continued
+1. No mutation and no crossover
+  * nomutacross.xml
