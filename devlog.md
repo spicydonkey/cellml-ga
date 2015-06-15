@@ -183,7 +183,7 @@ NOTE: parameters listed above show significant interaction in a GA
 * ResultColumn variable can be set appropriately by looking at the *csv* file
 
 ### GA Tests continued
-0. No mutation and no crossover
+Test 0: No mutation and no crossover
   * 0-nomutanox.xml
     * [x] Initial population is randomly scattered
 	* [x] Fittest genome does not always survive (selection to create gene pool give equal weights to all members)
@@ -192,7 +192,7 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [x] Population converges
 	* [x] As soon as the population converges the population is stationary
 
-1. No mutation and low crossover (1%)
+Test 1: No mutation and low crossover (1%)
   * 1-nomutalowx.xml
     * [x] Initial population is randomly scattered
 	* [x] New genomes created - via crossover
@@ -208,7 +208,7 @@ NOTE: parameters listed above show significant interaction in a GA
 	  * When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
 	  * Stuck in local minimum
 
-2. No mutation and high crossover (25%)
+Test 2: No mutation and high crossover (25%)
   * 2-nomutahighx.xml
     * [x] Initial population randomly scattered
 	* [x] New genomes *often* created - frequent crossover
@@ -226,7 +226,7 @@ NOTE: parameters listed above show significant interaction in a GA
 
 **Henceforth, tests are simplified to 5-Dimensional Schwefel function**
 
-3. Low mutation (5%) and no crossover
+Test 3: Low mutation (5%) and no crossover
   * 3-lowmutanox.xml
     * [ ] Initial population randomly scattered
 	* [ ] New genomes are consistently created (5% mutation)
@@ -236,5 +236,5 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [ ] Get solutions better than initial population
 	* Other features
 
-4. High mutation and no crossover
-5. Mutation and crossover
+Test 4: High mutation and no crossover
+Test 5: Mutation and crossover
