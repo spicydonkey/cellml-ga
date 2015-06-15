@@ -242,8 +242,15 @@ Test 3: Low mutation (5%) and no crossover
     * [ ] Population converges, but genome dynamics due to mutation
 	  * **Population has not converged!**
 	  * Seems like the global minimum can be found for a sufficiently long run
-  * 3-lowmutanox-2.xml (Generations=10000)
-    * [ ] Convergence to global minimum
+  * **3-lowmutanox-2.xml** (Generations=10000)
+    * [x] Convergence to global minimum
+	  * convergence to ~0.01 fitness reached with 5-dim
+	  * **This is quite surprising but not completely unexpected**
+
+```
+TODO: WHY?
+Should the test have been run with even lower mutation rate?
+```
 
 Test 4: High mutation and no crossover
 
