@@ -185,15 +185,21 @@ NOTE: parameters listed above show significant interaction in a GA
 ### GA Tests continued
 1. No mutation and no crossover
   * 0-nomutanox.xml
-    * [ ] Initial population is randomly scattered
-	* [ ] Fittest genome does not always survive (selection to create gene pool give equal weights to all members)
-	* [ ] No *new* genome is seen after the initial population
-    * [ ] The best fitness per generation is non-decreasing
-	* [ ] Population converges
-	* [ ] As soon as the population converges the population is stationary
+    * [x] Initial population is randomly scattered
+	* [x] Fittest genome does not always survive (selection to create gene pool give equal weights to all members)
+	* [x] No *new* genome is seen after the initial population
+    * [x] The best fitness per generation is non-decreasing
+	* [x] Population converges
+	* [x] As soon as the population converges the population is stationary
 
 2. No mutation and low crossover
   * 1-nomutalowx.xml
+    * [ ] Initial population is randomly scattered
+	* [ ] New genomes created - via crossover
+	* [ ] Crossover feedback
+	* [ ] Observe best fitness per generation improve at times
+	* [ ] Population converges and stays stationary (without mutation)
+	* [ ] Can get solutions better than initially scattered population
 
 3. No mutation and high crossover
 4. Low mutation and no crossover
