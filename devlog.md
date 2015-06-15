@@ -197,14 +197,14 @@ NOTE: parameters listed above show significant interaction in a GA
     * [x] Initial population is randomly scattered
 	* [x] New genomes created - via crossover
 	* [x] Crossover feedback
-	  Between 0 and 4 crossover operations are performed per-generation, with popsize 100, and mutation_proportion 0.01
+	  * Between 0 and 4 crossover operations are performed per-generation, with popsize 100, and mutation_proportion 0.01
 	* [x] Observe best fitness per generation improve at times
 	* [ ] Population converges and stays stationary (without mutation) **for sufficiently large generation #**
-	  Not enough generations to allow population to converge
+	  * Not enough generations to allow population to converge
 	* [x] Can get solutions better than initially scattered population
   * 1-nomutalowx-1.xml
     * [x] Population converges and stays stationary
-	  When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
+	  * When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
 
 2. No mutation and high crossover
 
