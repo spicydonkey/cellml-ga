@@ -183,7 +183,7 @@ NOTE: parameters listed above show significant interaction in a GA
 * ResultColumn variable can be set appropriately by looking at the *csv* file
 
 ### GA Tests continued
-1. No mutation and no crossover
+0. No mutation and no crossover
   * 0-nomutanox.xml
     * [x] Initial population is randomly scattered
 	* [x] Fittest genome does not always survive (selection to create gene pool give equal weights to all members)
@@ -192,16 +192,22 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [x] Population converges
 	* [x] As soon as the population converges the population is stationary
 
-2. No mutation and low crossover
+1. No mutation and low crossover
   * 1-nomutalowx.xml
-    * [ ] Initial population is randomly scattered
-	* [ ] New genomes created - via crossover
-	* [ ] Crossover feedback
-	* [ ] Observe best fitness per generation improve at times
-	* [ ] Population converges and stays stationary (without mutation)
-	* [ ] Can get solutions better than initially scattered population
+    * [x] Initial population is randomly scattered
+	* [x] New genomes created - via crossover
+	* [x] Crossover feedback
+	  Between 0 and 4 crossover operations are performed per-generation, with popsize 100, and mutation_proportion 0.01
+	* [x] Observe best fitness per generation improve at times
+	* [ ] Population converges and stays stationary (without mutation) **for sufficiently large generation #**
+	  Not enough generations to allow population to converge
+	* [x] Can get solutions better than initially scattered population
+  * 1-nomutalowx-1.xml
+    * [x] Population converges and stays stationary
+	  When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
 
-3. No mutation and high crossover
-4. Low mutation and no crossover
-5. High mutation and no crossover
-6. Mutation and crossover
+2. No mutation and high crossover
+
+3. Low mutation and no crossover
+4. High mutation and no crossover
+5. Mutation and crossover
