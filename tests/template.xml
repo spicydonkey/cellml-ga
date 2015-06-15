@@ -2,7 +2,7 @@
 <!--TESTNAME.xml-->
 <!--DESCRIPTION OF TEST-->
 <CellMLTimeSeriesFit>
-	<GA InitialPopulation="100" MaxPopulation="100" Generations="100" Mutation_proportion="0.2" Crossover_proportion="0.70" Sampling="0">
+	<GA InitialPopulation="100" Generations="100" Mutation_proportion="0.2" Crossover_proportion="0.70" Sampling="0">
 		<Alleles>
 			<Allele Name="x1" LowerBound="-500.0" UpperBound="500.0"/>
 			<Allele Name="x2" LowerBound="-500.0" UpperBound="500.0"/>
