@@ -192,7 +192,7 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [x] Population converges
 	* [x] As soon as the population converges the population is stationary
 
-1. No mutation and low crossover
+1. No mutation and low crossover (1%)
   * 1-nomutalowx.xml
     * [x] Initial population is randomly scattered
 	* [x] New genomes created - via crossover
@@ -208,7 +208,7 @@ NOTE: parameters listed above show significant interaction in a GA
 	  * When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
 	  * Stuck in local minimum
 
-2. No mutation and high crossover
+2. No mutation and high crossover (25%)
   * 2-nomutahighx.xml
     * [x] Initial population randomly scattered
 	* [x] New genomes *often* created - frequent crossover
@@ -224,6 +224,17 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [ ] More generations to achieve convergence
 	  * difference is not significant
 
-3. Low mutation and no crossover
+**Henceforth, tests are simplified to 5-Dimensional Schwefel function**
+
+3. Low mutation (5%) and no crossover
+  * 3-lowmutanox.xml
+    * [ ] Initial population randomly scattered
+	* [ ] New genomes are consistently created (5% mutation)
+	* [ ] Mutation feedback
+	* [ ] On average, 1 allele is mutated in a selected genome
+	* [ ] Population converges, but genome dynamics due to mutation
+	* [ ] Get solutions better than initial population
+	* Other features
+
 4. High mutation and no crossover
 5. Mutation and crossover
