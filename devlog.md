@@ -228,13 +228,19 @@ Test 2: No mutation and high crossover (25%)
 
 Test 3: Low mutation (5%) and no crossover
   * 3-lowmutanox.xml
-    * [ ] Initial population randomly scattered
-	* [ ] New genomes are consistently created (5% mutation)
-	* [ ] Mutation feedback
-	* [ ] On average, 1 allele is mutated in a selected genome
+    * [x] Initial population randomly scattered
+	* [x] New genomes are consistently created (5% mutation)
+	* [x] Mutation feedback
+	* [x] On average, 1 allele is mutated in a selected genome
 	* [ ] Population converges, but genome dynamics due to mutation
-	* [ ] Get solutions better than initial population
+	  * Population seems to converge in less than 100 generations for this test, but require larger gen# to make sure
+	  * The effect of mutation is clearly visible even when the population contains a dominant converged region
+	* [x] Get solutions better than initial population
 	* Other features
+	  * could not recognise any other distinct features
+  * 3-lowmutanox-1.xml (Generations=1000)
+    * [ ] Population converges, but genome dynamics due to mutation
 
 Test 4: High mutation and no crossover
+
 Test 5: Mutation and crossover
