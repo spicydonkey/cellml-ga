@@ -220,8 +220,9 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [ ] More generations to achieve convergence
 	  * more generations required
   * 2-nomutahighx-1.xml
-    * [ ] Population converges then stationary
+    * [x] Population converges then stationary
 	* [ ] More generations to achieve convergence
+	  * difference is not significant
 
 3. Low mutation and no crossover
 4. High mutation and no crossover
