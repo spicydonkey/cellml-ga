@@ -207,6 +207,14 @@ NOTE: parameters listed above show significant interaction in a GA
 	  * When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
 
 2. No mutation and high crossover
+  * 2-nomutahighx.xml
+    * [ ] Initial population randomly scattered
+	* [ ] New genomes *often* created - frequent crossover
+	* [ ] Crossover feedback
+	* [ ] Best fitness per generation fluctuate more often
+	* [ ] Population converges then stationary
+	* [ ] Get solutions better than initial population
+	* [ ] More generations to achieve convergence
 
 3. Low mutation and no crossover
 4. High mutation and no crossover
