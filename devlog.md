@@ -202,18 +202,25 @@ NOTE: parameters listed above show significant interaction in a GA
 	* [ ] Population converges and stays stationary (without mutation) **for sufficiently large generation #**
 	  * Not enough generations to allow population to converge
 	* [x] Can get solutions better than initially scattered population
+	  * Not global optimum
   * 1-nomutalowx-1.xml
     * [x] Population converges and stays stationary
 	  * When the population converges, the any crossover operations henceforth are effectively self-crossing, and do not create new genomes
+	  * Stuck in local minimum
 
 2. No mutation and high crossover
   * 2-nomutahighx.xml
-    * [ ] Initial population randomly scattered
-	* [ ] New genomes *often* created - frequent crossover
-	* [ ] Crossover feedback
-	* [ ] Best fitness per generation fluctuate more often
+    * [x] Initial population randomly scattered
+	* [x] New genomes *often* created - frequent crossover
+	* [x] Crossover feedback
+	* [x] Best fitness per generation fluctuate more often
 	* [ ] Population converges then stationary
-	* [ ] Get solutions better than initial population
+	  * more generations required
+	* [x] Get solutions better than initial population
+	* [ ] More generations to achieve convergence
+	  * more generations required
+  * 2-nomutahighx-1.xml
+    * [ ] Population converges then stationary
 	* [ ] More generations to achieve convergence
 
 3. Low mutation and no crossover
