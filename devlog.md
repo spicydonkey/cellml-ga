@@ -240,6 +240,10 @@ Test 3: Low mutation (5%) and no crossover
 	  * could not recognise any other distinct features
   * 3-lowmutanox-1.xml (Generations=1000)
     * [ ] Population converges, but genome dynamics due to mutation
+	  * **Population has not converged!**
+	  * Seems like the global minimum can be found for a sufficiently long run
+  * 3-lowmutanox-2.xml (Generations=10000)
+    * [ ] Convergence to global minimum
 
 Test 4: High mutation and no crossover
 
