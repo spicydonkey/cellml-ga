@@ -272,6 +272,10 @@ Test 4: High mutation (25%) and no crossover
 	* Other features
 	  * No other distinct features
   * 4-highmutanox-1.xml (Generations=10000)
-    * [ ] Convergence to global minimum
+    * [x] Convergence to global minimum
+	  * gen 100: 9.6
+	  * gen 500: 0.91
+	  * gen 2500: 0.021
+	  * gen 10000: 0.0010
 
 Test 5: Mutation and crossover
