@@ -261,13 +261,14 @@ Explanation:
 
 Test 4: High mutation (25%) and no crossover
   * 4-highmutanox.xml
-    * [ ] Initial population randomly scattered
-	* [ ] New genomes are very often created
-	* [ ] Mutation feedback
-	* [ ] 1 allele mutate on average per mutating genome
+    * [x] Initial population randomly scattered
+	* [x] New genomes are very often created
+	* [x] Mutation feedback
+	* [x] 1 allele mutate on average per mutating genome
 	* [ ] Population heavily oscillatory (shouldn't see convergence)
 	  * Selection process should not be able to weed out unfit genomes and select fit genomes fast enough for mutation
-	* [ ] Get better solutions than initial population
+	  * In fact, there is clearly a *dominant* gene in population, and in a weak-sense, the population has converged to this gene; the population should converge to global minimum by a similar reasoning to test-3
+	* [x] Get better solutions than initial population
 	* Other features
 
 Test 5: Mutation and crossover
