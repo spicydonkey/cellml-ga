@@ -289,11 +289,11 @@ On average, the population converges to fitness of ~10 from the above runs (pop=
 #### Test 6: INFINITE fitness case
 
 ##### Description
-Change the test function to *inf_schwefel* defined in *GATESTER.h* header that returns INFINITE when the allele values fall in a certain range
+  * Test function is **inf_schwefel** defined in *GATESTER.h* header that returns INFINITE when the allele values fall in a certain range
 
 ##### Expected behaviour
-INFINITE-valued genomes are appropriately labelled *invalid* and tagged with \* in population feedback
-INFINITE-valued genomes should be *weeded-out* as the generation passes, since the gene-pool selection ignores invalid genomes and gives less weighting for higher fitness
+  * INFINITE-valued genomes are appropriately labelled *invalid* and tagged with \* in population feedback
+  * INFINITE-valued genomes should be *weeded-out* as the generation passes, since the gene-pool selection ignores invalid genomes and gives less weighting for higher fitness
 
 ##### Test files
   * 6-0-inf.xml
