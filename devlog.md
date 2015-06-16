@@ -299,3 +299,13 @@ On average, the population converges to fitness of ~10 from the above runs (pop=
   * 6-0-inf.xml
     * output clearly shows GA follows the expected behaviour outlined above
 	* a simple run (params=5 pop=100 gen=100) resulted in the latest gen convergence to ~5 fitness
+
+## 17.06.2015
+### Patch
+*Patch description*
+
+#### Changes
+*Changes in this patch and reason*
+
+#### Files to add
+*Files from the original codebase*
