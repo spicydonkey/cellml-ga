@@ -248,10 +248,26 @@ Test 3: Low mutation (5%) and no crossover
 	  * **This is quite surprising but not completely unexpected**
 
 ```
-TODO: WHY?
-Should the test have been run with even lower mutation rate?
+Explanation:
+1. At a certain generation, the population is dominated by a certain genome
+2. Low rate mutation creates a fitter genome (likely mutated from the dominant)
+3. The mutated genome is likely to survive, having higher weight, and multiply in gene-pool
+4. The population pseudo-converges with the mutated genome being dominant
+5. Repeat from 1
 ```
 
-Test 4: High mutation and no crossover
+## 16.06.2015
+### GA Tests continued
+
+Test 4: High mutation (25%) and no crossover
+  * 4-highmutanox.xml
+    * [ ] Initial population randomly scattered
+	* [ ] New genomes are very often created
+	* [ ] Mutation feedback
+	* [ ] 1 allele mutate on average per mutating genome
+	* [ ] Population heavily oscillatory (shouldn't see convergence)
+	  * Selection process should not be able to weed out unfit genomes and select fit genomes fast enough for mutation
+	* [ ] Get better solutions than initial population
+	* Other features
 
 Test 5: Mutation and crossover
