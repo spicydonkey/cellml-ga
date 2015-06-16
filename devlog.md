@@ -293,6 +293,7 @@ Change the test function to *inf_schwefel* defined in *GATESTER.h* header that r
 
 ##### Expected behaviour
 INFINITE-valued genomes are appropriately labelled *invalid* and tagged with \* in population feedback
+INFINITE-valued genomes should be *weeded-out* as the generation passes, since the gene-pool selection ignores invalid genomes and gives less weighting for higher fitness
 
 ##### Test files
   * 6-0-inf.xml
