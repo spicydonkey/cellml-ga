@@ -279,3 +279,6 @@ Test 4: High mutation (25%) and no crossover
 	  * gen 10000: 0.0010
 
 Test 5: Mutation and crossover
+  * 5-0-mutax.xml (mut/x: 0.1/0.7)
+  * 5-1-mutax.xml (0.25/0.7)
+  * 5-2-mutax.xml (0.25/0.25)
