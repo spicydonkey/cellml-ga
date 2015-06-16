@@ -270,5 +270,8 @@ Test 4: High mutation (25%) and no crossover
 	  * In fact, there is clearly a *dominant* gene in population, and in a weak-sense, the population has converged to this gene; the population should converge to global minimum by a similar reasoning to test-3
 	* [x] Get better solutions than initial population
 	* Other features
+	  * No other distinct features
+  * 4-highmutanox-1.xml (Generations=10000)
+    * [ ] Convergence to global minimum
 
 Test 5: Mutation and crossover
