@@ -283,3 +283,11 @@ Explanation:
   * 5-1-mutax.xml (0.25/0.7)
   * 5-2-mutax.xml (0.25/0.25)
   * 5-3-mutax.xml (0.4/0.7)
+
+On average, the population converges to fitness of ~10 from the above runs (pop=100 gen=100), which is not too bad.
+
+#### Test 6: INFINITE fitness case
+Description: Change the test function to *inf_schwefel* defined in *GATESTER.h* header that returns INFINITE when the allele values fall in a certain range
+Expected behaviour: INFINITE-valued genomes are appropriately labelled *invalid* and tagged with \* in population feedback
+Test files:
+  * 6-0-inf.xml
