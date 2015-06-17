@@ -1,5 +1,9 @@
+// Patch the debuggin changes implemented on the sequential version of the project back onto the original codebase by undefining SEQMODE (or commenting out the definition line)
+
+/*	COMMENTING THIS BLOCK FOR PATCH SUFFICES FOR THIS FILE
 // define SEQMODE to build a sequential mode to test code (Schwefel function); no call to CellML
 #define SEQMODE
+*/
 
 #ifndef SEQMODE
 #include <mpi.h>
