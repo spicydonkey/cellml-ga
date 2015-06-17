@@ -302,10 +302,16 @@ On average, the population converges to fitness of ~10 from the above runs (pop=
 
 ## 17.06.2015
 ### Patch
-*Patch description*
+Apply debugging changes made to the *sequential version* back on the original codebase, fixing the INFINITE-fit genome breeding issue and random selection algorithm, in particular.
 
-#### Changes
-*Changes in this patch and reason*
+#### Original codebase
+The original codebase for the CellML-GA project loaded onto the **patch** branch in git repository, including files:
 
-#### Files to add
-*Files from the original codebase*
+  * distributor.cpp
+  * distributor.h
+  * cellml_observer.h
+
+#### Patch-log
+file|scope|description
+CODE BLOCK
+
