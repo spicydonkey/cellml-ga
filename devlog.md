@@ -319,3 +319,46 @@ The original codebase for the CellML-GA project loaded onto the **patch** branch
 #define SEQMODE
 */
 ```
+2. GAEngine.h|Genetic-operator feedback features
+```c++
+// Genetic operator feedback
+if(verbosity>2)
+	printf("SELECT: Adding %d to population\n",mem);
+```
+etc...
+3. experiment.cpp|PATCH global to compile patched code
+4. GAEngine.h|Warning tag displayed for negative fitness
+5. GAEngine.h|build_rnd_sample|Debug a loop-hole
+```c++
+...
+				// randomly assign an int to v 
+				// if reject_duplicates set true, add a unique index to sample
+				// if check_valid set true, add a valid index
+                do
+                {
+#ifndef PATCH
+					v=(int)(rnd_generate(0.0,limit));	// TODO v in [0, m_Pop.size()-1] - slightly disfavours the last index
+
+					// if check_valid is set true, loop until v is a valid Genome
+					// TODO (BUG - invalid genomes will still be pushed back onto sample)
+                    if(check_valid && !m_Population[v].valid())
+						continue;			
+#else
+					// nested do-while until genome is both valid and unique
+					do
+					{
+						v=(int)(rnd_generate(0.0,limit));
+					} while (check_valid && !m_Population[v].valid());
+#endif
+                } while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
+                //Found next genome
+				...
+```
+6.GAEngine.h|select_weighted|Fix selection bug
+```c++
+#ifdef PATCH
+				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);
+#else
+				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
+#endif
+```
