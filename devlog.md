@@ -319,6 +319,7 @@ The original codebase for the CellML-GA project loaded onto the **patch** branch
 #define SEQMODE
 */
 ```
+
 2. GAEngine.h|Genetic-operator feedback features
 ```c++
 // Genetic operator feedback
@@ -326,8 +327,11 @@ if(verbosity>2)
 	printf("SELECT: Adding %d to population\n",mem);
 ```
 etc...
+
 3. experiment.cpp|PATCH global to compile patched code
+
 4. GAEngine.h|Warning tag displayed for negative fitness
+
 5. GAEngine.h|build_rnd_sample|Debug a loop-hole
 ```c++
 ...
@@ -354,6 +358,7 @@ etc...
                 //Found next genome
 				...
 ```
+
 6.GAEngine.h|select_weighted|Fix selection bug
 ```c++
 #ifdef PATCH
