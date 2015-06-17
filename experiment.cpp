@@ -1,4 +1,5 @@
-// Patch the debuggin changes implemented on the sequential version of the project back onto the original codebase by undefining SEQMODE (or commenting out the definition line)
+// Return the sequential version to a parallel-processing version by undefining SEQMODE
+// Patch the debugging changes implemented by a preprecessor directive PATCH onto the original codebase
 #define PATCH
 
 /*	COMMENTING THIS BLOCK FOR PATCH SUFFICES FOR THIS FILE
@@ -13,7 +14,7 @@
 #include "IfaceCIS.hxx"
 #include "CellMLBootstrap.hpp"
 #include "CISBootstrap.hpp"
-#include "distributor.h"
+#include "distributor.h"	//TODO compare to processor.h
 #else
 #include <map>
 #include <string>
@@ -27,8 +28,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "AdvXMLParser.h"
-#include "GAEngine.h"
-#include "virtexp.h"
+#include "GAEngine.h"	//TODO
+#include "virtexp.h" 	//TODO
 
 
 using namespace std;
@@ -285,7 +286,7 @@ int main(int argc,char *argv[])
 		// load all virtual experiments in the XML file
 		for(int i=0;;i++)
         {
-            VariablesHolder params;	//??? unused	TODO
+            VariablesHolder params;	//TODO unused variable
 
 			// load the ith VE in file
             VirtualExperiment *vx=VirtualExperiment::LoadExperiment(root("VirtualExperiments",0)("VirtualExperiment",i));
