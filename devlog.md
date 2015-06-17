@@ -330,7 +330,7 @@ etc...
 
 (3) experiment.cpp|PATCH global to compile patched code
 
-(4) GAEngine.h|Warning tag displayed for negative fitness
+(4) GAEngine.h|Warning tag displayed for negative fitness (GA assumes non-negative fitness evaluator)
 
 (5) GAEngine.h|build_rnd_sample|Debug a loop-hole
 ```c++
@@ -367,3 +367,4 @@ etc...
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
 #endif
 ```
+
