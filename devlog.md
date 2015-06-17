@@ -312,10 +312,7 @@ The original codebase for the CellML-GA project loaded onto the **patch** branch
   * cellml_observer.h
 
 #### Patch-log
-file|scope|description
-CODE BLOCK
-
-experiment.cpp|return to distributed master-slave code
+1. experiment.cpp|return to distributed master-slave code
 ```c++
 /*	COMMENTING THIS BLOCK FOR PATCH SUFFICES FOR THIS FILE
 // define SEQMODE to build a sequential mode to test code (Schwefel function); no call to CellML
