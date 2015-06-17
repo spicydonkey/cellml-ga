@@ -312,7 +312,7 @@ The original codebase for the CellML-GA project loaded onto the **patch** branch
   * cellml_observer.h
 
 #### Patch-log
-1. experiment.cpp|return to distributed master-slave code
+(1) experiment.cpp|return to distributed master-slave code
 ```c++
 /*	COMMENTING THIS BLOCK FOR PATCH SUFFICES FOR THIS FILE
 // define SEQMODE to build a sequential mode to test code (Schwefel function); no call to CellML
@@ -320,7 +320,7 @@ The original codebase for the CellML-GA project loaded onto the **patch** branch
 */
 ```
 
-2. GAEngine.h|Genetic-operator feedback features
+(2) GAEngine.h|Genetic-operator feedback features
 ```c++
 // Genetic operator feedback
 if(verbosity>2)
@@ -328,11 +328,11 @@ if(verbosity>2)
 ```
 etc...
 
-3. experiment.cpp|PATCH global to compile patched code
+(3) experiment.cpp|PATCH global to compile patched code
 
-4. GAEngine.h|Warning tag displayed for negative fitness
+(4) GAEngine.h|Warning tag displayed for negative fitness
 
-5. GAEngine.h|build_rnd_sample|Debug a loop-hole
+(5) GAEngine.h|build_rnd_sample|Debug a loop-hole
 ```c++
 ...
 				// randomly assign an int to v 
@@ -359,7 +359,7 @@ etc...
 				...
 ```
 
-6.GAEngine.h|select_weighted|Fix selection bug
+(6) GAEngine.h|select_weighted|Fix selection bug
 ```c++
 #ifdef PATCH
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);
