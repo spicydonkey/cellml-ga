@@ -8,7 +8,6 @@
 using namespace std;
 
 
-// TODO
 double do_compute(std::vector<double>& vals);
 
 
