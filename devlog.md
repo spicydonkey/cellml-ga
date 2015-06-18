@@ -375,3 +375,5 @@ etc...
 (9) virtexp.h & virtexp.cpp|no changes; clean-up
 
 (10) utils.h & utils.cpp|no changes
+
+(11) makefile-patch|makefile for compiling the patched version (Intel's mpi compiler)
