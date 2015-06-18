@@ -1,7 +1,7 @@
 CC=mpiicpc
 
 PROJ_PATH=/projects/uoa00322/david.shin
-CELLML_PATH=$(PROJ_PATH)/cellml-sdk
+CELLML_PATH=/projects/uoa00322/mike.cooling/cellml-sdk
 
 CFLAGS=-I $(PROJ_PATH)/AdvXMLParser -I $(CELLML_PATH)/include -O
 LFLAGS=-L $(PROJ_PATH)/AdvXMLParser -ladvxml -L $(CELLML_PATH)/lib -lcellml -lcis -Wl,-rpath=$(CELLML_PATH)/lib 
