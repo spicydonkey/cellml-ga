@@ -144,10 +144,6 @@ class Genome
 		// same
         bool same(const Genome& other) const
         {
-            /* Bitwise AND replaced with logical AND
-			if(!valid() & other.valid())
-                return false;
-            */
 			if(!valid() && other.valid())
 				return false;
 
@@ -356,7 +352,7 @@ class GAEngine
 			// Process the works
 				// evaluate and assign the fitness function for each Genome
 #ifndef SEQMODE
-			Distributor::instance().process(observer,this);		//?? TODO: this must be assigning the fitness of each genome in population: HINT this meaning the GAEngine obj
+			Distributor::instance().process(observer,this);		//TODO track process method 
 #else
 			Processor::instance().process(observer,this);		// process the workitems scheduled in the Processor singleton and update this GA state from the observer call
 #endif
@@ -436,7 +432,7 @@ class GAEngine
 #endif
 
 						// cross the genomes in arena at a randomly selected crosspoint
-						// TODO - prone to multiple degree crossover in a single generation iteration! Dangeous?
+						// multiple degree crossover in a single generation iteration possible
 	    				cross(m_Population[arena[0]],m_Population[arena[1]],
 							(int)rnd_generate(1.0,m_Population[sample[i]].size()));		//crosspoint in [1,allele length of ith sample genome]
 
@@ -535,7 +531,7 @@ class GAEngine
 						Processor::instance().remove_key(sample[i]);	// remove previously requested processing for the this genome
 #endif
 						WorkItem *w=var_to_workitem(v);
-                        m_Population[sample[i]].set(v);		// TODO - what's the reason?
+                        m_Population[sample[i]].set(v);		// TODO may not be necessary 
 						w->key=sample[i];
 #ifndef SEQMODE
 						Distributor::instance().push(w);
@@ -773,7 +769,6 @@ class GAEngine
 
 		// build_rnd_sample
 		// append a defined number of randomly selected indices to genomes onto sample
-		// TODO - IMPORTANT BUT MAY CONTAIN BUGS!
         void build_rnd_sample(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid)
         {
             double limit=(double)m_Population.size()-0.5;
@@ -788,10 +783,10 @@ class GAEngine
                 do
                 {
 #ifndef PATCH
-					v=(int)(rnd_generate(0.0,limit));	// TODO v in [0, m_Pop.size()-1] - slightly disfavours the last index
+					v=(int)(rnd_generate(0.0,limit));	// slightly disfavours the last index
 
 					// if check_valid is set true, loop until v is a valid Genome
-					// TODO (BUG - invalid genomes will still be pushed back onto sample)
+					// BUG - invalid genomes will still be pushed back onto sample
                     if(check_valid && !m_Population[v].valid())
 						continue;			
 #else
@@ -855,9 +850,6 @@ class GAEngine
 		// select_weighted
         int select_weighted(POPULATION& p)
         {
-			/* TODO unreferenced
-			double limit=(double)p.size()-0.5;
-            */
 			double sum=0.0;
 
 #ifdef PATCH
@@ -869,6 +861,7 @@ class GAEngine
 #ifdef PATCH
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);
 #else
+				// BUG in assinging infinitely large weight on invalid genome
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
 #endif
 			}
