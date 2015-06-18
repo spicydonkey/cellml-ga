@@ -1,5 +1,7 @@
+/*	Turn off SEQMODE	
 // define SEQMODE to build a sequential mode to test code (Schwefel function); no call to CellML
 #define SEQMODE
+*/
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -134,7 +136,7 @@ void VirtualExperiment::SetParameters(VariablesHolder& v)
 }
 
 
-// TODO
+// TODO description of function
 void VirtualExperiment::SetVariables(VariablesHolder& v)
 {
     ObjRef<iface::cellml_api::CellMLComponentSet> comps=m_Model->modelComponents();
@@ -299,7 +301,7 @@ double VEGroup::Evaluate(VariablesHolder& v)
         experiments[i]->SetVariables(v);
 
 		// evaluate residual from this experiment 
-        double d=experiments[i]->Evaluate();	//??? residual method	TODO
+        double d=experiments[i]->Evaluate();	//TODO fitting method
 
 		// update the total residual
         if(d!=INFINITY)

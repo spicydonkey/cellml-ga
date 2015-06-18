@@ -217,10 +217,10 @@ class VEGroup
 		// get the singleton VE group object
         static VEGroup& instance();
 
-		// TODO
+		// TODO function description
         double Evaluate(VariablesHolder& v);
 
-		// TODO
+		// TODO function description
 		void add(VirtualExperiment *p);
 
     protected:
