@@ -14,7 +14,7 @@
 #include "IfaceCIS.hxx"
 #include "CellMLBootstrap.hpp"
 #include "CISBootstrap.hpp"
-#include "distributor.h"	//TODO compare to processor.h
+#include "distributor.h"
 #else
 #include <map>
 #include <string>
