@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J CellML_Test
 #SBATCH -A uoa00322
-#SBATCH --time=00:10:00     # Walltime
+#SBATCH --time=00:30:00     # Walltime
 #SBATCH --ntasks=4
 #SBATCH --cpus-per-task=2
 #SBATCH --mem-per-cpu=1024  # memory/cpu (in MB)
