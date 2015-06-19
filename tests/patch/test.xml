@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<CellMLTimeSeriesFit>
+	<GA InitialPopulation="100" Generations="100" Mutation_proportion="0.2" Crossover_proportion="0.70">
+		<Alleles>
+			<Allele Name="x1" LowerBound="1.0" UpperBound="1e3"/>
+			<Allele Name="x2" LowerBound="1.0" UpperBound="1e3"/>
+		</Alleles>
+	</GA>
+	<VirtualExperiments>
+		<VirtualExperiment ModelFilePath="ShiftedSchwefel2D.cellml" ResultColumn="3">
+			<AssessmentPoints>
+				<AssessmentPoint time="0.34" target="1" />
+			</AssessmentPoints>
+		</VirtualExperiment>
+	</VirtualExperiments>
+</CellMLTimeSeriesFit>
+
