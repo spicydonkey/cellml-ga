@@ -403,11 +403,26 @@ PROJECT_DIRECTORY(=/projects/uoa00322/david.shin)
 Search a positive domain [1,1000]
 
 #### Schwefel_2D
+##### Description
 Search domain [-500,500]
 
 A dummy ODE is solved but the *objective* variable is time-independent 
 
 Knowing the behaviour of the Schwefel function, target of 0.0 (function value at global minimum) is set at an arbitrary time (2.57s in this case)
+
+##### Results
+Population feedback shows all genomes' fitnesses are evaluated to **INFINITE**!
+
+As expected, *crossover* never gets performed, but the whole gene-pool gets *mutated*.
+
+An interesting behaviour is seen at the *selection* procedure initialising the gene-pool: The first (0th) genome in population **completely fills* the gene-pool!
+```
+...
+SELECT: Adding 0 to population
+SELECT: Adding 0 to population
+SELECT: Adding 0 to population
+...
+```
 
 #### Ramp_2D
 
