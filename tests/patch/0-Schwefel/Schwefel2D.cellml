@@ -1,105 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<model name="ShiftedSchwefel_2D" cmeta:id="ShiftedSchwefel_2D" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
-   <component name="all">
-      <variable name="x1" units="dimensionless" initial_value="510"/>
-      <variable name="x2" units="dimensionless" initial_value="490"/>
-      <variable name="dummy" units="dimensionless" initial_value="-1"/>
-      <variable name="time" units="second"/>
-      <variable name="schwefel" units="dimensionless"/>
-      <variable name="objective" units="dimensionless"/>
-      <variable name="shx1" units="dimensionless"/>
-      <variable name="shx2" units="dimensionless"/>
-      <math xmlns="http://www.w3.org/1998/Math/MathML">
-         <apply>
-            <eq/>
-            <ci>shx1</ci>
+<?xml version='1.0'?>
+<model cmeta:id="Schwefel_2D" name="Schwefel_2D" xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#">
+    <component name="all">
+        <variable initial_value="0" name="x1" units="dimensionless"/>
+        <variable initial_value="0" name="x2" units="dimensionless"/>
+        <variable initial_value="-1" name="dummy" units="dimensionless"/>
+        <variable name="time" units="second"/>
+        <variable name="schwefel" units="dimensionless"/>
+        <variable name="objective" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
-               <minus/>
-               <ci>x1</ci>
-               <cn cellml:units="dimensionless">500</cn>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>dummy</ci>
+                </apply>
+                <cn cellml:units="dimensionless">0</cn>
             </apply>
-         </apply>
-         <apply>
-            <eq/>
-            <ci>shx2</ci>
             <apply>
-               <minus/>
-               <ci>x2</ci>
-               <cn cellml:units="dimensionless">500</cn>
-            </apply>
-         </apply>
-         <apply>
-            <eq/>
-            <apply>
-               <diff/>
-               <bvar>
-                  <ci>time</ci>
-               </bvar>
-               <ci>dummy</ci>
-            </apply>
-            <cn cellml:units="dimensionless">0</cn>
-         </apply>
-         <apply>
-            <eq/>
-            <ci>schwefel</ci>
-            <apply>
-               <plus/>
-               <apply>
-                  <minus/>
-                  <apply>
-                     <minus/>
-                     <apply>
-                        <times/>
-                        <cn cellml:units="dimensionless">418.9829</cn>
-                        <cn cellml:units="dimensionless">2</cn>
-                     </apply>
-                     <apply>
-                        <times/>
-                        <ci>shx1</ci>
+                <eq/>
+                <ci>schwefel</ci>
+                <apply>
+                    <plus/>
+                    <apply>
+                        <minus/>
                         <apply>
-                           <sin/>
-                           <apply>
-                              <root/>
-                              <apply>
-                                 <abs/>
-                                 <ci>shx1</ci>
-                              </apply>
-                           </apply>
+                            <minus/>
+                            <apply>
+                                <times/>
+                                <cn cellml:units="dimensionless">418.9829</cn>
+                                <cn cellml:units="dimensionless">2</cn>
+                            </apply>
+                            <apply>
+                                <times/>
+                                <ci>x1</ci>
+                                <apply>
+                                    <sin/>
+                                    <apply>
+                                        <root/>
+                                        <apply>
+                                            <abs/>
+                                            <ci>x1</ci>
+                                        </apply>
+                                    </apply>
+                                </apply>
+                            </apply>
                         </apply>
-                     </apply>
-                  </apply>
-                  <apply>
-                     <times/>
-                     <ci>shx2</ci>
-                     <apply>
-                        <sin/>
                         <apply>
-                           <root/>
-                           <apply>
-                              <abs/>
-                              <ci>shx2</ci>
-                           </apply>
+                            <times/>
+                            <ci>x2</ci>
+                            <apply>
+                                <sin/>
+                                <apply>
+                                    <root/>
+                                    <apply>
+                                        <abs/>
+                                        <ci>x2</ci>
+                                    </apply>
+                                </apply>
+                            </apply>
                         </apply>
-                     </apply>
-                  </apply>
-               </apply>
-               <cn cellml:units="dimensionless">1</cn>
+                    </apply>
+                    <cn cellml:units="dimensionless">1</cn>
+                </apply>
             </apply>
-         </apply>
-         <apply>
-            <eq/>
-            <ci>objective</ci>
             <apply>
-               <plus/>
-               <ci>schwefel</ci>
-               <apply>
-                  <minus/>
-                  <ci>dummy</ci>
-                  <ci>dummy</ci>
-               </apply>
+                <eq/>
+                <ci>objective</ci>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <ci>schwefel</ci>
+                        <ci>dummy</ci>
+                    </apply>
+                    <ci>dummy</ci>
+                </apply>
             </apply>
-         </apply>
-      </math>
-   </component>
+        </math>
+    </component>
 </model>
