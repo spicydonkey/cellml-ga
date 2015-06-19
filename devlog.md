@@ -401,9 +401,16 @@ PROJECT_DIRECTORY(=/projects/uoa00322/david.shin)
 ### CellML Test Models
 #### ShiftedSchwefel_2D
 Search a positive domain [1,1000]
+
 #### Schwefel_2D
 Search domain [-500,500]
+
+A dummy ODE is solved but the *objective* variable is time-independent 
+
+Knowing the behaviour of the Schwefel function, target of 0.0 (function value at global minimum) is set at an arbitrary time (2.57s in this case)
+
 #### Ramp_2D
+
 #### ip3model
 
 ### TODO
