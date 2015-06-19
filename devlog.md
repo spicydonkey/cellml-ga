@@ -377,3 +377,23 @@ etc...
 (10) utils.h & utils.cpp|no changes
 
 (11) makefile-patch|makefile for compiling the patched version (Intel's mpi compiler)
+
+## 19.06.2015
+### Compiling the patched project
+* **mpiicpc** compiler (at the time of writing is used to compile the c++ code with MPI) requires the module: **intel/ics-2013**
+
+### Test directories
+The database hierarchy for tests are as follows:
+```
+PROJECT_DIRECTORY(=/projects/uoa00322/david.shin)
+	|
+	|____tests
+		|
+		|____seqmode
+		|
+		|____patch
+```
+
+### TODO
+* Problem: SEQMODE flag needs to be manually switched by the user before running make on corresponding project version, which makes switching versions a tedious task
+ 
