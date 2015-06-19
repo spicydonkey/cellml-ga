@@ -2,8 +2,8 @@
 
 #Usage:
 #	./run XML_FILENAME 
-
+PROJ_PATH=/projects/uoa00322/david.shin/cellml-ga
 
 FILENAME=$1
-../experiment ${FILENAME} -v -v -v > ${FILENAME%.*}.out;
+${PROJ_PATH}/experiment ${FILENAME} -v -v -v > ${FILENAME%.*}.out;
 
