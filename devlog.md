@@ -392,7 +392,19 @@ PROJECT_DIRECTORY(=/projects/uoa00322/david.shin)
 		|____seqmode
 		|
 		|____patch
+			|
+			|__0-ThisModel
+			|__1-ThatModel
+			|...
 ```
+
+### CellML Test Models
+#### ShiftedSchwefel_2D
+Search a positive domain [1,1000]
+#### Schwefel_2D
+Search domain [-500,500]
+#### Ramp_2D
+#### ip3model
 
 ### TODO
 * Problem: SEQMODE flag needs to be manually switched by the user before running make on corresponding project version, which makes switching versions a tedious task
