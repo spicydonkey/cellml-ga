@@ -430,4 +430,29 @@ SELECT: Adding 0 to population
 
 ### TODO
 * Problem: SEQMODE flag needs to be manually switched by the user before running make on corresponding project version, which makes switching versions a tedious task
- 
+
+## 22.06.2015
+### Clean code
+* Clean SEQMODE codes
+* release a SEQMODE version from the current master branch 
+
+#### Schwefel_2D
+* Try non-zero target, like the shifted schwefel test, such as 1.0
+  * No INFINITE alleles seen with non-zero target
+  * Crossover and Mutation seen
+  * Population converge to global minimum (100th Gen)
+    * Fitness=0.005 Alleles=420.96,420.22  
+* Try different time and target: 10.0s and 0.1
+  * No INFINITE alleles seen again!
+  * Crossover and Mutation okay
+  * Population HAS NOT converged to global minimum with equivalent GA param to previous test!
+    * Fitness=2589 Alleles=415.20,420.90
+
+Small target could be giving a large fitness. How is the "model fit" evaluted?
+
+* Smaller target: 0.1 and 0.01: Expect to get very high fitness
+  * target 0.1: Fitness=16800 Alleles=422,422
+  * target 0.01: Fitness=1570000 Alleles=422,422
+
+So it seems like that for the *Schwefel_2D* CellML model at least, the *target* attribute seems to interact with fitness evaluation.
+
