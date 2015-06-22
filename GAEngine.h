@@ -8,22 +8,12 @@
 #include <functional>
 #include <time.h>
 #include <stdlib.h>
-#ifndef SEQMODE
-#ifdef SUPPORT_MPI
-#include <mpi.h>
-#endif
-#endif
 #include <limits>
 #include "utils.h"
 #include "virtexp.h"
-#ifndef SEQMODE
-#include "distributor.h"
-#endif
 #include <math.h>
-#ifdef SEQMODE
 #include "processor.h"
 //#define INFINITY MAX_DOUBLE // redefined
-#endif
 
 extern int verbosity;
 
@@ -346,20 +336,12 @@ class GAEngine
 				WorkItem *w=var_to_workitem(v);		// initiate a ptr workitem that has collated this genome's chromosome
 				w->key=i;	// assign this workitem's key accordingly
 				
-#ifndef SEQMODE
-				Distributor::instance().push(w);	// push this work into the singleton distributor
-#else
 				Processor::instance().push(w);		// push this work into the singleton process scheduler
-#endif
 			}
 
 			// Process the works
 				// evaluate and assign the fitness function for each Genome
-#ifndef SEQMODE
-			Distributor::instance().process(observer,this);		//?? TODO: this must be assigning the fitness of each genome in population: HINT this meaning the GAEngine obj
-#else
 			Processor::instance().process(observer,this);		// process the workitems scheduled in the Processor singleton and update this GA state from the observer call
-#endif
 
 			std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort m_Population (vector<Genome>) by reverse_compare: in ascending order of fitness
             
@@ -386,13 +368,11 @@ class GAEngine
                 for(int i=0;i<limit;i++)
                 {
                     int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
-#ifdef SEQMODE
+
 					// Genetic operator feedback
 					if(verbosity>2)
 						printf("SELECT: Adding %d to population\n",mem);
-#else
-                    //printf("Adding %d to population\n",mem);
-#endif
+
 					m_Population.push_back(prev[mem]);
                 }
 
@@ -416,7 +396,6 @@ class GAEngine
 						//bulid tournament sample
                         build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
 
-#ifdef SEQMODE
 						// Genetic operator feedback
 						// Output genomes in arena pre-crossover
 						if(verbosity>2)
@@ -433,14 +412,12 @@ class GAEngine
 								print_genome(arena[j]);
 							}
 						}
-#endif
 
 						// cross the genomes in arena at a randomly selected crosspoint
 						// TODO - prone to multiple degree crossover in a single generation iteration! Dangeous?
 	    				cross(m_Population[arena[0]],m_Population[arena[1]],
 							(int)rnd_generate(1.0,m_Population[sample[i]].size()));		//crosspoint in [1,allele length of ith sample genome]
 
-#ifdef SEQMODE
 						// Output genomes in arena post-crossover
 						if(verbosity>2)
 						{
@@ -456,24 +433,18 @@ class GAEngine
 							}
 							printf("---------------------------------------\n");
 						}
-#endif
 
                         for(int j=0;j<2;j++)
                         {
 							m_Population[arena[j]].var(v);	// store the Xover operated genome in template
-#ifndef SEQMODE
-                            Distributor::instance().remove_key(arena[j]);	//remove previously requested processing
-#else
+
 							Processor::instance().remove_key(arena[j]);		// remove previously requested processing on this genome
-#endif
+
 							// Set-up workitem for Xover'd genome job
 							WorkItem *w=var_to_workitem(v);
 							w->key=arena[j];
-#ifndef SEQMODE
-							Distributor::instance().push(w);
-#else
+
 							Processor::instance().push(w);
-#endif
                         }
 						// genomes weight-selected into population that did not undergo Xover do not need to be re-worked for fitness 
                     }
@@ -501,7 +472,6 @@ class GAEngine
 					// Mutate the selected genomes
                     for(int i=0;i<sample.size();i++)
                     {
-#ifdef SEQMODE
 						// Genetic operator feedback
 						// Output genomes pre-mutation
 						if(verbosity>2)
@@ -516,10 +486,9 @@ class GAEngine
 							printf("-");
 							print_genome(sample[i]);
 						}
-#endif
 
 	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
-#ifdef SEQMODE
+
 						// Output genomes post-mutation
 						if(verbosity>2)
 						{
@@ -527,30 +496,22 @@ class GAEngine
 							print_genome(sample[i]);
 							printf("---------------------------------------\n");
 						}
-#endif
+
 						m_Population[sample[i]].var(v);
-#ifndef SEQMODE
-                        Distributor::instance().remove_key(sample[i]); //remove previously requested processing
-#else
+
 						Processor::instance().remove_key(sample[i]);	// remove previously requested processing for the this genome
-#endif
+
 						WorkItem *w=var_to_workitem(v);
                         m_Population[sample[i]].set(v);		// TODO - what's the reason?
 						w->key=sample[i];
-#ifndef SEQMODE
-						Distributor::instance().push(w);
-#else
+
 						Processor::instance().push(w);
-#endif
                     }
                 }
 
 				//Run the distribution
-#ifndef SEQMODE
-				Distributor::instance().process(observer,this);
-#else
 				Processor::instance().process(observer,this);
-#endif
+
 				std::sort(m_Population.begin(),m_Population.end(),reverse_compare);
 
                 if(m_Population.size()>m_MaxPopulation)
@@ -574,7 +535,6 @@ class GAEngine
         typedef std::map<std::wstring,std::pair<double,double> > LIMITS;
         LIMITS m_Limits;
 
-#ifdef SEQMODE
 		// Print a genome sequence
 		// A genome can be sequenced at any stage of the program, since it does not ask for its fitness, validity, generation, etc.
 		void print_genome(int ind_genome)
@@ -592,7 +552,6 @@ class GAEngine
 			}
 			printf("\n");
 		}
-#endif
 
 		// Output a current summary for GA
         void print_stage(int g)
@@ -600,7 +559,6 @@ class GAEngine
 			//verbose summary of GA: print all chromosomes of curr gen
             if(verbosity>1)
             {
-#ifdef SEQMODE
 				printf("--------------------------------------------------------\n");
                 for(int j=0;j<m_Population.size();j++)
 				{
@@ -622,54 +580,12 @@ class GAEngine
                     printf("\n");
                 }
 				printf("--------------------------------------------------------\n");
-#else
-                printf("--------------------------------------------------------\n");
-                for(int j=0;j<m_Population.size();j++)
-				{
-                    VariablesHolder v;
-					
-					//print validity, generation #, and fitness of each chromosome
-                    //printf("%s[%d](%lf) ",(m_Population[j].valid()?" ":"*"),g+1,m_Population[j].fitness());
-					printf("%s[%d](%lf) ",(m_Population[j].valid()?(m_Population[j].fitness()<0?"!":" "):"*"),g+1,m_Population[j].fitness());
-					//print each chromosome's alleles (name and value)
-                    for(int k=0;;k++)
-                    {
-                        m_Population[j].var(v);
-						std::wstring name=v.name(k);
-                               
-	    				if(name.empty())
-							break;
-						printf("%s=%lf   ",convert(name).c_str(),v(name));
-                    }
-                    printf("\n");
-                }
-				printf("--------------------------------------------------------\n");
-#endif
 			} 
              
 			//shorter summary of GA: print currently fittest chromosome
 				// and fittest chromosome of this generation
 			else if(verbosity==1)
 			{
-#ifdef SEQMODE
-				VariablesHolder v;
-				double f;
-				
-				// Fittest chromosome in this gen is the first genome in sorted population
-				m_Population[0].var(v);
-				f=m_Population[0].fitness();
-
-				printf("Generation %d. Best fitness: %lf\n",g+1,f);
-				for(int k=0;;k++)
-				{
-					std::wstring name=v.name(k);
-					if(name.empty())
-						break;
-					printf("%s=%lf    ",convert(name).c_str(),v(name));
-				}
-                printf("\n");
-                printf("--------------------------------------------------------\n");
-#else
 				VariablesHolder v;
 				double f=GetBest(v);	// The fittest chromosome so far in GA
 
@@ -683,7 +599,6 @@ class GAEngine
 				}
                 printf("\n");
                 printf("--------------------------------------------------------\n");
-#endif
 			}
 		}
 
@@ -808,20 +723,10 @@ class GAEngine
 				// if check_valid set true, add a valid index
                 do
                 {
-#ifndef SEQMODE
-					v=(int)(rnd_generate(0.0,limit));	// TODO v in [0, m_Pop.size()-1] - slightly disfavours the last index
-
-					// if check_valid is set true, loop until v is a valid Genome
-					// TODO (BUG - invalid genomes will still be pushed back onto sample)
-                    if(check_valid && !m_Population[v].valid())
-						continue;			
-#else
-					// THE FIX - nested do-while! TODO
 					do
 					{
 						v=(int)(rnd_generate(0.0,limit));
 					} while (check_valid && !m_Population[v].valid());
-#endif
                 } while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
                 //Found next genome
                 sample.push_back(v);
@@ -876,35 +781,20 @@ class GAEngine
 		// select_weighted
         int select_weighted(POPULATION& p)
         {
-			/* TODO unreferenced
-			double limit=(double)p.size()-0.5;
-            */
 			double sum=0.0;
-
-#ifdef SEQMODE
 			double zero_lim=0.000000000001;
-#endif
+
 			// total sum of population's fitness	(sum is inf if p[i].fitness == 0 or p[i] invalid)
             for(int i=0;i<p.size();i++)
 			{	
-				/* TODO BUG
-				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
-				*/
-#ifdef SEQMODE
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);
-#else
-				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):0.0);
-#endif
 			}
 			// use a randomly selected threshold for cum-sum to select i
             double choice=sum*rnd_generate(0.0,1.0);
             for(int i=0;i<p.size();i++)
             {
-#ifdef SEQMODE
 				choice-=1.0/(p[i].fitness()?p[i].fitness():zero_lim);
-#else
-				choice-=1.0/(p[i].fitness()?p[i].fitness():0.000000000001);
-#endif
+
                 if(choice<=0.0)
 					return i;
             }

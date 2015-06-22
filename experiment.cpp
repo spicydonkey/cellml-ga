@@ -1,23 +1,16 @@
-// define SEQMODE to build a sequential mode to test code (Schwefel function); no call to CellML
-#define SEQMODE
+// Sequential version 
+/*
+	Test GA against various test functions in GATESTER.h
+	No parallel processing
+	No call to CellML
+*/
 
-#ifndef SEQMODE
-#include <mpi.h>
-#include "cellml-api-cxx-support.hpp"
-#include "IfaceCellML_APISPEC.hxx"
-#include "IfaceCIS.hxx"
-#include "CellMLBootstrap.hpp"
-#include "CISBootstrap.hpp"
-#include "distributor.h"
-#else
 #include <map>
 #include <string>
 #include <string.h>
 #include <cfloat>
 #include "processor.h"
-//#undef UNICODE
-//#undef _UNICODE
-#endif
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,20 +22,12 @@
 using namespace std;
 using namespace AdvXMLParser;
 
-#ifndef SEQMODE
-using namespace iface::cellml_api;
-using namespace iface::cellml_services;
-#endif
 
 //If SUPPORT_BLOCK_SAMPLING is defined
 //the selection algorithms may use either
 //probabilistic search or blocking search
 //#define SUPPORT_BLOCK_SAMPLING
 
-#ifndef SEQMODE
-ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap; //CellML api bootstrap
-ObjRef<iface::cellml_services::CellMLIntegrationService> cis;
-#endif
 
 VariablesHolder var_template; //template for the variables, just holds names of the variables
 
@@ -86,7 +71,7 @@ char *OpenXmlFile(const char *name,long& nSize)
 
 //Initialise GA engine
 	//return number of generations to run GA
-int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)		//AdvXMLParser
+int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 {
 	//Get GA parameters from XML file
     int initPopulation=atoi(elem.GetAttribute("InitialPopulation").GetValue().c_str());
@@ -107,9 +92,6 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)		//AdvXMLPar
     ga.prob_mutate()=mutation;
     ga.part_cross()=(int)((double)initPopulation*cross);
     ga.part_mutate()=(int)((double)initPopulation*mutation);
-#ifdef SUPPORT_BLOCK_SAMPLING
-    ga.block_sample()=(block_sample==0);
-#endif
     
     //Read alleles information
     for(int i=0;;i++)
@@ -158,47 +140,7 @@ bool observer(WorkItem *w,double answer,void *g)
     return true;
 }
 
-#ifndef SEQMODE
-// do_compute [distributor.cpp]
-/**
- *	
- *
- **/
-double do_compute(std::vector<double>& val)
-{
-	// fill-up the tmp's allele values with supplied data
-    var_template.fillup(val);
-	// evaluate this chromosome's fit and return the representative residual
-    return VEGroup::instance().Evaluate(var_template);
-}
 
-
-//Slave process
-//Returns only when quit command is received from the master
-void run_slave(int proc)
-{
-    double req;
-    MPI_Status stat;
-    std::vector<double> data;
-
-    var_template.collate(data); 
-    while(1)
-    {
-        //check if data is received
-        MPI_Probe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&stat);
-        if(stat.MPI_TAG==TAG_QUIT)
-        {
-            //Quit signal received
-            break;
-        }
-        //Receive compute request and process it
-        MPI_Recv(&data[0],data.size(),MPI_DOUBLE,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&stat);
-        req=do_compute(data);
-        //returns the result of the computations
-        MPI_Send(&req,1,MPI_DOUBLE,0,0,MPI_COMM_WORLD);
-    }
-}
-#else
 // do_compute	[processor.cpp]
 // Call a virtual simulation (i.e. test functions) to assign genome's fitness
 double do_compute(std::vector<double>& val)
@@ -208,7 +150,6 @@ double do_compute(std::vector<double>& val)
 	// Virtual simulation: evaluate this chromosome's fitness
 	return VEGroup::instance().Evaluate(var_template);
 }
-#endif
 
 
 int main(int argc,char *argv[])
@@ -216,17 +157,11 @@ int main(int argc,char *argv[])
     char *pBuffer=NULL;
     long nSize=0;
     GAEngine<COMP_FUNC > ga;	// initialise GA engine for the program
-#ifndef SEQMODE
-	int proc,nproc;
-#endif
     int generations=1;
     const char *filename=NULL;
 
     srand(time(NULL));	// seed the RNG
 
-#ifndef SEQMODE
-    MPI_Init(&argc,&argv);
-#endif
     if(argc<2)
     {
 		// warn user for incorrect usage of command
@@ -244,15 +179,6 @@ int main(int argc,char *argv[])
             filename=argv[i];
     }
 
-#ifndef SEQMODE
-    MPI_Comm_rank(MPI_COMM_WORLD, &proc);
-    MPI_Comm_size(MPI_COMM_WORLD, &nproc);
-
-    //Load and initialise CellML API
-    bootstrap=CreateCellMLBootstrap();
-    cis=CreateIntegrationService();
-#endif
-
 	// Read input file and store contents in buffer
     if((pBuffer=OpenXmlFile(filename,nSize)) == NULL)
     {
@@ -266,31 +192,12 @@ int main(int argc,char *argv[])
     {
         Parser parser;
 
-#ifndef SEQMODE
-        ObjRef<CellMLComponentSet> comps;	//??? comps not referenced elsewhere in project
-#endif
-
 		// Parse the XML contents in buffer
         auto_ptr<Document> pDoc(parser.Parse(pBuffer,nSize));	// can throw an exception
 		// Get the root of the XML structure
         const Element& root=pDoc->GetRoot();
 
 		// Load virtual experiments
-#ifndef SEQMODE
-		// load all virtual experiments in the XML file
-		for(int i=0;;i++)
-        {
-            VariablesHolder params;	//??? unused	TODO
-
-			// load the ith VE in file
-            VirtualExperiment *vx=VirtualExperiment::LoadExperiment(root("VirtualExperiments",0)("VirtualExperiment",i));
-			if(!vx)
-               break;	// load all the VE in file
-			
-			// add each VE into the group singleton
-            VEGroup::instance().add(vx);
-        }
-#else
 		// List of test functions and their call number at VEGroup::Evaluate
 		std::map<std::string,int> testFunctions;
 		testFunctions["schwefel"]=1;
@@ -302,25 +209,10 @@ int main(int argc,char *argv[])
 		// get test function specified in XML file
 		string testName=(root("VirtualExperiments",0)("VirtualExperiment",0)).GetAttribute("TestFunction").GetValue();
 		var_template.test() = testFunctions[testName];	// assign corresponding test function to the variable template
-#endif
 		
 		// load the GA parameters from file and initialise the engine
-#ifndef SEQMODE
-        if(!proc)
-        {
-			// assign number of generations and initialise the parameters for the GA engine
-            generations=SetAndInitEngine(ga,root("GA",0));
-        }
-        else
-        {
-			// initialise the template variable holder
-            initialize_template_var(root("GA",0));
-        }
-#else
 		generations=SetAndInitEngine(ga,root("GA",0));		// load the GA params and initialise the engine
-		initialize_template_var(root("GA",0));		// initialise var_template with alleles 
-#endif
-
+		initialize_template_var(root("GA",0));		// initialise var_template with alleles
     }
     catch(ParsingException e)
     {
@@ -328,51 +220,23 @@ int main(int argc,char *argv[])
     }
     delete [] pBuffer;	// free memory used to store file
 
-#ifndef SEQMODE
-	//Wait until all the clints are ready
-    //
-    MPI_Barrier(MPI_COMM_WORLD);
+    VariablesHolder v;	// storage for the best chromosome
 
-    //Only master tasks needs GA engine to be initialised and used   
-    if(!proc)
-    {
-        //Master task
-#endif
-        VariablesHolder v;	// storage for the best chromosome
-
-		//Initialise the population in GA engine
-        ga.Initialise();
-		//Run GA
-        ga.RunGenerations(generations);
+	//Initialise the population in GA engine
+    ga.Initialise();
+	//Run GA
+    ga.RunGenerations(generations);
         
-		// Best genome from the run
-		double bf=ga.GetBest(v);
-		printf("Best fitness: %lf\n",bf);
-        for(int i=0;;i++)
-        {
-            wstring name=v.name(i);
-            if(!name.size())
-                break;
-            printf("Best[%s]=%lf\n",convert(name).c_str(),v(name));
-        }
-#ifndef SEQMODE
-        Distributor::instance().finish();
-    }
-    else
+	// Best genome from the run
+	double bf=ga.GetBest(v);
+	printf("Best fitness: %lf\n",bf);
+    for(int i=0;;i++)
     {
-        run_slave(proc);
+        wstring name=v.name(i);
+        if(!name.size())
+            break;
+        printf("Best[%s]=%lf\n",convert(name).c_str(),v(name));
     }
-
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    MPI_Finalize();
-#endif
 
     return 0;
 }
-
-
-//#ifdef SEQMODE
-//#define UNICODE 1
-//#define _UNICODE 1
-//#endif

@@ -1,3 +1,5 @@
+// Sequential version's work-scheduling class to mimic Distributor object for MPI
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "processor.h"

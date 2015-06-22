@@ -1,12 +1,6 @@
 #ifndef VIRTUAL_EXPERIMENT_H
 #define VIRTUAL_EXPERIMENT_H
 #include <stddef.h>
-#ifndef SEQMODE
-#include "cellml-api-cxx-support.hpp"
-#include "IfaceCellML_APISPEC.hxx"
-#include "CellMLBootstrap.hpp"
-#include "CISBootstrap.hpp"
-#endif
 #include "AdvXMLParser.h"
 #include "utils.h"
 #include <string>
@@ -21,30 +15,19 @@
 typedef std::vector<std::pair<std::wstring,double> > ALLELE;
 
 
-/**
- *	VariablesHolder
- *	
- *	+ m_Vars : a storage for ALLELE variable
- *	
- *	
- **/
 class VariablesHolder
 {
 	private:
 		ALLELE m_Vars;	//the member that stores alleles in a chromosome form ( i.e. vector <allele=pair<wstring allele_name,double allele_value> > )
 
-#ifdef SEQMODE
 		int m_Test;	// test-function/simulation selector
-#endif
 
 	public:
 		VariablesHolder() {}
 		VariablesHolder(const VariablesHolder& other) { m_Vars.assign(other.m_Vars.begin(),other.m_Vars.end()); }	//copy other VarHolder's variables into this one
 		~VariablesHolder() {}
 
-#ifdef SEQMODE
 		int& test() { return m_Test; }
-#endif
 
 		// = assign other VarHold to this if different 
 		VariablesHolder& operator=(const VariablesHolder& other)
@@ -136,61 +119,12 @@ class VariablesHolder
 };
 
 
-
-/**
- *	VirtualExperiment
- *	
- *	
- *	
- **/
 class VirtualExperiment
 {
     public:
         VirtualExperiment();
         ~VirtualExperiment();
 
-#ifndef SEQMODE
-        bool LoadModel(const std::string& model_name);
-        static VirtualExperiment *LoadExperiment(const AdvXMLParser::Element& elem);
-        void SetVariables(VariablesHolder& v);
-        void SetParameters(VariablesHolder& v);
-        double Evaluate();
-
-        int resultcol() const { return m_nResultColumn; }
-        void resultcol(int r) { m_nResultColumn=r; }
-
-        unsigned long maxtime() const { return m_MaxTime; }
-        void maxtime(unsigned long m) { m_MaxTime=m; }
-
-        double accuracy() const { return m_Accuracy; }
-        void accuracy(double a) { m_Accuracy=a; }
-
-        void Run();
-
-	private:
-
-		/**
-		 *	Runner structure
-		 *	
-		 *	+ pOwner (ptr to a VirtualExperiment)
-		 *
-		 **/
-        struct Runner
-        {
-           Runner(VirtualExperiment *p):pOwner(p) {}
-           double operator()(VariablesHolder& v);
-
-           VirtualExperiment *pOwner;
-        };
-
-        friend class Runner;
-
-        double getSSRD(std::vector<std::pair<int,double> >& d);
-        std::string m_strModelName;
-
-
-        ObjRef<iface::cellml_api::Model> m_Model;
-#endif		
 		int m_nResultColumn;
         
 		// Type definitions
