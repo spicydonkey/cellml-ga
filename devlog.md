@@ -433,8 +433,8 @@ SELECT: Adding 0 to population
 
 ## 22.06.2015
 ### Clean code
-* Clean SEQMODE codes
-* release a SEQMODE version from the current master branch 
+* [x] Clean SEQMODE codes in patch branch
+* [x] release a SEQMODE version from the current master branch
 
 #### Schwefel_2D
 * Try non-zero target, like the shifted schwefel test, such as 1.0
@@ -455,4 +455,3 @@ Small target could be giving a large fitness. How is the "model fit" evaluted?
   * target 0.01: Fitness=1570000 Alleles=422,422
 
 So it seems like that for the *Schwefel_2D* CellML model at least, the *target* attribute seems to interact with fitness evaluation.
-
