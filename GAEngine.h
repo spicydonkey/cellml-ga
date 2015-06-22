@@ -8,22 +8,14 @@
 #include <functional>
 #include <time.h>
 #include <stdlib.h>
-#ifndef SEQMODE
 #ifdef SUPPORT_MPI
 #include <mpi.h>
-#endif
 #endif
 #include <limits>
 #include "utils.h"
 #include "virtexp.h"
-#ifndef SEQMODE
 #include "distributor.h"
-#endif
 #include <math.h>
-#ifdef SEQMODE
-#include "processor.h"
-//#define INFINITY MAX_DOUBLE // redefined
-#endif
 
 extern int verbosity;
 
@@ -342,20 +334,12 @@ class GAEngine
 				WorkItem *w=var_to_workitem(v);		// initiate a ptr workitem that has collated this genome's chromosome
 				w->key=i;	// assign this workitem's key accordingly
 				
-#ifndef SEQMODE
 				Distributor::instance().push(w);	// push this work into the singleton distributor
-#else
-				Processor::instance().push(w);		// push this work into the singleton process scheduler
-#endif
 			}
 
 			// Process the works
 				// evaluate and assign the fitness function for each Genome
-#ifndef SEQMODE
 			Distributor::instance().process(observer,this);		//TODO track process method 
-#else
-			Processor::instance().process(observer,this);		// process the workitems scheduled in the Processor singleton and update this GA state from the observer call
-#endif
 
 			std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort m_Population (vector<Genome>) by reverse_compare: in ascending order of fitness
             
@@ -457,19 +441,12 @@ class GAEngine
                         for(int j=0;j<2;j++)
                         {
 							m_Population[arena[j]].var(v);	// store the Xover operated genome in template
-#ifndef SEQMODE
                             Distributor::instance().remove_key(arena[j]);	//remove previously requested processing
-#else
-							Processor::instance().remove_key(arena[j]);		// remove previously requested processing on this genome
-#endif
+
 							// Set-up workitem for Xover'd genome job
 							WorkItem *w=var_to_workitem(v);
 							w->key=arena[j];
-#ifndef SEQMODE
 							Distributor::instance().push(w);
-#else
-							Processor::instance().push(w);
-#endif
                         }
 						// genomes weight-selected into population that did not undergo Xover do not need to be re-worked for fitness 
                     }
@@ -525,28 +502,16 @@ class GAEngine
 						}
 #endif
 						m_Population[sample[i]].var(v);
-#ifndef SEQMODE
                         Distributor::instance().remove_key(sample[i]); //remove previously requested processing
-#else
-						Processor::instance().remove_key(sample[i]);	// remove previously requested processing for the this genome
-#endif
 						WorkItem *w=var_to_workitem(v);
                         m_Population[sample[i]].set(v);		// TODO may not be necessary 
 						w->key=sample[i];
-#ifndef SEQMODE
 						Distributor::instance().push(w);
-#else
-						Processor::instance().push(w);
-#endif
                     }
                 }
 
 				//Run the distribution
-#ifndef SEQMODE
 				Distributor::instance().process(observer,this);
-#else
-				Processor::instance().process(observer,this);
-#endif
 				std::sort(m_Population.begin(),m_Population.end(),reverse_compare);
 
                 if(m_Population.size()>m_MaxPopulation)
