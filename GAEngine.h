@@ -245,7 +245,7 @@ class GAEngine
                 return false;
 
 			// Attach alleles to the representative genome
-			for(typename std::vector<std::wstring>::iterator it=m_AlleleList.begin();it!=m_AlleleList.end();++it)	// iterate through the list of allele names
+			for(typename std::vector<std::wstring>::iterator it=m_AlleleList.begin();it!=m_AlleleList.end();++it)	// iterate through the list of alleles
 			{
 				// Create each allele with all values initialised to 0.0
 				v.allele(*it,(double)0.0);

@@ -62,7 +62,6 @@ char *OpenXmlFile(const char *name,long& nSize)
 	//allocate memory to contain the whole file
     pBuffer=new char[nSize+1];
 
-	
     fread(pBuffer,nSize,1,f);	//copy the file into buffer (usage of fread)
 	//fread(pBuffer,1,nSize,f);
     
@@ -72,9 +71,9 @@ char *OpenXmlFile(const char *name,long& nSize)
     return pBuffer;
 }
 
-//Initialise GA engine
-	//return number of generations to run GA
-int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)		//AdvXMLParser
+// Initialise GA engine
+	// return number of generations to run GA
+int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 {
 	//Get GA parameters from XML file
     int initPopulation=atoi(elem.GetAttribute("InitialPopulation").GetValue().c_str());
@@ -82,11 +81,10 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)		//AdvXMLPar
     double cross=atof(elem.GetAttribute("Crossover_proportion").GetValue().c_str());
     int generations=atoi(elem.GetAttribute("Generations").GetValue().c_str());
     int block_sample=atoi(elem.GetAttribute("Sampling").GetValue().c_str());
-    
 
-    //Set the parameters for the GA engine accordingly
+    // Check for default and limit for params
     if(!initPopulation)
-        initPopulation=100;		// default population size if in XML it is undeclared or 0
+        initPopulation=100;
     if(cross>1.0)
         cross=1.0;
     if(mutation>1.0)
@@ -99,38 +97,36 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)		//AdvXMLPar
     ga.block_sample()=(block_sample==0);
 #endif
     
-    //Read alleles information
+    // Read alleles information
     for(int i=0;;i++)
     {
-        const Element& al=elem("Alleles",0)("Allele",i);		//AdvXMLParser// assign to "al" the ith Allele sub-element of the (first) Alleles element in "elem"
+        const Element& al=elem("Alleles",0)("Allele",i);	// get sub-Allele element in XML
         std::wstring name;
         if(al.IsNull())
-           break;	// exhaustively iterate through the "Allele" sub-elements of Alleles
-        name=convert(al.GetAttribute("Name").GetValue());	// get the String value for Name attribute in "al" allele sub-element; convert it to wstring and store in name
-        // Add allele
-		ga.AddAllele(name);	
-        // Set allele limits
+           break;	// no more alleles specified
+        name=convert(al.GetAttribute("Name").GetValue());
+		ga.AddAllele(name);
         ga.AddLimit(name,atof(al.GetAttribute("LowerBound").GetValue().c_str()),atof(al.GetAttribute("UpperBound").GetValue().c_str()));
-        // Initialise variable template
-        var_template(name,0.0);
+        var_template(name,0.0);		// update allele list in var_template
     }
-    ga.set_borders(initPopulation);		// set max population of GA
+    ga.set_borders(initPopulation);		// set max population of GA and initialise the population with default genomes
 
 	// return the num of generations to run GA
     return (generations?generations:1);	// default number of generations to run is 1
 }
 
 
-//Initialise var_template with Alleles in XML; all param names are updated into var_template
-void initialize_template_var(const Element& elem)	//AdvXMLParser
+//Initialise var_template with Alleles in XML; all param (allele) names are updated into var_template
+void initialize_template_var(const Element& elem)
 {
+	// Read alleles information in XML
     for(int i=0;;i++)
     {
-        const Element& al=elem("Alleles",0)("Allele",i);	// assign to "al" the ith Allele sub-element of the (first) Alleles element in "elem"
+        const Element& al=elem("Alleles",0)("Allele",i);
         std::wstring name; 
         if(al.IsNull())
-           break;	// exhaustively iterate through the "Allele" sub-elements of Alleles
-        name=convert(al.GetAttribute("Name").GetValue());	// get the String value for Name attribute in "al" allele sub-element; convert it to wstring and store in name
+           break;	// no more alleles specified
+        name=convert(al.GetAttribute("Name").GetValue());
         // Add this parameter as an allele in var_template
 		var_template(name,0.0);
     }
@@ -195,9 +191,10 @@ int main(int argc,char *argv[])
     srand(time(NULL));	// seed the RNG
 
     MPI_Init(&argc,&argv);
+
     if(argc<2)
     {
-		// warn user for incorrect usage of command
+		// warn user for incorrect usage at command line
         usage(argv[0]);
         return -1;
     }
@@ -232,7 +229,7 @@ int main(int argc,char *argv[])
     {
         Parser parser;
 
-        ObjRef<CellMLComponentSet> comps;	//??? comps not referenced elsewhere in project
+        ObjRef<CellMLComponentSet> comps;	// TODO comps not referenced elsewhere in project
 
 		// Parse the XML contents in buffer
         auto_ptr<Document> pDoc(parser.Parse(pBuffer,nSize));	// can throw an exception
@@ -243,12 +240,10 @@ int main(int argc,char *argv[])
 		// load all virtual experiments in the XML file
 		for(int i=0;;i++)
         {
-            VariablesHolder params;	//TODO unused variable
-
-			// load the ith VE in file
+			// load the VE data in file
             VirtualExperiment *vx=VirtualExperiment::LoadExperiment(root("VirtualExperiments",0)("VirtualExperiment",i));
 			if(!vx)
-               break;	// load all the VE in file
+               break;	// loaded all the VE in file
 			
 			// add each VE into the group singleton
             VEGroup::instance().add(vx);
@@ -257,12 +252,13 @@ int main(int argc,char *argv[])
 		// load the GA parameters from file and initialise the engine
         if(!proc)
         {
-			// assign number of generations and initialise the parameters for the GA engine
+			// Only the Master initialises the GA engine
+			// get max generations and GA parameters
             generations=SetAndInitEngine(ga,root("GA",0));
         }
         else
         {
-			// initialise the template variable holder
+			// The slaves initialise the template variable holder for storing Genome structure
             initialize_template_var(root("GA",0));
         }
     }
@@ -272,11 +268,10 @@ int main(int argc,char *argv[])
     }
     delete [] pBuffer;	// free memory used to store file
 
-	//Wait until all the clints are ready
-    //
+	//Wait until all the clients are ready
     MPI_Barrier(MPI_COMM_WORLD);
 
-    //Only master tasks needs GA engine to be initialised and used   
+    //Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
         //Master task

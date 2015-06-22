@@ -29,19 +29,21 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 {
     VirtualExperiment *vx=NULL;
 
-    string strName=elem.GetAttribute("ModelFilePath").GetValue();
+    string strName=elem.GetAttribute("ModelFilePath").GetValue();	// Get model name
 
-	// Check if the model file path is defined
     if(!strName.size())
         return NULL;
+
     vx=new VirtualExperiment;
+	// Load the CellML model
     if(!vx->LoadModel(strName))
-    {
+    {	// Error in loading model
         delete vx;
         vx=NULL;
     }
-    else //read assessment points
-    {
+    else
+    {	// Model loaded correctly - read the VE data
+		// VE variable of interest
         vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
 
         if(elem.GetAttribute("Accuracy").GetValue().size())
@@ -49,7 +51,9 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
        
         vx->m_MaxTime=atoi(elem.GetAttribute("MaxSecondsForSimulation").GetValue().c_str());
         vx->m_ReportStep=atof(elem.GetAttribute("ReportStep").GetValue().c_str());
-        for(int i=0;;i++)
+        
+		// Read the assessment points
+		for(int i=0;;i++)
         {
             const AdvXMLParser::Element& al=elem("AssessmentPoints",0)("AssessmentPoint",i);
             POINT pt;
@@ -60,6 +64,7 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
             pt.second=atof(al.GetAttribute("target").GetValue().c_str());
             vx->m_Timepoints.push_back(pt);
         }
+
         //read parameters
         for(int i=0;;i++)
         {
