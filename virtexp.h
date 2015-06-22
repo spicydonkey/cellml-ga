@@ -1,12 +1,10 @@
 #ifndef VIRTUAL_EXPERIMENT_H
 #define VIRTUAL_EXPERIMENT_H
 #include <stddef.h>
-#ifndef SEQMODE
 #include "cellml-api-cxx-support.hpp"
 #include "IfaceCellML_APISPEC.hxx"
 #include "CellMLBootstrap.hpp"
 #include "CISBootstrap.hpp"
-#endif
 #include "AdvXMLParser.h"
 #include "utils.h"
 #include <string>
@@ -33,18 +31,10 @@ class VariablesHolder
 	private:
 		ALLELE m_Vars;	//the member that stores alleles in a chromosome form ( i.e. vector <allele=pair<wstring allele_name,double allele_value> > )
 
-#ifdef SEQMODE
-		int m_Test;	// test-function/simulation selector
-#endif
-
 	public:
 		VariablesHolder() {}
 		VariablesHolder(const VariablesHolder& other) { m_Vars.assign(other.m_Vars.begin(),other.m_Vars.end()); }	//copy other VarHolder's variables into this one
 		~VariablesHolder() {}
-
-#ifdef SEQMODE
-		int& test() { return m_Test; }
-#endif
 
 		// = assign other VarHold to this if different 
 		VariablesHolder& operator=(const VariablesHolder& other)
@@ -149,7 +139,6 @@ class VirtualExperiment
         VirtualExperiment();
         ~VirtualExperiment();
 
-#ifndef SEQMODE
         bool LoadModel(const std::string& model_name);
         static VirtualExperiment *LoadExperiment(const AdvXMLParser::Element& elem);
         void SetVariables(VariablesHolder& v);
@@ -190,7 +179,7 @@ class VirtualExperiment
 
 
         ObjRef<iface::cellml_api::Model> m_Model;
-#endif		
+	
 		int m_nResultColumn;
         
 		// Type definitions

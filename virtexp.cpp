@@ -1,35 +1,21 @@
-/*	Turn off SEQMODE	
-// define SEQMODE to build a sequential mode to test code (Schwefel function); no call to CellML
-#define SEQMODE
-*/
-
 #include <unistd.h>
 #include <stdlib.h>
 #include "virtexp.h"
 #include "AdvXMLParser.h"
 #include "utils.h"
-#ifndef SEQMODE
 #include "cellml_observer.h"
-#endif
 #include <math.h>
-
-#ifdef SEQMODE
-#include "GATESTER.h" // test functions 
-#endif
 
 using namespace std;
 using namespace AdvXMLParser;
-#ifndef SEQMODE
 using namespace iface::cellml_api;
 using namespace iface::cellml_services;
-#endif
+
 
 #define EPSILON 0.01
 
-#ifndef SEQMODE
 extern ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap; //CellML api bootstrap
 extern ObjRef<iface::cellml_services::CellMLIntegrationService> cis;
-#endif
 
 VirtualExperiment::VirtualExperiment():m_nResultColumn(-1),m_ReportStep(0.0),m_MaxTime(0),m_Accuracy(EPSILON)
 {
@@ -39,7 +25,6 @@ VirtualExperiment::~VirtualExperiment()
 {
 }
 
-#ifndef SEQMODE
 VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element& elem)
 {
     VirtualExperiment *vx=NULL;
@@ -258,7 +243,7 @@ double VirtualExperiment::Runner::operator()(VariablesHolder& v)
     pOwner->SetVariables(v);
     return pOwner->Evaluate();
 }
-#endif
+
 
 VEGroup::VEGroup()
 {
@@ -277,7 +262,6 @@ VEGroup& VEGroup::instance()
 }
 
 
-#ifndef SEQMODE
 /**
  *	Evaluate a model's fit against data from a group of virtual experiments
  *	
@@ -314,34 +298,6 @@ double VEGroup::Evaluate(VariablesHolder& v)
 	// return this param list's average deviation evaluated from all virtual experiments
     return (count==experiments.size()?res/(double)count:INFINITY);
 }
-#else
-double VEGroup::Evaluate(VariablesHolder& v)
-{
-	// Get back the vector<double> of params
-	std::vector<double> params;
-	v.collate(params);
-
-	int test = v.test();
-	// Evaluate and return the result of a test function
-	switch (test) {
-		case 1:
-			// multi-dim Schwefel function
-			return schwefel(params);
-		case 2:
-			// shifted multi-dim Schwefel function
-			return sh_schwefel(params);
-		case 3:
-			// multi-dim Schwefel with infinite region
-			return inf_schwefel(params);
-		case 4:
-			// negative valued Schwefel function
-			return neg_schwefel(params);
-		case 5:
-			// multi-dim Schwefel with v large region (not inf)
-			return lge_schwefel(params);
-	}
-}
-#endif
 
 void VEGroup::add(VirtualExperiment *p)
 {
