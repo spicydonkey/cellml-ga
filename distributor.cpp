@@ -85,20 +85,22 @@ void Distributor::process(Distributor::OBSERVER o,void *p)
         //check if an available rank is found
         if(i<ranks.size())
         {
-            ranks[i].first=true; //Found available rank
+            ranks[i].first=true; //This processor busy now
             ranks[i].second=workitem;
             workitem->context=time(NULL); //save time for adding load balancing later
-            //Request processing
-            MPI_Send(&workitem->data[0],workitem->data.size(),MPI_DOUBLE,i,0,MPI_COMM_WORLD);
+            //Request processing to the chosen processor
+				// slave procs in run_slave loop in experiment.cpp
+            MPI_Send(&workitem->data[0],workitem->data.size(),MPI_DOUBLE,i,0,MPI_COMM_WORLD);	//TODO Sending vector like array?
             in_process++;
         }
         else
         {
             //we are the only one available - do compute
+				// TODO could be bad if many slave processors wait for master
             double answer;
 
-            answer=do_compute(workitem->data); // compute this workitem's data, returns the residual
-            o(workitem,answer,p); //call observer
+            answer=do_compute(workitem->data);	// compute the work item
+            o(workitem,answer,p);	// observer callback on the context with the result
             //get data back
             if(in_process)
             {
@@ -113,11 +115,11 @@ void Distributor::process(Distributor::OBSERVER o,void *p)
                     if(flag)
                     {
                         //There is data available
-		        r=stat.MPI_SOURCE;
-		        MPI_Recv(&answer,1,MPI_DOUBLE,stat.MPI_SOURCE,0,MPI_COMM_WORLD,&stat);
-		        o(ranks[r].second,answer,p);                 
-		        ranks[r].first=false;
-		        in_process--;
+						r=stat.MPI_SOURCE;	// which proc
+						MPI_Recv(&answer,1,MPI_DOUBLE,stat.MPI_SOURCE,0,MPI_COMM_WORLD,&stat);
+						o(ranks[r].second,answer,p);	// observer callback         
+						ranks[r].first=false;	// the proc is free
+						in_process--;	// one less processor working
                     }
                     else
                        break;
@@ -128,17 +130,17 @@ void Distributor::process(Distributor::OBSERVER o,void *p)
     //all done - wait for the rest if anything left
     while(in_process)
     {
-	MPI_Status stat;
-	int r;
-        double answer;
+		MPI_Status stat;
+		int r;
+		double answer;
 
-        //Wait until someting is returned - can be ommitted
-	MPI_Probe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&stat);
-	r=stat.MPI_SOURCE;
-	MPI_Recv(&answer,1,MPI_DOUBLE,stat.MPI_SOURCE,0,MPI_COMM_WORLD,&stat);
-	o(ranks[r].second,answer,p);                 
-	ranks[r].first=false;
-	in_process--;
+		//Wait until someting is returned - can be ommitted
+		MPI_Probe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&stat);
+		r=stat.MPI_SOURCE;
+		MPI_Recv(&answer,1,MPI_DOUBLE,stat.MPI_SOURCE,0,MPI_COMM_WORLD,&stat);
+		o(ranks[r].second,answer,p);                 
+		ranks[r].first=false;
+		in_process--;
     }
 }
 

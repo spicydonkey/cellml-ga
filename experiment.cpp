@@ -136,7 +136,7 @@ void initialize_template_var(const Element& elem)
 //Observer callback
 bool observer(WorkItem *w,double answer,void *g)
 {
-    GAEngine<COMP_FUNC> *ga=(GAEngine<COMP_FUNC> *)g;	// type casting void pointer appropriately
+    GAEngine<COMP_FUNC> *ga=(GAEngine<COMP_FUNC> *)g;
    
     ga->process_workitem(w,answer);
     return true;
@@ -147,7 +147,7 @@ double do_compute(std::vector<double>& val)
 {
 	// fill-up the tmp's allele values with supplied data
     var_template.fillup(val);
-	// evaluate this chromosome's fit and return the representative residual
+	// Evaluate the chromosome fitness
     return VEGroup::instance().Evaluate(var_template);
 }
 

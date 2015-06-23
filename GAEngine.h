@@ -150,8 +150,7 @@ class Genome
             return true;
         }
 
-		// var
-		// store the alleles data of a genome in a variables holder
+		// Store the genomic data
 			// 'update' all alleles of this genome to v
 			// if this genome is missing some alleles, v may contain some alleles unknown to genome
         void var(VariablesHolder& v)
@@ -292,12 +291,11 @@ class GAEngine
             return m_bestFitness;
         }
 
-		// Create a new WorkItem with chromosome data from a VarHolder collated
-			// key initialised to 0
+		// Create a work item to be processed from chromosome data
         WorkItem *var_to_workitem(VariablesHolder& h)
         {
             WorkItem *w=new WorkItem;
-            w->key=0;
+            w->key=0;	// key initialised to 0
             h.collate(w->data);
             return w;
         }
@@ -307,7 +305,7 @@ class GAEngine
         {
             if(w->key<m_Population.size())
             {
-                Genome& g=m_Population[w->key];	// reference to the appropriate genome
+                Genome& g=m_Population[w->key];		// get the genome corresponding to this workitem
                 g.fitness(answer);	// assign fitness
             }
             delete w;
@@ -324,15 +322,14 @@ class GAEngine
 			{
 				Genome& g=m_Population[i];	// get the ith Genome in population
 
-				// 'update' all alleles of this genome into temporary variable storage
-				g.var(v);	// strange behaviour when this genome is incomplete
+				g.var(v);	// store the genomic information in a temporary variable
 				WorkItem *w=var_to_workitem(v);		// collate the genome in a workitem for processing
-				w->key=i;	// assign the genome index in population as the workitem key
+				w->key=i;	// the key stores a reference to genome
 				
-				Distributor::instance().push(w);	// push this work into the singleton distributor
+				Distributor::instance().push(w);	// push this work onto the distributor singleton
 			}
 
-			// Process the works by the distributor
+			// Process the work item collected by distributor
 				// evaluate and assign fitness for each Genome in population
 			Distributor::instance().process(observer,this);		//TODO track process method 
 

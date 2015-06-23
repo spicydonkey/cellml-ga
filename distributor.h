@@ -13,9 +13,9 @@
 //data to be passed to a compute task
 struct WorkItem
 {
-    int key; //context-dependent value, passed to the observer
-    int context; //distribution context
-    std::vector<double> data; //data to be distributed
+    int key; // context-dependent value, passed to the observer
+    int context; // distribution context
+    std::vector<double> data; // data to be distributed
 };
 
 //Class to handle job distribution via MPI
