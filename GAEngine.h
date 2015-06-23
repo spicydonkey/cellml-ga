@@ -369,9 +369,10 @@ class GAEngine
 					m_Population.push_back(prev[mem]);	// add the selected genome into the new population for breeding
                 }
 
-				// TODO print the new selected population
+				// Print the new selected population
 				if (verbosity>2)
 				{
+					printf("--------------------------------------------------------\n");
 					printf("Selected Population:\n");
 					for (int j=0;j<limit;j++)
 					{
