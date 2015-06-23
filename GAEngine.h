@@ -170,7 +170,6 @@ class Genome
 			// rebuild alleles from that stored in a varholder
 
             m_Alleles.clear();	// clear m_Alleles vector
-			// m_Alleles is an empty vector of pair
 
             for(int k=0;;k++)
             {
@@ -314,36 +313,33 @@ class GAEngine
             delete w;
         }
 
-		/**
-		 *	Run the GA engine for given number of generations
-		 *
-		 **/
+		// Run the GA engine for given number of generations
         void RunGenerations(int gener)
         {
             VariablesHolder v;
-       
             m_Generations=gener;
 
-            //Create initial fitness set
+            // Create initial fitness set
 			for(int i=0;i<m_Population.size();i++)
 			{
 				Genome& g=m_Population[i];	// get the ith Genome in population
 
 				// 'update' all alleles of this genome into temporary variable storage
 				g.var(v);	// strange behaviour when this genome is incomplete
-				WorkItem *w=var_to_workitem(v);		// initiate a ptr workitem that has collated this genome's chromosome
-				w->key=i;	// assign this workitem's key accordingly
+				WorkItem *w=var_to_workitem(v);		// collate the genome in a workitem for processing
+				w->key=i;	// assign the genome index in population as the workitem key
 				
 				Distributor::instance().push(w);	// push this work into the singleton distributor
 			}
 
-			// Process the works
-				// evaluate and assign the fitness function for each Genome
+			// Process the works by the distributor
+				// evaluate and assign fitness for each Genome in population
 			Distributor::instance().process(observer,this);		//TODO track process method 
 
-			std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort m_Population (vector<Genome>) by reverse_compare: in ascending order of fitness
+			std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort population in ascending order of fitness
             
-			// Update the variable for best fitness
+			// Update fittest genome
+				// the fittest genome after sorting population is the 0th member
 			if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
             {
                 m_bestFitness=m_Population[0].fitness();	// assign min ftns as the best fitness
@@ -351,18 +347,18 @@ class GAEngine
                 m_bBestFitnessAssigned=true;
             }
 
-            print_stage(-1);		// -1 for initial generation
+            print_stage(-1);		// generation 0
 
 			for(int g=0;g<gener;g++)
             {
-				//Do the genetics
+				// Do the genetics
 				int limit=m_Population.size();
                 POPULATION prev(m_Population);	// temporary copy of current pop vector
                 m_Population.clear();			// clear current population vector
-                double l=(double)prev.size()-0.5;	// TODO unreferenced elsewhere
+                //double l=(double)prev.size()-0.5;	// TODO unreferenced elsewhere
 
 				// SELECTION
-				// fill population by a weighted-selection with replacement from prev generation's population
+				// Weighted-selection with replacement from the previous generation's population
                 for(int i=0;i<limit;i++)
                 {
                     int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
@@ -373,8 +369,10 @@ class GAEngine
 #else
                     //printf("Adding %d to population\n",mem);
 #endif
-					m_Population.push_back(prev[mem]);
+					m_Population.push_back(prev[mem]);	// add the selected genome into the new population for breeding
                 }
+
+				// TODO print the new population
 
                 // CROSSOVER
 				// Caution: Multiple crossovers allowed in single generation iteration
@@ -386,13 +384,12 @@ class GAEngine
                     if(!m_UseBlockSample)
                         build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);		// fill sample with unique and valid indices to genomes for performing crossover
                     else
-                        build_rnd_sample(sample,m_crossPartition,true,true);			// disallow duplicates in building sample (size m_crossPartition)
+                        build_rnd_sample(sample,m_crossPartition,true,true);			// disallow duplicates and invalids in building a fixed size sample
 
                     for(int i=0;i<sample.size();i++)
                     {
-                        std::vector<int> arena; //initialise arena for breeding
-                        
-                        arena.push_back(sample[i]);	//ith sample enters arena 
+                        std::vector<int> arena; // initialise arena for breeding
+                        arena.push_back(sample[i]);	// sampled genome enters arena 
 						//bulid tournament sample
                         build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
 
@@ -401,7 +398,7 @@ class GAEngine
 						// Output genomes in arena pre-crossover
 						if(verbosity>2)
 						{
-							/*
+							/* output format
 							CROSSOVER
 							-[i] x1=_________ x2=__________
 							-[j] x1=_________ x2=__________
@@ -415,10 +412,10 @@ class GAEngine
 						}
 #endif
 
-						// cross the genomes in arena at a randomly selected crosspoint
-						// multiple degree crossover in a single generation iteration possible
+						// cross the genomes in arena before a randomly selected point
+						// multiple degree crossover in a single generation iteration possible (i.e. crossover processed genome may be tournament selected for additional crossover)
 	    				cross(m_Population[arena[0]],m_Population[arena[1]],
-							(int)rnd_generate(1.0,m_Population[sample[i]].size()));		//crosspoint in [1,allele length of ith sample genome]
+							(int)rnd_generate(1.0,m_Population[sample[i]].size()));
 
 #ifdef PATCH
 						// Output genomes in arena post-crossover
@@ -441,7 +438,7 @@ class GAEngine
                         for(int j=0;j<2;j++)
                         {
 							m_Population[arena[j]].var(v);	// store the Xover operated genome in template
-                            Distributor::instance().remove_key(arena[j]);	//remove previously requested processing
+                            Distributor::instance().remove_key(arena[j]);	// remove previously requested processing
 
 							// Set-up workitem for Xover'd genome job
 							WorkItem *w=var_to_workitem(v);
@@ -461,7 +458,7 @@ class GAEngine
                     if(!m_UseBlockSample)
                         build_rnd_sample_rnd(sample,m_MutationProbability*100.0,false);	// invalid Genomes may be picked into sample
                     else
-                        build_rnd_sample(sample,m_mutatePartition,false,false);	// allow duplicates and invalid genomes to build sample (size m_mutatePartition)
+                        build_rnd_sample(sample,m_mutatePartition,false,false);	// allow duplicates and invalid genomes to build sample of fixed size
 
 					// Treatment of invalid genomes in the population
                     for(int i=0;i<m_Population.size();i++)
@@ -490,7 +487,6 @@ class GAEngine
 							print_genome(sample[i]);
 						}
 #endif
-
 	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
 #ifdef PATCH
 						// Output genomes post-mutation
@@ -510,8 +506,9 @@ class GAEngine
                     }
                 }
 
-				//Run the distribution
+				// Distribute the fitness evaluation for this generation
 				Distributor::instance().process(observer,this);
+				// Sort the population
 				std::sort(m_Population.begin(),m_Population.end(),reverse_compare);
 
                 if(m_Population.size()>m_MaxPopulation)
@@ -820,17 +817,17 @@ class GAEngine
 #ifdef PATCH
 			double zero_lim=0.000000000001;
 #endif
-			// total sum of population's fitness	(sum is inf if p[i].fitness == 0 or p[i] invalid)
+			// total population fitness
             for(int i=0;i<p.size();i++)
 			{	
 #ifdef PATCH
-				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);
+				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);	//TODO sum can overflow?
 #else
 				// BUG in assinging infinitely large weight on invalid genome
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
 #endif
 			}
-			// use a randomly selected threshold for cum-sum to select i
+			// use a randomly selected threshold for a cumulative-sum selection
             double choice=sum*rnd_generate(0.0,1.0);
             for(int i=0;i<p.size();i++)
             {
@@ -842,7 +839,7 @@ class GAEngine
                 if(choice<=0.0)
 					return i;
             }
-			// choice is larger than cum-sum
+			// choice is larger than total sum
             return p.size()-1;	// return the index to last (least-fit) genome
         }
 };

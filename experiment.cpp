@@ -268,21 +268,21 @@ int main(int argc,char *argv[])
     }
     delete [] pBuffer;	// free memory used to store file
 
-	//Wait until all the clients are ready
+	// Wait until all the clients are ready
     MPI_Barrier(MPI_COMM_WORLD);
 
-    //Only master task needs GA engine to be initialised and used   
+    // Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
-        //Master task
+        // Master task
         VariablesHolder v;	// storage for the best chromosome
 
-		//Initialise the population in GA engine
+		// Initialise the population in GA engine
         ga.Initialise();
-		//Run GA
+		// Run GA
         ga.RunGenerations(generations);
         
-		// Best genome from the run
+		// Print best genome from the run
 		double bf=ga.GetBest(v);
 		printf("Best fitness: %lf\n",bf);
         for(int i=0;;i++)
