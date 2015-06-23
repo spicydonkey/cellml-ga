@@ -586,8 +586,8 @@ class GAEngine
 						printf("%s=%lf   ",convert(name).c_str(),v(name));
                     }
                     printf("\n");
-                }
 #endif
+				}
 				printf("--------------------------------------------------------\n");
 			}
              
