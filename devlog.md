@@ -460,3 +460,14 @@ So it seems like that for the *Schwefel_2D* CellML model at least, the *target* 
 ### Selection
 * [ ] Print the new population *selected* before the *breeding stage*
   * should be less verbose than individual feedback of selection operator as it is a batch summary
+
+### Task distribution
+The *root* processor (rank=0) handles the majority of tasks in the Genetic Algorithm except for fitness evaluation.
+Each genome well specifies a CellML model's parameters so that a simulation can be run with a CellML API.
+The *fit* of the CellML model to the data points specified in the *virtual experiment* determines the corresponding genome's fitness.
+
+Parallel processing is natural to such problem: assign a free processor a *genome* to evaluate the fitness for.
+
+The *Distributor* class handles the task distribution and synchronisation.
+
+Optimising *Distributor::process* for the number of processors, average simulation time, and number of tasks required, could be a worthwhile task.
