@@ -372,7 +372,12 @@ class GAEngine
 				// TODO print the new selected population
 				if (verbosity>2)
 				{
-					printf("--Selected Population--\n");
+					printf("Selected Population:\n");
+					for (int j=0;j<limit;j++)
+					{
+						print_genome(j);
+					}
+					printf("--------------------------------------------------------\n");
 				}
 
 
