@@ -369,7 +369,12 @@ class GAEngine
 					m_Population.push_back(prev[mem]);	// add the selected genome into the new population for breeding
                 }
 
-				// TODO print the new population
+				// TODO print the new selected population
+				if (verbosity>2)
+				{
+					printf("--Selected Population--\n");
+				}
+
 
                 // CROSSOVER
 				// Caution: Multiple crossovers allowed in single generation iteration
@@ -536,7 +541,7 @@ class GAEngine
 		{
 			VariablesHolder v;
 			m_Population[ind_genome].var(v);	// store alleles data in a temporary variable
-			printf("[%d] ", ind_genome);
+			printf("[%d] ", ind_genome);		// print the genome's index
 			for(int i=0;;i++)
 			{
 				std::wstring name=v.name(i);
@@ -558,15 +563,19 @@ class GAEngine
 				printf("--------------------------------------------------------\n");
                 for(int j=0;j<m_Population.size();j++)
 				{
-                    VariablesHolder v;
-					
 					//print validity, generation #, and fitness of each chromosome
 #ifdef PATCH		// tag genome with ! if fitness is negative
 					printf("%s[%d](%lf) ",(m_Population[j].valid()?(m_Population[j].fitness()<0?"!":" "):"*"),g+1,m_Population[j].fitness());
 #else
 					printf("%s[%d](%lf) ",(m_Population[j].valid()?" ":"*"),g+1,m_Population[j].fitness());
 #endif
+
+#ifdef PATCH
+					// Sequence the chromosome
+					print_genome(j);
+#else
 					//print each chromosome's alleles (name and value)
+					VariablesHolder v;
                     for(int k=0;;k++)
                     {
                         m_Population[j].var(v);
@@ -578,30 +587,33 @@ class GAEngine
                     }
                     printf("\n");
                 }
+#endif
 				printf("--------------------------------------------------------\n");
-			} 
+			}
              
 			//shorter summary of GA: print currently fittest chromosome
 				// and fittest chromosome of this generation
 			else if(verbosity==1)
 			{
 #ifdef PATCH
-				VariablesHolder v;
+				//VariablesHolder v;
 				double f;
 				
 				// Fittest chromosome in this gen is the first genome in sorted population
-				m_Population[0].var(v);
+				//m_Population[0].var(v);
 				f=m_Population[0].fitness();
 
 				printf("Generation %d. Best fitness: %lf\n",g+1,f);
-				for(int k=0;;k++)
+				print_genome(0);
+
+				/*for(int k=0;;k++)
 				{
 					std::wstring name=v.name(k);
 					if(name.empty())
 						break;
 					printf("%s=%lf    ",convert(name).c_str(),v(name));
 				}
-                printf("\n");
+                printf("\n");*/
                 printf("--------------------------------------------------------\n");
 #else
 				VariablesHolder v;
