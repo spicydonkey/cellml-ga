@@ -455,3 +455,8 @@ Small target could be giving a large fitness. How is the "model fit" evaluted?
   * target 0.01: Fitness=1570000 Alleles=422,422
 
 So it seems like that for the *Schwefel_2D* CellML model at least, the *target* attribute seems to interact with fitness evaluation.
+
+## 23.06.2015
+### Selection
+* [ ] Print the new population *selected* before the *breeding stage*
+  * should be less verbose than individual feedback of selection operator as it is a batch summary
