@@ -458,7 +458,7 @@ So it seems like that for the *Schwefel_2D* CellML model at least, the *target* 
 
 ## 23.06.2015
 ### Selection
-* [ ] Print the new population *selected* before the *breeding stage*
+* [*] Print the new population *selected* before the *breeding stage*
   * should be less verbose than individual feedback of selection operator as it is a batch summary
 
 ### Task distribution
