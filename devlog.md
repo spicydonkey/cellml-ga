@@ -458,7 +458,7 @@ So it seems like that for the *Schwefel_2D* CellML model at least, the *target* 
 
 ## 23.06.2015
 ### Selection
-* [*] Print the new population *selected* before the *breeding stage*
+* [x] Print the new population *selected* before the *breeding stage*
   * should be less verbose than individual feedback of selection operator as it is a batch summary
 
 ### Task distribution
@@ -473,15 +473,15 @@ The *Distributor* class handles the task distribution and synchronisation.
 Optimising *Distributor::process* for the number of processors, average simulation time, and number of tasks required, could be a worthwhile task.
 
 ## 24.06.2015
-* [*] Process yesterday's todo list
-  * [*] Selected population feedback before breeding
-  * [*] Organise and document verbosity settings in README
-  * [*] Update GAEngine.h to apply the new verbosity setting
-    * [*] verbosity:0
-	* [*] 1
+* [x] Process yesterday's todo list
+  * [x] Selected population feedback before breeding
+  * [x] Organise and document verbosity settings in README
+  * [x] Update GAEngine.h to apply the new verbosity setting
+    * [x] verbosity:0
+	* [x] 1
 	  * Could make format nicer
-	* [*] 2
+	* [x] 2
 	  * Tagging each genome with [index] is slightly annoying
-	* [*] 3
+	* [x] 3
 	  * The tagging is good for GO stage feedback
-	* [*] 4	
+	* [x] 4	
