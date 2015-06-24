@@ -474,4 +474,6 @@ Optimising *Distributor::process* for the number of processors, average simulati
 
 ## 24.06.2015
 * [ ] Process yesterday's todo list
-  * [ ] Selected population feedback before breeding
+  * [*] Selected population feedback before breeding
+  * [*] Organise and document verbosity settings in README
+  * [ ] Update GAEngine.h to apply the new verbosity setting
