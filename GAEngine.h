@@ -361,7 +361,7 @@ class GAEngine
                     int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
 #ifdef PATCH
 					// Genetic operator feedback
-					if(verbosity>2)
+					if(verbosity>3)
 						printf("SELECT: Adding %d to population\n",mem);
 #else
                     //printf("Adding %d to population\n",mem);
@@ -374,13 +374,9 @@ class GAEngine
 				{
 					printf("--------------------------------------------------------\n");
 					printf("Selected Population:\n");
-					for (int j=0;j<limit;j++)
-					{
-						print_genome(j);
-					}
+					print_population();
 					printf("--------------------------------------------------------\n");
 				}
-
 
                 // CROSSOVER
 				// Caution: Multiple crossovers allowed in single generation iteration
@@ -404,7 +400,7 @@ class GAEngine
 #ifdef PATCH
 						// Genetic operator feedback
 						// Output genomes in arena pre-crossover
-						if(verbosity>2)
+						if(verbosity>3)
 						{
 							/* output format
 							CROSSOVER
@@ -427,7 +423,7 @@ class GAEngine
 
 #ifdef PATCH
 						// Output genomes in arena post-crossover
-						if(verbosity>2)
+						if(verbosity>3)
 						{
 							/*
 							+[i] x1=_________ x2=__________
@@ -455,6 +451,15 @@ class GAEngine
                         }
 						// genomes weight-selected into population that did not undergo Xover do not need to be re-worked for fitness 
                     }
+				
+					// Print population after crossover
+					if (verbosity>2)
+					{
+						printf("--------------------------------------------------------\n");
+						printf("Crossover:\n");
+						print_population();
+						printf("--------------------------------------------------------\n");
+					}
 				}
 
                 // MUTATION
@@ -482,7 +487,7 @@ class GAEngine
 #ifdef PATCH
 						// Genetic operator feedback
 						// Output genomes pre-mutation
-						if(verbosity>2)
+						if(verbosity>3)
 						{
 							/*
 							MUTATION:
@@ -498,7 +503,7 @@ class GAEngine
 	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
 #ifdef PATCH
 						// Output genomes post-mutation
-						if(verbosity>2)
+						if(verbosity>3)
 						{
 							printf("+");
 							print_genome(sample[i]);
@@ -512,6 +517,15 @@ class GAEngine
 						w->key=sample[i];
 						Distributor::instance().push(w);
                     }
+
+					// Print population after mutation
+					if (verbosity>2)
+					{
+						printf("--------------------------------------------------------\n");
+						printf("Mutation:\n");
+						print_population();
+						printf("--------------------------------------------------------\n");
+					}
                 }
 
 				// Distribute the fitness evaluation for this generation
@@ -557,6 +571,16 @@ class GAEngine
 				printf("%s=%lf   ",convert(name).c_str(),v(name));
 			}
 			printf("\n");
+		}
+
+		// Print the current population
+		void print_population()
+		{
+			int popsize=m_Population.size();
+			for (int i=0;i<popsize;i++)
+			{
+				print_genome(i);
+			}
 		}
 #endif
 
