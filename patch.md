@@ -12,5 +12,5 @@ verbosity	|	output
 0		| Fittest genome of the run 
 1		| Fittest genome in each generation + Fittest genome of the run
 2		| Population at each generation + Fittest genome of the run 
-3		| TODO + Population at each genetic operator (GO) stage (selection, crossover, mutation)
+3		| + Population at each genetic operator (GO) stage (selection, crossover, mutation)
 4		| + Individual GO 

@@ -473,7 +473,15 @@ The *Distributor* class handles the task distribution and synchronisation.
 Optimising *Distributor::process* for the number of processors, average simulation time, and number of tasks required, could be a worthwhile task.
 
 ## 24.06.2015
-* [ ] Process yesterday's todo list
+* [*] Process yesterday's todo list
   * [*] Selected population feedback before breeding
   * [*] Organise and document verbosity settings in README
-  * [ ] Update GAEngine.h to apply the new verbosity setting
+  * [*] Update GAEngine.h to apply the new verbosity setting
+    * [*] verbosity:0
+	* [*] 1
+	  * Could make format nicer
+	* [*] 2
+	  * Tagging each genome with [index] is slightly annoying
+	* [*] 3
+	  * The tagging is good for GO stage feedback
+	* [*] 4	
