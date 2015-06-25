@@ -491,5 +491,5 @@ Optimising *Distributor::process* for the number of processors, average simulati
 #### Method
 
 ### TODO
-* [ ] Add comments to functions in VirtualExperiment
-* [ ] Add comments to functions in VEGroup
+* [x] Add comments to functions in VirtualExperiment
+* [x] Add comments to functions in VEGroup

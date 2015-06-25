@@ -84,10 +84,15 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 
 double VirtualExperiment::getSSRD(std::vector<std::pair<int,double> >& d)
 {
-    double r=0.0;
+    double r=0.0;	// initialise residual sum of squares
 
     for(int i=0;i<d.size();i++)
     {
+		// At time d[i].first:
+		// d[i].second is the predicted data value by the simulated model
+		// m_Timepoints[d[i].first].second is the VE measurement
+		// The residual is "normalised" by dividing by the measured value before squaring! 
+		// TODO so the measured value should never be 0! since division by 0 will yield INF ssr
         r+=pow((d[i].second-m_Timepoints[d[i].first].second)/m_Timepoints[d[i].first].second,2);
     }
     return r;
@@ -168,8 +173,9 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
     }
 }
 
-// TODO comment
-// TODO residual method
+
+// Compile and run an ODE solver to simulate the configured CellML model
+// Select estimation points from the result and return the deviation to virtual experiment by SSR
 double VirtualExperiment::Evaluate()
 {
     double res=0.0;
@@ -180,6 +186,7 @@ double VirtualExperiment::Evaluate()
 
     try
     {
+		// Set up the ODE solver
        compiledModel=cis->compileModelODE(m_Model);
        osr=cis->createODEIntegrationRun(compiledModel);
        LocalProgressObserver *po=new LocalProgressObserver(compiledModel);
@@ -192,14 +199,18 @@ double VirtualExperiment::Evaluate()
        if(m_ReportStep)
             osr->setTabulationStepControl(m_ReportStep,true);
 
+		// Run the solver
        calc_started=time(NULL);
        osr->start();
+	   
+	   // Wait until the solver has completed
        while(!po->finished())
        {
-           usleep(1000);
+           usleep(1000);	// wait 1ms for the ODE solver
            if(m_MaxTime)
            {
                time_t t=time(NULL);
+			   // Check if the solver is running over maximum time
                if((unsigned long)(t-calc_started)>m_MaxTime)
                {
                    po->failed("Took too long to integrate");
@@ -212,14 +223,21 @@ double VirtualExperiment::Evaluate()
        {
            std::vector<double> vd;
            std::vector<std::pair<int,double> > results;
-           int recsize=po->GetResults(vd);
+           int recsize=po->GetResults(vd);	// Get the result of ODE simulation as a 1D-vector and individual record size
  
-           for(int i=0;i<vd.size();i+=recsize)
+		   // Collate the set of estimation model points corresponding to VE data points
+		   //
+		   // TODO Shouldn't we search for the t-point in the simulation result that is in range to a t-point specified in VE?
+				// multiple points from the simulation can be mapped in-range of a point in VE
+				// should we look for the closest simulation point wrt time?
+
+		   for(int i=0;i<vd.size();i+=recsize)	// iterate through the time-points in simulation
            {
+			   // record the result if the simulation point is in a close range to a VE point
                for(int j=0;j<m_Timepoints.size();j++)
                    if(in_range(vd[i],m_Timepoints[j].first,EPSILON))
                    {
-                       results.push_back(make_pair(j,vd[i+m_nResultColumn]));
+                       results.push_back(make_pair(j,vd[i+m_nResultColumn]));	// add the variable of interest
                        break;
                    }
            }
@@ -227,10 +245,12 @@ double VirtualExperiment::Evaluate()
            {
                fprintf(stderr,"Results vector is empty, Observer returned %d bytes (%d records)\n",vd.size(),vd.size()/recsize);
            }
-           res=(results.size()?getSSRD(results):INFINITY);
+
+		   // Calculate the squared-sum-residual
+           res=(results.size()?getSSRD(results):INFINITY);	// return INF if result vector is empty
        }
        else
-           res=INFINITY;
+           res=INFINITY;	// return INF if simulation failed
     }
     catch(CellMLException e)
     {

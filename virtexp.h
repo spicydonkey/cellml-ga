@@ -148,7 +148,7 @@ class VirtualExperiment
 
         void SetParameters(VariablesHolder& v);
 
-		// Evaluate the residual from fitting the configured CellML model to the experimental data
+		// Evaluate the parameter-configured CellML model fitness to the experimental data
         double Evaluate();
 
         int resultcol() const { return m_nResultColumn; }
@@ -173,8 +173,10 @@ class VirtualExperiment
 
         friend class Runner;
 
-        double getSSRD(std::vector<std::pair<int,double> >& d);
-        std::string m_strModelName;
+		// Calculate the (scaled) Sum of Square Residuals (SSR) of the simulation and virtual experimental data
+		double getSSRD(std::vector<std::pair<int,double> >& d);
+        
+		std::string m_strModelName;
 
 
         ObjRef<iface::cellml_api::Model> m_Model;
