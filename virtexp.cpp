@@ -65,7 +65,7 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
             vx->m_Timepoints.push_back(pt);
         }
 
-        //read parameters
+        // Read parameters
         for(int i=0;;i++)
         {
             const AdvXMLParser::Element& al=elem("Parameters",0)("Parameter",i);
@@ -125,15 +125,11 @@ void VirtualExperiment::SetParameters(VariablesHolder& v)
     }
 }
 
-
-// TODO description of function
 void VirtualExperiment::SetVariables(VariablesHolder& v)
 {
     ObjRef<iface::cellml_api::CellMLComponentSet> comps=m_Model->modelComponents();
     ObjRef<iface::cellml_api::CellMLComponentIterator> comps_it=comps->iterateComponents();
     ObjRef<iface::cellml_api::CellMLComponent> firstComp=comps_it->nextComponent();
-
-
 
     while(firstComp)
     {
@@ -141,12 +137,11 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
         ObjRef<iface::cellml_api::CellMLVariableIterator> vars_it=vars->iterateVariables();
         ObjRef<iface::cellml_api::CellMLVariable> var=vars_it->nextVariable();
 
-
         string compname=convert(firstComp->name());
 
         while(var)
         {
-            wstring name=var->name();
+            wstring name=var->name();	// get this variable's name
             wstring fullname=name;
             if(compname!="all" && compname!="")
             {
@@ -154,14 +149,14 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
                 fullname+=name;
             }
             if(v.exists(fullname))
-            {
+            {	// parameter specified in input
                 char sss[120];
-                gcvt(v(fullname),25,sss);
+                gcvt(v(fullname),25,sss);	// convert the param value to char string
                 std::wstring wv=convert(sss);
-                var->initialValue(wv);
+                var->initialValue(wv);		// set this variable
             }
             else if(m_Parameters.find(fullname)!=m_Parameters.end())
-            {
+            {	// constant parameters
                 char sss[120];
                 gcvt(m_Parameters[fullname],25,sss);
                 std::wstring wv=convert(sss);
@@ -173,10 +168,12 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
     }
 }
 
+// TODO comment
+// TODO residual method
 double VirtualExperiment::Evaluate()
 {
     double res=0.0;
-    //int j=0;
+
     ObjRef<iface::cellml_services::ODESolverCompiledModel> compiledModel;
     ObjRef<iface::cellml_services::ODESolverRun> osr;
     time_t calc_started;
@@ -268,11 +265,12 @@ VEGroup& VEGroup::instance()
 
 
 /**
- *	Evaluate a model's fit against data from a group of virtual experiments
+ *	Evaluate the fitness of the given set of parameters based on how well CellML models fit the corresponding VE data
  *	
- *	VariableHolder argument contains a list of parameters for the model for which the average deviation 
- *		from experimental data will be returned
+ *	VariableHolder argument contains a list of parameters for the CellML model
  *	
+ *	Returns INFINITY if any virtual experiment causes error (by returning inf)	
+ *
  *	INFINITY is an exception returned when particularly poor fit against experiment
  *	0.0 returned when the VEGroup object contains no virtual experiments
  **/
@@ -290,7 +288,8 @@ double VEGroup::Evaluate(VariablesHolder& v)
         experiments[i]->SetVariables(v);
 
 		// evaluate residual from this experiment 
-        double d=experiments[i]->Evaluate();	//TODO fitting method
+		// TODO residual method and positivity
+        double d=experiments[i]->Evaluate();	// handle INFINITY exception
 
 		// update the total residual
         if(d!=INFINITY)
@@ -300,7 +299,7 @@ double VEGroup::Evaluate(VariablesHolder& v)
         }
     }
 
-	// return this param list's average deviation evaluated from all virtual experiments
+	// Average deviation evaluated from all virtual experiments against given model parameters                                                                                                                                                         
     return (count==experiments.size()?res/(double)count:INFINITY);
 }
 

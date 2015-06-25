@@ -136,10 +136,19 @@ class VirtualExperiment
         VirtualExperiment();
         ~VirtualExperiment();
 
+		// Load the CellML model by give name and return success of implementation
         bool LoadModel(const std::string& model_name);
+
+		// Load a VirtualExperiment object from the corresponding element in XML file
+		// Returns a pointer to the loaded object and NULL ptr if error in loading model
         static VirtualExperiment *LoadExperiment(const AdvXMLParser::Element& elem);
-        void SetVariables(VariablesHolder& v);
+
+		// Load the CellML model parameters onto m_Model
+		void SetVariables(VariablesHolder& v);
+
         void SetParameters(VariablesHolder& v);
+
+		// Evaluate the residual from fitting the configured CellML model to the experimental data
         double Evaluate();
 
         int resultcol() const { return m_nResultColumn; }
@@ -154,13 +163,6 @@ class VirtualExperiment
         void Run();
 
 	private:
-
-		/**
-		 *	Runner structure
-		 *	
-		 *	+ pOwner (ptr to a VirtualExperiment)
-		 *
-		 **/
         struct Runner
         {
            Runner(VirtualExperiment *p):pOwner(p) {}
@@ -179,7 +181,6 @@ class VirtualExperiment
 	
 		int m_nResultColumn;
         
-		// Type definitions
 		typedef std::map<std::wstring,double>	PARAMS;
         typedef std::pair<double,double>		POINT;
         typedef std::vector<POINT>				TIMEPOINTS;
@@ -203,10 +204,10 @@ class VEGroup
 		// get the singleton VE group object
         static VEGroup& instance();
 
-		// TODO function description
+		// Evaluate the fitness of the given set of parameters based on how well CellML models fit the corresponding VE data
         double Evaluate(VariablesHolder& v);
 
-		// TODO function description
+		// Add a VE object onto experiments
 		void add(VirtualExperiment *p);
 
     protected:
