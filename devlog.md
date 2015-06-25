@@ -485,3 +485,11 @@ Optimising *Distributor::process* for the number of processors, average simulati
 	* [x] 3
 	  * The tagging is good for GO stage feedback
 	* [x] 4	
+
+## 25.06.2015
+### CellML-VE fitness evaluation
+#### Method
+
+### TODO
+* [ ] Add comments to functions in VirtualExperiment
+* [ ] Add comments to functions in VEGroup
