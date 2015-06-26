@@ -306,7 +306,7 @@ class GAEngine
             if(w->key<m_Population.size())
             {
                 Genome& g=m_Population[w->key];		// get the genome corresponding to this workitem
-                g.fitness(answer);	// assign fitness
+                g.fitness(answer);	// assign the evaluated fitness to the genome
             }
             delete w;
         }
@@ -314,8 +314,8 @@ class GAEngine
 		// Run the GA engine for given number of generations
         void RunGenerations(int gener)
         {
-            VariablesHolder v;
-            m_Generations=gener;
+            VariablesHolder v;		// temporary genome storage
+            m_Generations=gener;	// number of generations to run
 
             // Create initial fitness set
 			for(int i=0;i<m_Population.size();i++)

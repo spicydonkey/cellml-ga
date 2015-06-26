@@ -133,12 +133,12 @@ void initialize_template_var(const Element& elem)
 }
 
 
-//Observer callback
+// Observer callback to process workitem in the GA context
 bool observer(WorkItem *w,double answer,void *g)
 {
-    GAEngine<COMP_FUNC> *ga=(GAEngine<COMP_FUNC> *)g;
+    GAEngine<COMP_FUNC> *ga=(GAEngine<COMP_FUNC> *)g;	// GAEngine typecasting
    
-    ga->process_workitem(w,answer);
+    ga->process_workitem(w,answer);		// assign 'answer' as fitness to the genome corresponding to the workitem w
     return true;
 }
 
@@ -147,20 +147,21 @@ double do_compute(std::vector<double>& val)
 {
 	// fill-up the tmp's allele values with supplied data
     var_template.fillup(val);
+
 	// Evaluate the chromosome fitness
     return VEGroup::instance().Evaluate(var_template);
 }
 
 
-//Slave process
-//Returns only when quit command is received from the master
+// Slave process
+// Returns only when appropriate quit command is received from the master
 void run_slave(int proc)
 {
     double req;
     MPI_Status stat;
     std::vector<double> data;
 
-    var_template.collate(data); 
+    var_template.collate(data);
     while(1)
     {
         //check if data is received

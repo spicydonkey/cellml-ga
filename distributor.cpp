@@ -66,42 +66,42 @@ void Distributor::remove_key(int key)
 //p is a context passed to observer and is transparent for the distributor
 void Distributor::process(Distributor::OBSERVER o,void *p)
 {
-    int in_process=0;
-
+    int in_process=0;	// number of occupied processors
 
     while(witems.size())
     {
         int i=1;
 
-        //get next workitem for processing
+        // get next workitem for processing
         WorkItem *workitem=witems.front();
         witems.pop_front();
 
-        //find a rank to send the workitem to
+        // find a free processor to delegate workitem
         for(;i<ranks.size();i++)
             if(!ranks[i].first)
-               break; //found available rank
+               break;	// found available rank
         
-        //check if an available rank is found
+        // Send workitem
         if(i<ranks.size())
         {
-            ranks[i].first=true; //This processor busy now
+            ranks[i].first=true;	// tag this processor as busy
             ranks[i].second=workitem;
-            workitem->context=time(NULL); //save time for adding load balancing later
-            //Request processing to the chosen processor
-				// slave procs in run_slave loop in experiment.cpp
+            workitem->context=time(NULL);	// save curr time for adding load balancing later
+            // Request processing to the chosen processor
+				// slave procs receives workitem in run_slave loop in experiment.cpp
             MPI_Send(&workitem->data[0],workitem->data.size(),MPI_DOUBLE,i,0,MPI_COMM_WORLD);	//TODO Sending vector like array?
             in_process++;
         }
         else
         {
-            //we are the only one available - do compute
+			// we are the only one available - do compute
 				// TODO could be bad if many slave processors wait for master
             double answer;
 
             answer=do_compute(workitem->data);	// compute the work item
-            o(workitem,answer,p);	// observer callback on the context with the result
-            //get data back
+            o(workitem,answer,p);		// observer callback to update the result in context
+
+            // get data back from slave procs
             if(in_process)
             {
                 MPI_Status stat;
@@ -113,13 +113,12 @@ void Distributor::process(Distributor::OBSERVER o,void *p)
                 {
                     MPI_Iprobe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&flag,&stat);
                     if(flag)
-                    {
-                        //There is data available
-						r=stat.MPI_SOURCE;	// which proc
+                    {	// data is available
+						r=stat.MPI_SOURCE;	// which sending proc
 						MPI_Recv(&answer,1,MPI_DOUBLE,stat.MPI_SOURCE,0,MPI_COMM_WORLD,&stat);
 						o(ranks[r].second,answer,p);	// observer callback         
-						ranks[r].first=false;	// the proc is free
-						in_process--;	// one less processor working
+						ranks[r].first=false;			// the proc is free
+						in_process--;					// one less processor working
                     }
                     else
                        break;
@@ -127,7 +126,8 @@ void Distributor::process(Distributor::OBSERVER o,void *p)
             }
         }
     }
-    //all done - wait for the rest if anything left
+
+    // all workitems distributed - wait for the rest if anything left
     while(in_process)
     {
 		MPI_Status stat;
