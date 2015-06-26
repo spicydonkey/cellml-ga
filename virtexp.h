@@ -177,19 +177,18 @@ class VirtualExperiment
         
 		std::string m_strModelName;
 
-
-        ObjRef<iface::cellml_api::Model> m_Model;
+        ObjRef<iface::cellml_api::Model> m_Model;	// CellML model corresponding to this experiment
 	
-		int m_nResultColumn;
+		int m_nResultColumn;			// indicator for the variable of interest 
         
 		typedef std::map<std::wstring,double>	PARAMS;
         typedef std::pair<double,double>		POINT;
         typedef std::vector<POINT>				TIMEPOINTS;
 
-        PARAMS m_Parameters;
-        TIMEPOINTS m_Timepoints;
+        PARAMS m_Parameters;			// parameters to be held constant in simulations of mathematical models
+        TIMEPOINTS m_Timepoints;		// object for storing empirical data for model optimisation
         double m_ReportStep;
-        unsigned long m_MaxTime;
+        unsigned long m_MaxTime;		// maximum time limit (sec) given to the solver
         double m_Accuracy;
 };
 
@@ -205,7 +204,7 @@ class VEGroup
 		// get the singleton VE group object
         static VEGroup& instance();
 
-		// Evaluate the fitness of the given set of parameters based on how well CellML models fit the corresponding VE data
+		// Evaluate the set of parameters in characterising models as approximations of data in VEs
         double Evaluate(VariablesHolder& v);
 
 		// Add a VE object onto experiments

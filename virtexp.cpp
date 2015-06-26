@@ -305,31 +305,29 @@ VEGroup& VEGroup::instance()
 
 
 /**
- *	Evaluate the fitness of the given set of parameters based on how well CellML models fit the corresponding VE data
+ *	Evaluate model parameters based on the average SSR across the whole VEs
  *	
- *	VariableHolder argument contains a list of parameters for the CellML model
+ *	v contains a list of parameters to characterise a CellML model
  *	
  *	Returns INFINITY if any virtual experiment causes error (by returning inf)	
- *
- *	INFINITY is an exception returned when particularly poor fit against experiment
  *	0.0 returned when the VEGroup object contains no virtual experiments
  **/
 double VEGroup::Evaluate(VariablesHolder& v)
 {
-    double res=0.0;
-    int count=0;	// counter for the number of experiments that yielded a finite residual
+    double res=0.0;		// initialise the total residual from all models and VE data points
+    int count=0;	// counter for the number of experiments that yield a finite residual
 
     if(!experiments.size())
-        return 0.0;	// no virtual experiments to reference
+        return 0.0;		// no virtual experiments to reference
 
+	// iterate through each VE in group
     for(int i=0;i<experiments.size();i++)
     {
-		// set variables to compare against experiment
+		// set model variables to compare against experiment
         experiments[i]->SetVariables(v);
 
-		// evaluate residual from this experiment 
-		// TODO residual method and positivity
-        double d=experiments[i]->Evaluate();	// handle INFINITY exception
+		// evaluate squared-sum-residual for this test (model config + VE data)
+        double d=experiments[i]->Evaluate();
 
 		// update the total residual
         if(d!=INFINITY)
@@ -339,8 +337,8 @@ double VEGroup::Evaluate(VariablesHolder& v)
         }
     }
 
-	// Average deviation evaluated from all virtual experiments against given model parameters                                                                                                                                                         
-    return (count==experiments.size()?res/(double)count:INFINITY);
+    // Return the avg SSR obtained across all v-experiments
+	return (count==experiments.size()?res/(double)count:INFINITY);
 }
 
 void VEGroup::add(VirtualExperiment *p)

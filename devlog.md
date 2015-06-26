@@ -496,7 +496,7 @@ Optimising *Distributor::process* for the number of processors, average simulati
 
 ## 26.06.2015
 ### BUGS
-Bugs in model evaluation method in virtexp.cpp
+Bugs in model evaluation method in *virtexp.cpp* have been addressed below:
 
 * VirtualExperiment::Evaluate()
   * [ ] All simulation points sufficiently close to VE data points are selected for SSR evaluation (not strictly 1-1)
