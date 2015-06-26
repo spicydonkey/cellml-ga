@@ -32,9 +32,10 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
     string strName=elem.GetAttribute("ModelFilePath").GetValue();	// Get model name
 
     if(!strName.size())
-        return NULL;
+        return NULL;	// error: no model to optimize
 
-    vx=new VirtualExperiment;
+    vx=new VirtualExperiment;	// allocate memory for a new VE object
+
 	// Load the CellML model
     if(!vx->LoadModel(strName))
     {	// Error in loading model
@@ -43,39 +44,45 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
     }
     else
     {	// Model loaded correctly - read the VE data
-		// VE variable of interest
+		// Set model variable of interest (variable corresponding to the 'target' variable in data)
         vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
 
+		// Set accuracy (TODO unused)
         if(elem.GetAttribute("Accuracy").GetValue().size())
               vx->m_Accuracy=atof(elem.GetAttribute("Accuracy").GetValue().c_str());
        
+		// Set maximum time limit on simulator (no time limit on default)
         vx->m_MaxTime=atoi(elem.GetAttribute("MaxSecondsForSimulation").GetValue().c_str());
+
         vx->m_ReportStep=atof(elem.GetAttribute("ReportStep").GetValue().c_str());
         
-		// Read the assessment points
+		// Acquire the v-experiment data points
 		for(int i=0;;i++)
         {
-            const AdvXMLParser::Element& al=elem("AssessmentPoints",0)("AssessmentPoint",i);
-            POINT pt;
+            const AdvXMLParser::Element& al=elem("AssessmentPoints",0)("AssessmentPoint",i);	// get a data point
+            POINT pt;	// initialise a POINT object to store data
 
             if(al.IsNull())
                 break;
+
+			// Update point and store in m_Timepoints
             pt.first=atof(al.GetAttribute("time").GetValue().c_str());
             pt.second=atof(al.GetAttribute("target").GetValue().c_str());
             vx->m_Timepoints.push_back(pt);
         }
 
-        // Read parameters
+        // Read experimental configuration as fixed model parameters
         for(int i=0;;i++)
         {
             const AdvXMLParser::Element& al=elem("Parameters",0)("Parameter",i);
 
             if(al.IsNull())
                 break;
-            wstring name=convert(al.GetAttribute("ToSet").GetValue());
-            double val=atof(al.GetAttribute("Value").GetValue().c_str());
+
+            wstring name=convert(al.GetAttribute("ToSet").GetValue());		// parameter to set as simulation constant
+            double val=atof(al.GetAttribute("Value").GetValue().c_str());	// value
             if(name.size())
-                vx->m_Parameters[name]=val;
+                vx->m_Parameters[name]=val;		// update simulation config
         }
     }
     
@@ -84,18 +91,19 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 
 double VirtualExperiment::getSSRD(std::vector<std::pair<int,double> >& d)
 {
-    double r=0.0;	// initialise residual sum of squares
+    double SSR=0.0;		// init sum of squared residuals
 
     for(int i=0;i<d.size();i++)
     {
-		// At time d[i].first:
-		// d[i].second is the predicted data value by the simulated model
-		// m_Timepoints[d[i].first].second is the VE measurement
-		// The residual is "normalised" by dividing by the measured value before squaring! 
-		// TODO so the measured value should never be 0! since division by 0 will yield INF ssr
-        r+=pow((d[i].second-m_Timepoints[d[i].first].second)/m_Timepoints[d[i].first].second,2);
+		// TODO The point of this BUG is that d[i].first may not be i and this is quite important in the regression analysis
+		double sim_data = d[i].second;		// predicted data value from simulation 'near' the {d[i].first}^th data point
+		double exp_data = m_Timepoints[d[i].first].second;	// virtual experiment measurement
+
+		// residual is normalised by dividing by the measured value before squaring! (TODO hence measured value of 0 yields INF normed res)
+        //r+=pow((d[i].second-m_Timepoints[d[i].first].second)/m_Timepoints[d[i].first].second,2);
+		SSR+=pow(sim_data/exp_data-1.0,2);
     }
-    return r;
+    return SSR;
 }
 
 bool VirtualExperiment::LoadModel(const std::string& model_name)
@@ -120,13 +128,14 @@ bool VirtualExperiment::LoadModel(const std::string& model_name)
 
 void VirtualExperiment::SetParameters(VariablesHolder& v)
 {
+	// iterate through the stored alleles
     for(int i=0;;i++)
     {
-        wstring n=v.name(i);
+        wstring n=v.name(i);	// get the next allele name
         if(n.empty())
            break;
         double val=v(n);
-        m_Parameters[n]=val; 
+        m_Parameters[n]=val;	// add the allele as a constant for the model
     }
 }
 
@@ -136,6 +145,7 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
     ObjRef<iface::cellml_api::CellMLComponentIterator> comps_it=comps->iterateComponents();
     ObjRef<iface::cellml_api::CellMLComponent> firstComp=comps_it->nextComponent();
 
+	// Iterate thorough model components
     while(firstComp)
     {
         ObjRef<iface::cellml_api::CellMLVariableSet> vars=firstComp->variables();
@@ -144,24 +154,29 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 
         string compname=convert(firstComp->name());
 
+		// Iterate component variables
         while(var)
         {
             wstring name=var->name();	// get this variable's name
-            wstring fullname=name;
+
+            // Find the full-name for the variable
+			wstring fullname=name;
             if(compname!="all" && compname!="")
             {
                 fullname=convert(compname)+convert(".");
                 fullname+=name;
             }
+
+			// Get model optimization parameter from v or experimental constants from m_Parameters
             if(v.exists(fullname))
-            {	// parameter specified in input
-                char sss[120];
+            {	// model optimisation paramter
+                char sss[120];	// buffer for parameter value 
                 gcvt(v(fullname),25,sss);	// convert the param value to char string
                 std::wstring wv=convert(sss);
                 var->initialValue(wv);		// set this variable
             }
             else if(m_Parameters.find(fullname)!=m_Parameters.end())
-            {	// constant parameters
+            {	// experimental constant
                 char sss[120];
                 gcvt(m_Parameters[fullname],25,sss);
                 std::wstring wv=convert(sss);
@@ -175,7 +190,8 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 
 
 // Compile and run an ODE solver to simulate the configured CellML model
-// Select estimation points from the result and return the deviation to virtual experiment by SSR
+// Select local estimation points from the result 
+// Return the model's deviation to virt-experiment as Residual Sum of Squares
 double VirtualExperiment::Evaluate()
 {
     double res=0.0;
@@ -200,7 +216,7 @@ double VirtualExperiment::Evaluate()
             osr->setTabulationStepControl(m_ReportStep,true);
 
 		// Run the solver
-       calc_started=time(NULL);
+       calc_started=time(NULL);		// solver start time
        osr->start();
 	   
 	   // Wait until the solver has completed
@@ -209,7 +225,7 @@ double VirtualExperiment::Evaluate()
            usleep(1000);	// wait 1ms for the ODE solver
            if(m_MaxTime)
            {
-               time_t t=time(NULL);
+               time_t t=time(NULL);		// current time
 			   // Check if the solver is running over maximum time
                if((unsigned long)(t-calc_started)>m_MaxTime)
                {
@@ -219,34 +235,38 @@ double VirtualExperiment::Evaluate()
            }
        }      
 
+	   // Regression analysis
        if(!po->failed())
        {
            std::vector<double> vd;
            std::vector<std::pair<int,double> > results;
-           int recsize=po->GetResults(vd);	// Get the result of ODE simulation as a 1D-vector and individual record size
+           int recsize=po->GetResults(vd);	// get ODE simulation result as 1D-vector and per-time record size
  
 		   // Collate the set of estimation model points corresponding to VE data points
 		   //
 		   // TODO Shouldn't we search for the t-point in the simulation result that is in range to a t-point specified in VE?
-				// multiple points from the simulation can be mapped in-range of a point in VE
+				// in original code, multiple points from the simulation can be mapped in-range of a point in VE
 				// should we look for the closest simulation point wrt time?
-
 		   for(int i=0;i<vd.size();i+=recsize)	// iterate through the time-points in simulation
            {
 			   // record the result if the simulation point is in a close range to a VE point
                for(int j=0;j<m_Timepoints.size();j++)
-                   if(in_range(vd[i],m_Timepoints[j].first,EPSILON))
+                   if(in_range(vd[i],m_Timepoints[j].first,EPSILON))	// TODO should in_range gap be EPSILON or 'accuracy'?
                    {
                        results.push_back(make_pair(j,vd[i+m_nResultColumn]));	// add the variable of interest
                        break;
                    }
            }
+		   // TODO more importantly, shouldn't results.size()==m_Timepoints.size() so that all data points have estimations?
+				// No duplicate estimation
+				// No data missing estimation
            if(!results.size())
            {
                fprintf(stderr,"Results vector is empty, Observer returned %d bytes (%d records)\n",vd.size(),vd.size()/recsize);
            }
 
 		   // Calculate the squared-sum-residual
+		   // TODO getSSRD doesn't check if results is the same size as m_Timepoints; can lead to multiple estimation?
            res=(results.size()?getSSRD(results):INFINITY);	// return INF if result vector is empty
        }
        else
@@ -254,7 +274,7 @@ double VirtualExperiment::Evaluate()
     }
     catch(CellMLException e)
     {
-        //fprintf(stderr,"Error evaluating model\n");
+        fprintf(stderr,"Error evaluating model\n");
         res=INFINITY;
     }
     return res;

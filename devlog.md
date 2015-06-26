@@ -493,3 +493,16 @@ Optimising *Distributor::process* for the number of processors, average simulati
 ### TODO
 * [x] Add comments to functions in VirtualExperiment
 * [x] Add comments to functions in VEGroup
+
+## 26.06.2015
+### BUGS
+Bugs in model evaluation method in virtexp.cpp
+
+* VirtualExperiment::Evaluate()
+  * [ ] All simulation points sufficiently close to VE data points are selected for SSR evaluation (not strictly 1-1)
+  * [ ] Algorithm to select simulation point is using EPSILON
+  * [ ] Should check if simulation has given estimation for *all* time-points in VE (No time-point missed)
+
+* GetSSRD
+  * [ ] Should check if there is one-to-one relationship between experimental data (m_Timepoints) and estimates (input vector)
+  * [ ] Normalisation method fails if experimental data is *zero*

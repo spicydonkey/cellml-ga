@@ -52,7 +52,7 @@ class VariablesHolder
 			return (it==m_Vars.end()?double(0.0):it->second);
 		}
 
-		// Update an allele in VarHold's m_Var obj and return updated allele value
+		// Update an allele in m_Var member and return updated allele value
 		double operator()(const std::wstring& name,double val)
 		{
 			// find if matching allele already exists in VarHold
@@ -81,14 +81,14 @@ class VariablesHolder
 			return (it!=m_Vars.end());
 		}
 
-		// Size of a VariablesHolder object
+		// Size of a VariablesHolder object (number of alleles stored)
 		size_t size()
 		{
 			// is the size of m_Vars vector i.e. number of alleles in stored in the m_Vars vector
 			return m_Vars.size();
 		}
 
-		// Collate the genome sequence
+		// Collate the genome sequence into a vector
 		void collate(std::vector<double>& v)
 		{
 			for(ALLELE::iterator it=m_Vars.begin();it!=m_Vars.end();++it)
@@ -106,8 +106,7 @@ class VariablesHolder
 			}
 		}
 
-		// Fill-up the genepool's allele values with a supplied genome sequence (i.e. vector of doubles)
-		// returns true iff executed correctly
+		// Fill-up the chromosome with a supplied vector of allele values. Return true iff executed correctly
 		bool fillup(std::vector<double>& v)
 		{
 			// check if the sizes are equal
@@ -136,16 +135,16 @@ class VirtualExperiment
         VirtualExperiment();
         ~VirtualExperiment();
 
-		// Load the CellML model by give name and return success of implementation
+		// Load the CellML model and return if the load was successful
         bool LoadModel(const std::string& model_name);
 
-		// Load a VirtualExperiment object from the corresponding element in XML file
-		// Returns a pointer to the loaded object and NULL ptr if error in loading model
+		// Load the virtual experiment data from XML file and return a pointer to the constructed VE object (NULL ptr if error)
         static VirtualExperiment *LoadExperiment(const AdvXMLParser::Element& elem);
 
 		// Load the CellML model parameters onto m_Model
 		void SetVariables(VariablesHolder& v);
 
+		// Set model constants with parameters stored in a VariablesHolder object
         void SetParameters(VariablesHolder& v);
 
 		// Evaluate the parameter-configured CellML model fitness to the experimental data
@@ -173,7 +172,7 @@ class VirtualExperiment
 
         friend class Runner;
 
-		// Calculate the (scaled) Sum of Square Residuals (SSR) of the simulation and virtual experimental data
+		// Calculate the normalised Sum of Square Residuals (SSR) of the simulation against v-experimental data
 		double getSSRD(std::vector<std::pair<int,double> >& d);
         
 		std::string m_strModelName;
