@@ -500,9 +500,14 @@ Bugs in model evaluation method in *virtexp.cpp* have been addressed below:
 
 * VirtualExperiment::Evaluate()
   * [ ] All simulation points sufficiently close to VE data points are selected for SSR evaluation (not strictly 1-1)
-  * [ ] Algorithm to select simulation point is using EPSILON
+  * Algorithm to select simulation point is using EPSILON
+    * [x] replace eps argument as m_Accuracy for calls to *in_range* function
   * [ ] Should check if simulation has given estimation for *all* time-points in VE (No time-point missed)
 
 * GetSSRD
-  * [ ] Should check if there is one-to-one relationship between experimental data (m_Timepoints) and estimates (input vector)
+  * Should check if there is one-to-one relationship between experimental data (m_Timepoints) and estimates (input vector)
+    * [ ] Check if the estimates vector and m_Timepoints are equal size
   * [ ] Normalisation method fails if experimental data is *zero*
+
+## 27.06.2015
+Process adressed bugs
