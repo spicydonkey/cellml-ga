@@ -251,11 +251,13 @@ double VirtualExperiment::Evaluate()
            {
 			   // record the result if the simulation point is in a close range to a VE point
                for(int j=0;j<m_Timepoints.size();j++)
-                   if(in_range(vd[i],m_Timepoints[j].first,EPSILON))	// TODO should in_range gap be EPSILON or 'accuracy'?
-                   {
-                       results.push_back(make_pair(j,vd[i+m_nResultColumn]));	// add the variable of interest
-                       break;
-                   }
+                   
+					//if(in_range(vd[i],m_Timepoints[j].first,EPSILON))	// TODO should in_range gap be EPSILON or 'accuracy'?
+					if (in_range(vd[i], m_Timepoints[j].first, m_Accuracy))
+					{
+						results.push_back(make_pair(j,vd[i+m_nResultColumn]));	// add the variable of interest
+						break;
+					}
            }
 		   // TODO more importantly, shouldn't results.size()==m_Timepoints.size() so that all data points have estimations?
 				// No duplicate estimation
