@@ -511,3 +511,16 @@ Bugs in model evaluation method in *virtexp.cpp* have been addressed below:
 
 ## 27.06.2015
 Process adressed bugs
+
+## 29.06.2015
+### Diagnosis
+#### Regression analysis
+Check to see if a VE data point is estimated by multiple simluation points AND multiply summed
+
+* A simple print-out?
+
+
+### TODO
+* Other CellML models
+  * [ ] Ramp_2D
+  * [ ] ip3model

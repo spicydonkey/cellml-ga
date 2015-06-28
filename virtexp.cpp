@@ -259,6 +259,22 @@ double VirtualExperiment::Evaluate()
 						break;
 					}
            }
+		   
+#ifdef DEBUG_BUILD
+		   // Check for multiple estimation of data points
+		   for(int data_index=0;data_index<m_Timepoints.size();data_index++)
+		   {
+			   int count=0;
+			   // iterate through results vector and count the number of estimations
+			   for(int i=0;i<results.size();i++)
+			   {
+				   if(results[i].first==data_index)
+					   count++;
+			   }
+			   std::cerr << data_index << ":" << count << std::endl;
+		   }
+#endif
+
 		   // TODO more importantly, shouldn't results.size()==m_Timepoints.size() so that all data points have estimations?
 				// No duplicate estimation
 				// No data missing estimation
