@@ -244,6 +244,7 @@ double VirtualExperiment::Evaluate()
  
 		   // Collate the set of estimation model points corresponding to VE data points
 		   //
+#ifndef DEBUG_BUILD
 		   // TODO Shouldn't we search for the t-point in the simulation result that is in range to a t-point specified in VE?
 				// in original code, multiple points from the simulation can be mapped in-range of a point in VE
 				// should we look for the closest simulation point wrt time?
@@ -259,7 +260,31 @@ double VirtualExperiment::Evaluate()
 						break;
 					}
            }
-		   
+#else
+		   // FIX Replace above nested loop for building estimation vector with code below:
+		   // Guaranteed to match 1-1 OR output error message
+		   // May not find the closest estimation, but finds an appropriate one
+		   //
+		   // iterate through the data points
+		   for(int i=0;i<m_Timepoints.size();i++)
+		   {
+			   bool b_match=false;	// flag to indicate if a data point has been matched with an appropriate estimation
+			   // iterate the simulation points and get the first point in range of the data
+			   for(int j=0;j<vd.size();j+=recsize)
+			   {
+				   // check if sim-point is in range
+				   if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
+				   {
+					   results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
+					   b_match=true;
+					   break;	// done with this data-point
+				   }
+			   }
+			   if(!b_match)
+				   std::cerr << "Error: Simulation cannot estimate VE data-point" << std::endl;
+		   }
+#endif
+
 #ifdef DEBUG_BUILD
 		   // Check for multiple estimation of data points
 		   for(int data_index=0;data_index<m_Timepoints.size();data_index++)

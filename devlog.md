@@ -514,13 +514,30 @@ Process adressed bugs
 
 ## 29.06.2015
 ### Diagnosis
-#### Regression analysis
+#### Unique estimation
 Check to see if a VE data point is estimated by multiple simluation points AND multiply summed
 
-* A simple print-out?
+* A simple error log
 
+* Schwefel2D
+Realised that there was only one target anyway and ODE was solving a dummy. Always a 1-1 relationship for experimental data-simulation estimation pair. Very good.
+```
+...
+0:1
+0:1
+0:1
+...
+```
+
+Rewrote the code to collect estimation vector to the VE data point vector. Fix is implemented when DEBUG_BUILD is not defined.
+
+#### 
 
 ### TODO
 * Other CellML models
-  * [ ] Ramp_2D
-  * [ ] ip3model
+  * Ramp_2D
+    * [x] add to codebase
+	* [ ] test
+  * ip3model
+    * [x] add to codebase
+	* [ ] test
