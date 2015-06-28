@@ -9,7 +9,7 @@
 	<VirtualExperiments>
 		<VirtualExperiment ModelFilePath="Schwefel2D.cellml" ResultColumn="3">
 			<AssessmentPoints>
-				<AssessmentPoint time="2.57" target="0.0" />
+				<AssessmentPoint time="2.57" target="1.0" />
 			</AssessmentPoints>
 		</VirtualExperiment>
 	</VirtualExperiments>
