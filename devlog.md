@@ -531,7 +531,40 @@ Realised that there was only one target anyway and ODE was solving a dummy. Alwa
 
 Rewrote the code to collect estimation vector to the VE data point vector. Fix is implemented when DEBUG_BUILD is not defined.
 
-#### 
+#### Sum of Squared Residuals
+Check for equal size between simulation and experimental data vectors added.
+INFINITY returned as SSR if the check fails.
+
+getSSRD function expects ordering of data in the estimation vector (d) to be identical to m_Timepoints vector.
+New implementation of estimation selector guarantees equivalent ordering **except** gaps in estimations. 
+Hence, even before getSSRD is called, the **completeness** as well as **uniqueness** of estimation vector needs to be checked.
+
+* [x] Uniqueness: two elements in estimation vector correspond to two different data points
+  * guaranteed by the estimation selector algorithm
+
+```c++
+for(int i=0;i<m_Timepoints.size();i++)
+{
+	bool b_match=false;	// flag to indicate if a data point has been matched with an appropriate estimation
+	// iterate the simulation points and get the first point in range of the data
+	for(int j=0;j<vd.size();j+=recsize)
+	{
+		// check if sim-point is in range
+		if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
+		{
+			results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
+			b_match=true;
+			break;	// done with this data-point
+		}
+	}
+	if(!b_match)
+		std::cerr << "Error: Simulation cannot estimate VE data-point" << std::endl;
+}
+```
+
+* [ ] Complenetess: each element in experimental data vector has a corresponding estimation in estimation vector
+  * Compare size of two vectors before call to getSSRD
+
 
 ### TODO
 * Other CellML models

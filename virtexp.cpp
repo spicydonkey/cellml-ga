@@ -93,6 +93,15 @@ double VirtualExperiment::getSSRD(std::vector<std::pair<int,double> >& d)
 {
     double SSR=0.0;		// init sum of squared residuals
 
+#ifdef DEBUG_BUILD
+	// Check if simulation and experimental data are same size
+	if(d.size()!=m_Timepoints.size())
+	{
+		fprintf(stderr,"getSSRD: estimation and data vector need to have the same size but are different.\n");
+		return INFINITY;
+	}
+#endif
+
     for(int i=0;i<d.size();i++)
     {
 		// TODO The point of this BUG is that d[i].first may not be i and this is quite important in the regression analysis
@@ -301,8 +310,8 @@ double VirtualExperiment::Evaluate()
 #endif
 
 		   // TODO more importantly, shouldn't results.size()==m_Timepoints.size() so that all data points have estimations?
-				// No duplicate estimation
-				// No data missing estimation
+				// No duplicate estimation: our estimation vector selector above will eliminate duplicates
+				// No data missing estimation: error message will be printed. SSRD function should print error message
            if(!results.size())
            {
                fprintf(stderr,"Results vector is empty, Observer returned %d bytes (%d records)\n",vd.size(),vd.size()/recsize);
