@@ -651,6 +651,10 @@ Find the index to the frame in simulation result vector closest in time to the V
 A relatively large job for ip3model was ran after fixing the small bug in best estimation finder. 
 Strangely, the job suffered an error before walltime and was killed. Below is the job description and error log.
 
+Upon checking some parameters tested by GA, the solver seemed to have been working correctly.
+
+The error could have been due to memory leakage - could be from our codebase or the CellML ODE solver.
+
 #### Job description
 In the slurm file
 ```
@@ -686,7 +690,8 @@ srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
 ```
 
 #### Test file
-```
+Comments: Range for parameters is far too large and unrealistic(?). Running a few parameter sets on OpenCOR hints that the upper bound for the below parameters may be far too large.
+```xml
 <?xml version="1.0"?>
 <CellMLTimeSeriesFit>
         <GA InitialPopulation="100" Generations="1000" Mutation_proportion="0.20" Crossover_proportion="0.70">
