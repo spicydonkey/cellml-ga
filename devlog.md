@@ -633,3 +633,4 @@ Error in evaluating Experiment[0] with parameters: kf5->855.197337 kf4->838.3994
 
 Let's probe into the simulation result to see how sparse the solution really is...
 
+Indeed, the simulation is not sparse enough, but we could do with what we have..?

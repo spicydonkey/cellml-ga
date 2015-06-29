@@ -278,29 +278,50 @@ double VirtualExperiment::Evaluate()
 		   for(int i=0;i<m_Timepoints.size();i++)
 		   {
 			   bool b_match=false;	// flag to indicate if a data point has been matched with an appropriate estimation
+			   double diff;
+			   double t_target=m_Timepoints[i].first;
+			   int best_est;
+
 			   // iterate the simulation points and get the first point in range of the data
 			   for(int j=0;j<vd.size();j+=recsize)
 			   {
-				   // check if sim-point is in range
-				   if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
+				   //// check if sim-point is in range
+				   //if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
+				   //{
+					  // results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
+					  // b_match=true;
+					  // break;	// done with this data-point
+				   //}
+				   if (!b_match)
 				   {
-					   results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
-					   b_match=true;
-					   break;	// done with this data-point
+						diff=fabs(vd[j]-t_target);
+						b_match=true;
+						j=best_est;
+				   }
+				   else
+				   {
+					   if(diff>fabs(vd[j]-t_target))
+					   {
+						   diff=fabs(vd[j]-t_target);
+						   j=best_est;
+					   }
 				   }
 			   }
+
+			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
+
 			   if(!b_match)
 			   {
 				   std::cerr << "Error: Simulation cannot estimate VE data-point" << std::endl;
 
-				   // print the data-point and simulation result as a check
-				   std::cerr << "DATA POINT: " << m_Timepoints[i].first << "\n";
-				   std::cerr << "Simulation:\n";
-				   for(int j=0;j<vd.size();j+=recsize)
-				   {
-					   std::cerr << vd[j] << " ";
-				   }
-				   std::cerr << std::endl;
+				   //// print the data-point and simulation result as a check
+				   //std::cerr << "DATA POINT: " << m_Timepoints[i].first << "\n";
+				   //std::cerr << "Simulation:\n";
+				   //for(int j=0;j<vd.size();j+=recsize)
+				   //{
+					  // std::cerr << vd[j] << " ";
+				   //}
+				   //std::cerr << std::endl;
 			   }
 		   }
 #endif
