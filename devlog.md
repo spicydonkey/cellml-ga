@@ -594,6 +594,9 @@ else
 #endif
 ```
 
+### BUGS
+* Assessment points should be in chronological order?!
+
 ### TODO
 * Other CellML models
   * Ramp_2D
