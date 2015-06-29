@@ -318,9 +318,15 @@ double VirtualExperiment::Evaluate()
            }
 
 		   // Calculate the squared-sum-residual
+#ifndef DEBUG_BUILD
 		   // TODO getSSRD doesn't check if results is the same size as m_Timepoints; can lead to multiple estimation?
-           res=(results.size()?getSSRD(results):INFINITY);	// return INF if result vector is empty
-       }
+		   res=(results.size()?getSSRD(results):INFINITY);	// return INF if result vector is empty
+#else
+		   // FIX
+		   // Check completeness of estimation points selected from simulation
+		   res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
+#endif
+	   }
        else
            res=INFINITY;	// return INF if simulation failed
     }

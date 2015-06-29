@@ -562,9 +562,15 @@ for(int i=0;i<m_Timepoints.size();i++)
 }
 ```
 
-* [ ] Complenetess: each element in experimental data vector has a corresponding estimation in estimation vector
+* [x] Complenetess: each element in experimental data vector has a corresponding estimation in estimation vector
   * Compare size of two vectors before call to getSSRD
+  * return INF for mismatch in size
 
+```c++
+// FIX
+// Check completeness of estimation points selected from simulation
+res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
+```
 
 ### TODO
 * Other CellML models
