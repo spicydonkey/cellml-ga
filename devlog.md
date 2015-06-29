@@ -603,7 +603,7 @@ else
     * [x] add to codebase
 	* [ ] test
 	  * All alleles INF!
-	  * Must find the bug...
+	    * it was a bug in best estimation selector algorithm
 
 ### BUGS
 * Assessment points should be in chronological order?!
@@ -734,3 +734,10 @@ Comments: Range for parameters is far too large and unrealistic(?). Running a fe
         </VirtualExperiments>
 </CellMLTimeSeriesFit>
 ```
+
+### TODO Jobs from the meeting
+* [ ] Disallow user from supplying VE with zero target (cannot implement a satisfactory normalisation yet)
+* [ ] Check for chronological ordering of assessment points in XML file
+* [ ] Implement ReportStep in CellML API as default
+  * [ ] GCD of all timepoints 
+* [ ] Remove *Block Sampling* feature in GA
