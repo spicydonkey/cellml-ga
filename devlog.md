@@ -634,3 +634,10 @@ Error in evaluating Experiment[0] with parameters: kf5->855.197337 kf4->838.3994
 Let's probe into the simulation result to see how sparse the solution really is...
 
 Indeed, the simulation is not sparse enough, but we could do with what we have..?
+
+### Meeting minutes
+* Disallow user from supplying VE with zero target (cannot implement a satisfactory normalisation yet)
+* Check for chronological ordering of assessment points in XML file
+* Implement ReportStep in CellML API as default
+  * GCD of all timepoints 
+* Remove *Block Sampling* feature in GA
