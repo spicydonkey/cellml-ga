@@ -645,3 +645,87 @@ Find the index to the frame in simulation result vector closest in time to the V
 * Implement ReportStep in CellML API as default
   * GCD of all timepoints 
 * Remove *Block Sampling* feature in GA
+
+## 30.06.2015
+### Job result
+A relatively large job for ip3model was ran after fixing the small bug in best estimation finder. 
+Strangely, the job suffered an error before walltime and was killed. Below is the job description and error log.
+
+#### Job description
+In the slurm file
+```
+#!/bin/bash
+#SBATCH -J CellML_Test
+#SBATCH -A uoa00322
+#SBATCH --time=10:00:00     # Walltime
+#SBATCH --ntasks=2
+#SBATCH --cpus-per-task=4
+#SBATCH --mem-per-cpu=1024  # memory/cpu (in MB)
+#SBATCH -o exper_cellml_%j.out       # OPTIONAL
+#SBATCH -e exper_cellml_%j.err       # OPTIONAL
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=dk.shin1992@gmail.com
+#SBATCH -C sb
+######################################################
+
+#module load intel/ics-2013
+#module load impi
+module load ictce/5.4.0
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
+export LIBRARY_PATH=$LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
+srun /projects/uoa00322/david.shin/cellml-ga/experiment ip3model1.xml -v -v
+```
+
+#### Error log
+In exper_cellml_14309850.err (error log)
+```
+srun: error: compute-b1-051: task 0: Killed
+slurmstepd: error: *** JOB 14309850 CANCELLED AT 2015-06-30T04:08:07 DUE TO TIME LIMIT on compute-b1-051 ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+```
+
+#### Test file
+```
+<?xml version="1.0"?>
+<CellMLTimeSeriesFit>
+        <GA InitialPopulation="100" Generations="1000" Mutation_proportion="0.20" Crossover_proportion="0.70">
+                <Alleles>
+                        <Allele Name="kf5" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+                        <Allele Name="kf4" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+                        <Allele Name="kf16" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+                        <Allele Name="Rpc" LowerBound="1.0e-2" UpperBound="5e3"/>
+                </Alleles>
+        </GA>
+        <VirtualExperiments>
+                <VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="9">
+                <!-- note this VE doesn't have any Parameters to set, but next VE does (ie optional Parameters entity here) -->
+                        <AssessmentPoints>
+                                <AssessmentPoint time="100.0" target="0.026761882" />
+                                <AssessmentPoint time="200.0" target="0.032711469" />
+                                <AssessmentPoint time="400.0" target="0.035444437" />
+                                <AssessmentPoint time="650.0" target="0.034428839" />
+                                <AssessmentPoint time="1000.0" target="0.032079332" />
+                                <AssessmentPoint time="5000.0" target="0.018530385" />
+                                <AssessmentPoint time="7500.0" target="0.016311098" />
+                                <AssessmentPoint time="10000.0" target="0.015490316" />
+                        </AssessmentPoints>
+                </VirtualExperiment>
+                <VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="1">
+                        <Parameters>
+                                <Parameter ToSet="Ls" Value="5.0"/>
+                        </Parameters>
+                        <AssessmentPoints>
+                                <AssessmentPoint time="100.0" target="0.1" />
+                                <AssessmentPoint time="200.0" target="0.0957163" />
+                                <AssessmentPoint time="400.0" target="0.09551297" />
+                                <AssessmentPoint time="650.0" target="0.095987597" />
+                                <AssessmentPoint time="1000.0" target="0.098171588" />
+                                <AssessmentPoint time="5000.0" target="0.09932246" />
+                                <AssessmentPoint time="7500.0" target="0.099750063" />
+                                <AssessmentPoint time="10000.0" target="0.099907954" />
+                        </AssessmentPoints>
+                </VirtualExperiment>
+        </VirtualExperiments>
+</CellMLTimeSeriesFit>
+```
