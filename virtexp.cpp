@@ -104,7 +104,7 @@ double VirtualExperiment::getSSRD(std::vector<std::pair<int,double> >& d)
 
     for(int i=0;i<d.size();i++)
     {
-		// TODO The point of this BUG is that d[i].first may not be i and this is quite important in the regression analysis
+		// TODO d[i].first may not be i while it is quite important in the regression analysis
 		double sim_data = d[i].second;		// predicted data value from simulation 'near' the {d[i].first}^th data point
 		double exp_data = m_Timepoints[d[i].first].second;	// virtual experiment measurement
 

@@ -594,9 +594,6 @@ else
 #endif
 ```
 
-### BUGS
-* Assessment points should be in chronological order?!
-
 ### TODO
 * Other CellML models
   * Ramp_2D
@@ -605,3 +602,34 @@ else
   * ip3model
     * [x] add to codebase
 	* [ ] test
+	  * All alleles INF!
+	  * Must find the bug...
+
+### BUGS
+* Assessment points should be in chronological order?!
+#### ip3model
+* Must run with 1 processor only to avoid multiple processors writing to the error log
+  * set *ntasks* and *cpus-per-task* to 1
+
+##### Error message
+```
+Error: Simulation cannot estimate VE data-point
+Error: Simulation cannot estimate VE data-point
+Error: Simulation cannot estimate VE data-point
+Error: Simulation cannot estimate VE data-point
+Error: Simulation cannot estimate VE data-point
+Error: Simulation cannot estimate VE data-point
+Error: Simulation cannot estimate VE data-point
+0:0
+1:0
+2:0
+3:0
+4:0
+5:0
+6:0
+7:1
+Error in evaluating Experiment[0] with parameters: kf5->855.197337 kf4->838.399435 kf16->104.028944 Rpc->4127.398099
+```
+
+Let's probe into the simulation result to see how sparse the solution really is...
+
