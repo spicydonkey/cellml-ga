@@ -342,7 +342,8 @@ double VirtualExperiment::Evaluate()
 				   if(results[i].first==data_index)
 					   count++;
 			   }
-			   std::cerr << data_index << ":" << count << std::endl;
+			   if(count!=1)
+					std::cerr << data_index << ":" << count << std::endl;
 		   }
 #endif
 
