@@ -572,6 +572,28 @@ for(int i=0;i<m_Timepoints.size();i++)
 res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
 ```
 
+### Optimisation
+VEGroup::Evaluate returns a finite fitness value only when regression analysis for every VE is *successful*. 
+Therefore, as soon as a single VE has been found to give error, the function should immediately return INFINITY rather than continuing to simulate the remaining VEs.
+
+```c++
+// update the total residual
+if(d!=INFINITY)
+{	
+    res+=d;
+    count++;
+}
+#ifdef DEBUG_BUILD
+// If any experiment evaluated to INFINITY, this loop should immediately return INFINITY, since all experiments need to be processed properly
+else
+{
+	fprintf(stderr,"Error in evaluating Experiment[%d] with parameters: ",i);
+	v.print(stderr);	// print model parameters
+	return INFINITY;
+}
+#endif
+```
+
 ### TODO
 * Other CellML models
   * Ramp_2D

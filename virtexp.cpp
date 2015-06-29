@@ -220,7 +220,7 @@ double VirtualExperiment::Evaluate()
        po->release_ref();
        osr->stepType(iface::cellml_services::BDF_IMPLICIT_1_5_SOLVE);
        osr->setStepSizeControl(1e-6,1e-6,1.0,0.0,1.0);
-       osr->setResultRange(0.0,m_Timepoints[m_Timepoints.size()-1].first,m_Timepoints[m_Timepoints.size()-1].first);
+       osr->setResultRange(0.0,m_Timepoints[m_Timepoints.size()-1].first,m_Timepoints[m_Timepoints.size()-1].first);	// TODO Maximum point density?
        if(m_ReportStep)
             osr->setTabulationStepControl(m_ReportStep,true);
 
@@ -389,10 +389,19 @@ double VEGroup::Evaluate(VariablesHolder& v)
 
 		// update the total residual
         if(d!=INFINITY)
-        {
+        {	
             res+=d;
             count++;
         }
+#ifdef DEBUG_BUILD
+		// If any experiment evaluated to INFINITY, this loop should immediately return INFINITY, since all experiments need to be processed properly
+		else
+		{
+			fprintf(stderr,"Error in evaluating Experiment[%d] with parameters: ",i);
+			v.print(stderr);	// print model parameters
+			return INFINITY;
+		}
+#endif
     }
 
     // Return the avg SSR obtained across all v-experiments
