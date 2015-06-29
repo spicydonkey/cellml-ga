@@ -635,6 +635,10 @@ Let's probe into the simulation result to see how sparse the solution really is.
 
 Indeed, the simulation is not sparse enough, but we could do with what we have..?
 
+##### Best estimation
+Find the index to the frame in simulation result vector closest in time to the VE data point.
+
+
 ### Meeting minutes
 * Disallow user from supplying VE with zero target (cannot implement a satisfactory normalisation yet)
 * Check for chronological ordering of assessment points in XML file

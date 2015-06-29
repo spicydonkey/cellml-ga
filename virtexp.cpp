@@ -279,31 +279,36 @@ double VirtualExperiment::Evaluate()
 		   {
 			   bool b_match=false;	// flag to indicate if a data point has been matched with an appropriate estimation
 			   double diff;
-			   double t_target=m_Timepoints[i].first;
+			   double t_target=m_Timepoints[i].first;	// target assessment time
 			   int best_est;
 
-			   // iterate the simulation points and get the first point in range of the data
+			   // get an estimation from simulation result
 			   for(int j=0;j<vd.size();j+=recsize)
 			   {
-				   //// check if sim-point is in range
-				   //if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
-				   //{
-					  // results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
-					  // b_match=true;
-					  // break;	// done with this data-point
-				   //}
+				   /*	Match to the first simulation result in-range
+				   // check if sim-point is in range
+				   if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
+				   {
+					   results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
+					   b_match=true;
+					   break;	// done with this data-point
+				   }
+				   */
+
+				   // Get the closest estimate wrt time
 				   if (!b_match)
 				   {
 						diff=fabs(vd[j]-t_target);
 						b_match=true;
-						j=best_est;
+						best_est=j;
 				   }
 				   else
 				   {
+					   // Update best estimate
 					   if(diff>fabs(vd[j]-t_target))
 					   {
 						   diff=fabs(vd[j]-t_target);
-						   j=best_est;
+						   best_est=j;
 					   }
 				   }
 			   }
