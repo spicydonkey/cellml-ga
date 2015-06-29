@@ -290,7 +290,18 @@ double VirtualExperiment::Evaluate()
 				   }
 			   }
 			   if(!b_match)
+			   {
 				   std::cerr << "Error: Simulation cannot estimate VE data-point" << std::endl;
+
+				   // print the data-point and simulation result as a check
+				   std::cerr << "DATA POINT: " << m_Timepoints[i].first << "\n";
+				   std::cerr << "Simulation:\n";
+				   for(int j=0;j<vd.size();j+=recsize)
+				   {
+					   std::cerr << vd[j] << " ";
+				   }
+				   std::cerr << std::endl;
+			   }
 		   }
 #endif
 
