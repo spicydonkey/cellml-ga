@@ -198,6 +198,21 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 }
 
 
+bool VirtualExperiment::isValid()
+{
+	// Check for zero target value
+	for (int i = 0; i < m_Timepoints.size(); i++)
+	{
+		if (m_Timepoints[i].second == 0.0)
+		{
+			fprintf(stderr, "Error in VirtualExperiment - zero is not allowed as target\n");
+			return false;
+		}
+	}
+	return true;
+}
+
+
 // Compile and run an ODE solver to simulate the configured CellML model
 // Select local estimation points from the result 
 // Return the model's deviation to virt-experiment as Residual Sum of Squares

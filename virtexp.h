@@ -163,6 +163,9 @@ class VirtualExperiment
 		// Evaluate the parameter-configured CellML model fitness to the experimental data
         double Evaluate();
 
+		// Check for invalid settings
+		bool isValid();
+
         int resultcol() const { return m_nResultColumn; }
         void resultcol(int r) { m_nResultColumn=r; }
 
