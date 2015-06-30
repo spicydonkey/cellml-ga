@@ -741,3 +741,15 @@ Comments: Range for parameters is far too large and unrealistic(?). Running a fe
 * [ ] Implement ReportStep in CellML API as default
   * [ ] GCD of all timepoints 
 * [ ] Remove *Block Sampling* feature in GA
+
+### Checking for invalid VEs
+Added a member function in VirtualExperiment class *isValid* to check for a VE's validity.
+Below is an error output of a Schwefel2D test with 0.0 as a target value.
+The job used 4 tasks, 2 cpus.
+```
+Error in VirtualExperiment - zero is not allowed as target
+Error in VirtualExperiment - zero is not allowed as target
+Error in VirtualExperiment - zero is not allowed as target
+Error in VirtualExperiment - zero is not allowed as target
+srun: error: compute-gpu-d1-005: tasks 0-3: Exited with exit code 255
+```
