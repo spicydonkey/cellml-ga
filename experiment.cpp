@@ -246,6 +246,10 @@ int main(int argc,char *argv[])
 			if(!vx)
                break;	// loaded all the VE in file
 			
+			// check for invalid target value
+			if (!vx->isValid())
+				return -1;
+
 			// add each VE into the group singleton
             VEGroup::instance().add(vx);
         }
