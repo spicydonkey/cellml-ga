@@ -736,7 +736,7 @@ Comments: Range for parameters is far too large and unrealistic(?). Running a fe
 ```
 
 ### TODO Jobs from the meeting
-* [ ] Disallow user from supplying VE with zero target (cannot implement a satisfactory normalisation yet)
+* [x] Disallow user from supplying VE with zero target (cannot implement a satisfactory normalisation yet)
 * [ ] Check for chronological ordering of assessment points in XML file
 * [ ] Implement ReportStep in CellML API as default
   * [ ] GCD of all timepoints 
@@ -754,5 +754,6 @@ Error in VirtualExperiment - zero is not allowed as target
 srun: error: compute-gpu-d1-005: tasks 0-3: Exited with exit code 255
 ```
 
-Reassigning the target to 0.1...
+Reassigning the target to 0.1... and re-running the test, no error message is generated, and the test is successful.
 
+## 01.07.2015
