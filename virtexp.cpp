@@ -205,7 +205,7 @@ bool VirtualExperiment::isValid()
 	{
 		if (m_Timepoints[i].second == 0.0)
 		{
-			fprintf(stderr, "Error in VirtualExperiment - zero is not allowed as target\n");
+			fprintf(stderr, "Error: VirtualExperiment: invalid target value: zero target\n");
 			return false;
 		}
 	}
