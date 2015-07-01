@@ -1,6 +1,3 @@
-// Patch the debugging changes implemented by a preprecessor directive PATCH onto the original codebase
-#define PATCH
-
 #include <mpi.h>
 #include "cellml-api-cxx-support.hpp"
 #include "IfaceCellML_APISPEC.hxx"

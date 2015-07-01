@@ -47,7 +47,7 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 		// Set model variable of interest (variable corresponding to the 'target' variable in data)
         vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
 
-		// Set accuracy (TODO unused)
+		// Set accuracy
         if(elem.GetAttribute("Accuracy").GetValue().size())
               vx->m_Accuracy=atof(elem.GetAttribute("Accuracy").GetValue().c_str());
        
@@ -91,25 +91,21 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 
 double VirtualExperiment::getSSRD(std::vector<std::pair<int,double> >& d)
 {
-    double SSR=0.0;		// init sum of squared residuals
+    double SSR=0.0;		// sum of squared residuals
 
-#ifdef DEBUG_BUILD
-	// Check if simulation and experimental data are same size
+	// Check if estimation and experimental data are of same size
 	if(d.size()!=m_Timepoints.size())
 	{
-		fprintf(stderr,"getSSRD: estimation and data vector need to have the same size but are different.\n");
+		fprintf(stderr,"Error: in getSSRD: estimation and data vector need to have the same size but are different\n");
 		return INFINITY;
 	}
-#endif
 
     for(int i=0;i<d.size();i++)
     {
-		// TODO d[i].first may not be i while it is quite important in the regression analysis
-		double sim_data = d[i].second;		// predicted data value from simulation 'near' the {d[i].first}^th data point
-		double exp_data = m_Timepoints[d[i].first].second;	// virtual experiment measurement
+		double sim_data = d[i].second;		// model estimate for the ith data point
+		double exp_data = m_Timepoints[d[i].first].second;	// reference experimental data
 
-		// residual is normalised by dividing by the measured value before squaring! (TODO hence measured value of 0 yields INF normed res)
-        //r+=pow((d[i].second-m_Timepoints[d[i].first].second)/m_Timepoints[d[i].first].second,2);
+		// normalisation of residual is safe due to pre-solver check for zero targets
 		SSR+=pow(sim_data/exp_data-1.0,2);
     }
     return SSR;
@@ -243,7 +239,9 @@ double VirtualExperiment::Evaluate()
        osr->stepType(iface::cellml_services::BDF_IMPLICIT_1_5_SOLVE);
        osr->setStepSizeControl(1e-6,1e-6,1.0,0.0,1.0);
        osr->setResultRange(0.0,m_Timepoints[m_Timepoints.size()-1].first,m_Timepoints[m_Timepoints.size()-1].first);	// TODO Maximum point density?
-       if(m_ReportStep)
+       
+	   // TODO refer to CellML API doc and set TabStepControl as default so that the solver will automatically generate solutions at exact data points
+	   if(m_ReportStep)
             osr->setTabulationStepControl(m_ReportStep,true);
 
 		// Run the solver
@@ -274,7 +272,8 @@ double VirtualExperiment::Evaluate()
            int recsize=po->GetResults(vd);	// get ODE simulation result as 1D-vector and per-time record size
  
 		   // Collate the set of estimation model points corresponding to VE data points
-		   //
+		   // 
+		   // TODO Cleanup: What's going on below is messy
 #ifndef DEBUG_BUILD
 		   // TODO Shouldn't we search for the t-point in the simulation result that is in range to a t-point specified in VE?
 				// in original code, multiple points from the simulation can be mapped in-range of a point in VE
@@ -354,7 +353,9 @@ double VirtualExperiment::Evaluate()
 #endif
 
 #ifdef DEBUG_BUILD
-		   // Check for multiple estimation of data points
+		   // TODO Unnecessary if using minimal discrepancy estimation selector
+		   //
+		   // Check if estimates are assigned 1-1 with data points
 		   for(int data_index=0;data_index<m_Timepoints.size();data_index++)
 		   {
 			   int count=0;
@@ -365,27 +366,20 @@ double VirtualExperiment::Evaluate()
 					   count++;
 			   }
 			   if(count!=1)
-					std::cerr << data_index << ":" << count << std::endl;
+			   {
+				   std::cerr << "Error: in VirtualExperiment::Evaluate invalid estimates: data:#est=" << data_index << ":" << count << std::endl;
+					// return INFINITY;
+			   }
 		   }
 #endif
 
-		   // TODO more importantly, shouldn't results.size()==m_Timepoints.size() so that all data points have estimations?
-				// No duplicate estimation: our estimation vector selector above will eliminate duplicates
-				// No data missing estimation: error message will be printed. SSRD function should print error message
            if(!results.size())
            {
                fprintf(stderr,"Results vector is empty, Observer returned %d bytes (%d records)\n",vd.size(),vd.size()/recsize);
            }
 
 		   // Calculate the squared-sum-residual
-#ifndef DEBUG_BUILD
-		   // TODO getSSRD doesn't check if results is the same size as m_Timepoints; can lead to multiple estimation?
-		   res=(results.size()?getSSRD(results):INFINITY);	// return INF if result vector is empty
-#else
-		   // FIX
-		   // Check completeness of estimation points selected from simulation
 		   res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
-#endif
 	   }
        else
            res=INFINITY;	// return INF if simulation failed
@@ -453,15 +447,12 @@ double VEGroup::Evaluate(VariablesHolder& v)
             res+=d;
             count++;
         }
-#ifdef DEBUG_BUILD
-		// If any experiment evaluated to INFINITY, this loop should immediately return INFINITY, since all experiments need to be processed properly
 		else
 		{
 			fprintf(stderr,"Error in evaluating Experiment[%d] with parameters: ",i);
 			v.print(stderr);	// print model parameters
 			return INFINITY;
 		}
-#endif
     }
 
     // Return the avg SSR obtained across all v-experiments

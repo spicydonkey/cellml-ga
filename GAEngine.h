@@ -331,7 +331,7 @@ class GAEngine
 
 			// Process the work item collected by distributor
 				// evaluate and assign fitness for each Genome in population
-			Distributor::instance().process(observer,this);		//TODO track process method 
+			Distributor::instance().process(observer,this);
 
 			std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort population in ascending order of fitness
             
@@ -352,20 +352,17 @@ class GAEngine
 				int limit=m_Population.size();
                 POPULATION prev(m_Population);	// temporary copy of current pop vector
                 m_Population.clear();			// clear current population vector
-                //double l=(double)prev.size()-0.5;	// TODO unreferenced elsewhere
 
 				// SELECTION
 				// Weighted-selection with replacement from the previous generation's population
                 for(int i=0;i<limit;i++)
                 {
                     int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
-#ifdef PATCH
+
 					// Genetic operator feedback
 					if(verbosity>3)
 						printf("SELECT: Adding %d to population\n",mem);
-#else
-                    //printf("Adding %d to population\n",mem);
-#endif
+
 					m_Population.push_back(prev[mem]);	// add the selected genome into the new population for breeding
                 }
 
@@ -395,7 +392,6 @@ class GAEngine
 						//bulid tournament sample
                         build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
 
-#ifdef PATCH
 						// Genetic operator feedback
 						// Output genomes in arena pre-crossover
 						if(verbosity>3)
@@ -412,14 +408,12 @@ class GAEngine
 								print_genome(arena[j]);
 							}
 						}
-#endif
 
 						// cross the genomes in arena before a randomly selected point
 						// multiple degree crossover in a single generation iteration possible (i.e. crossover processed genome may be tournament selected for additional crossover)
 	    				cross(m_Population[arena[0]],m_Population[arena[1]],
 							(int)rnd_generate(1.0,m_Population[sample[i]].size()));
 
-#ifdef PATCH
 						// Output genomes in arena post-crossover
 						if(verbosity>3)
 						{
@@ -435,7 +429,6 @@ class GAEngine
 							}
 							printf("---------------------------------------\n");
 						}
-#endif
 
                         for(int j=0;j<2;j++)
                         {
@@ -479,7 +472,6 @@ class GAEngine
 					// Mutate the selected genomes
                     for(int i=0;i<sample.size();i++)
                     {
-#ifdef PATCH
 						// Genetic operator feedback
 						// Output genomes pre-mutation
 						if(verbosity>3)
@@ -494,9 +486,9 @@ class GAEngine
 							printf("-");
 							print_genome(sample[i]);
 						}
-#endif
+
 	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
-#ifdef PATCH
+
 						// Output genomes post-mutation
 						if(verbosity>3)
 						{
@@ -504,7 +496,7 @@ class GAEngine
 							print_genome(sample[i]);
 							printf("---------------------------------------\n");
 						}
-#endif
+
 						m_Population[sample[i]].var(v);
                         Distributor::instance().remove_key(sample[i]); //remove previously requested processing
 						WorkItem *w=var_to_workitem(v);
@@ -549,7 +541,6 @@ class GAEngine
         typedef std::map<std::wstring,std::pair<double,double> > LIMITS;
         LIMITS m_Limits;
 
-#ifdef PATCH
 		// Print a genome sequence
 		// A genome can be sequenced at any stage of the program, since it does not ask for its fitness, validity, generation, etc.
 		void print_genome(int ind_genome)
@@ -577,7 +568,6 @@ class GAEngine
 				print_genome(i);
 			}
 		}
-#endif
 
 		// Output a current summary for GA
         void print_stage(int g)
@@ -589,29 +579,10 @@ class GAEngine
                 for(int j=0;j<m_Population.size();j++)
 				{
 					//print validity, generation #, and fitness of each chromosome
-#ifdef PATCH		// tag genome with ! if fitness is negative
 					printf("%s[%d](%lf) ",(m_Population[j].valid()?(m_Population[j].fitness()<0?"!":" "):"*"),g+1,m_Population[j].fitness());
-#else
-					printf("%s[%d](%lf) ",(m_Population[j].valid()?" ":"*"),g+1,m_Population[j].fitness());
-#endif
 
-#ifdef PATCH
 					// Sequence the chromosome
 					print_genome(j);
-#else
-					//print each chromosome's alleles (name and value)
-					VariablesHolder v;
-                    for(int k=0;;k++)
-                    {
-                        m_Population[j].var(v);
-						std::wstring name=v.name(k);
-                               
-	    				if(name.empty())
-							break;
-						printf("%s=%lf   ",convert(name).c_str(),v(name));
-                    }
-                    printf("\n");
-#endif
 				}
 				printf("--------------------------------------------------------\n");
 			}
@@ -620,7 +591,6 @@ class GAEngine
 				// and fittest chromosome of this generation
 			else if(verbosity==1)
 			{
-#ifdef PATCH
 				//VariablesHolder v;
 				double f;
 				
@@ -640,21 +610,6 @@ class GAEngine
 				}
                 printf("\n");*/
                 printf("--------------------------------------------------------\n");
-#else
-				VariablesHolder v;
-				double f=GetBest(v);	// The fittest chromosome so far in GA
-
-				printf("Generation %d. Best fitness: %lf\n",g+1,f);
-				for(int k=0;;k++)
-				{
-					std::wstring name=v.name(k);
-					if(name.empty())
-						break;
-					printf("%s=%lf    ",convert(name).c_str(),v(name));
-				}
-                printf("\n");
-                printf("--------------------------------------------------------\n");
-#endif
 			}
 		}
 
@@ -778,20 +733,11 @@ class GAEngine
 				// if check_valid set true, add a valid index
                 do
                 {
-#ifndef PATCH
-					v=(int)(rnd_generate(0.0,limit));	// slightly disfavours the last index
-
-					// if check_valid is set true, loop until v is a valid Genome
-					// BUG - invalid genomes will still be pushed back onto sample
-                    if(check_valid && !m_Population[v].valid())
-						continue;			
-#else
 					// nested do-while until genome is both valid and unique
 					do
 					{
 						v=(int)(rnd_generate(0.0,limit));
 					} while (check_valid && !m_Population[v].valid());
-#endif
                 } while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
                 //Found next genome
                 sample.push_back(v);
@@ -847,29 +793,18 @@ class GAEngine
         int select_weighted(POPULATION& p)
         {
 			double sum=0.0;
-
-#ifdef PATCH
 			double zero_lim=0.000000000001;
-#endif
+
 			// total population fitness
             for(int i=0;i<p.size();i++)
 			{	
-#ifdef PATCH
 				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);	//TODO sum can overflow?
-#else
-				// BUG in assinging infinitely large weight on invalid genome
-				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():0.000000000001):99999999999.99999);
-#endif
 			}
 			// use a randomly selected threshold for a cumulative-sum selection
             double choice=sum*rnd_generate(0.0,1.0);
             for(int i=0;i<p.size();i++)
             {
-#ifdef PATCH
 				choice-=1.0/(p[i].fitness()?p[i].fitness():zero_lim);
-#else
-				choice-=1.0/(p[i].fitness()?p[i].fitness():0.000000000001);
-#endif
                 if(choice<=0.0)
 					return i;
             }

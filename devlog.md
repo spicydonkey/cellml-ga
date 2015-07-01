@@ -781,4 +781,7 @@ Done
 * Read CellML API documentation
  
 ### Clean code
-Clean patched code from seqmode including preprocessor directives.
+Clean patched code from seqmode including preprocessor directives, unreferenced variables, and comments.
+
+### TODO
+* In GAEngine::select_weighted, a better way to calculate sum? Sum can OVERFLOW!? Even if not, the method is not simple.

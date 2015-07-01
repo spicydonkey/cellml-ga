@@ -23,10 +23,7 @@ typedef std::vector<std::pair<std::wstring,double> > ALLELE;
 
 /**
  *	VariablesHolder
- *	
- *	+ m_Vars : a storage for ALLELE variable
- *	
- *	
+ *		m_Vars : a storage for ALLELE variable
  **/
 class VariablesHolder
 {
@@ -99,16 +96,7 @@ class VariablesHolder
 			}
 		}
 
-		// print all alleles held in m_Vars
-#ifndef DEBUG_BUILD
-		void print()
-		{
-			for(ALLELE::iterator it=m_Vars.begin();it!=m_Vars.end();++it)
-			{
-				printf("%s->%lf\n",convert(it->first).c_str(),it->second);
-			}
-		}
-#else
+		// print all alleles held in m_Vars to file
 		void print(FILE *pfout)
 		{
 			for(ALLELE::iterator it=m_Vars.begin();it!=m_Vars.end();++it)
@@ -117,7 +105,6 @@ class VariablesHolder
 			}
 			fprintf(pfout,"\n");
 		}
-#endif
 
 		// Fill-up the chromosome with a supplied vector of allele values. Return true iff executed correctly
 		bool fillup(std::vector<double>& v)
