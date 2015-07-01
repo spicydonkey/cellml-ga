@@ -764,4 +764,11 @@ A few minor advantages we see from checking chronological ordering are:
 * Checks some user typos
 * Readability of Virtual experiment data in XML file
 
-Test file: test_order.xml
+Test file: test_order.xml (in 3-ip3model test directory) 
+Output:
+```
+Error: VirtualExperiment: assessment points are not in chronological order
+Error: VirtualExperiment: assessment points are not in chronological order
+srun: error: compute-b1-015: task 0: Exited with exit code 255
+srun: error: compute-b1-019: task 1: Exited with exit code 255
+```
