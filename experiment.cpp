@@ -20,11 +20,11 @@ using namespace iface::cellml_api;
 using namespace iface::cellml_services;
 
 
-ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap; //CellML api bootstrap
+ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap;	//CellML api bootstrap
 ObjRef<iface::cellml_services::CellMLIntegrationService> cis;
 
 
-VariablesHolder var_template; //template for the variables, just holds names of the variables
+VariablesHolder var_template;	//template for the variables, just holds names of the variables
 
 int verbosity=0;	// verbosity initialised to 0
 
@@ -64,7 +64,7 @@ char *OpenXmlFile(const char *name,long& nSize)
 }
 
 // Initialise GA engine
-	// return number of generations to run GA
+// returns number of generations to run GA
 int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 {
 	//Get GA parameters from XML file
@@ -177,8 +177,6 @@ int main(int argc,char *argv[])
     int generations=1;
     const char *filename=NULL;
 
-    srand(time(NULL));	// seed the RNG
-
     MPI_Init(&argc,&argv);
 
     if(argc<2)
@@ -200,6 +198,8 @@ int main(int argc,char *argv[])
 
     MPI_Comm_rank(MPI_COMM_WORLD, &proc);
     MPI_Comm_size(MPI_COMM_WORLD, &nproc);
+
+	srand(time(NULL)*proc);		// unique seed for RNG
 
     //Load and initialise CellML API
     bootstrap=CreateCellMLBootstrap();

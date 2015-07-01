@@ -785,3 +785,9 @@ Clean patched code from seqmode including preprocessor directives, unreferenced 
 
 ### TODO
 * In GAEngine::select_weighted, a better way to calculate sum? Sum can OVERFLOW!? Even if not, the method is not simple.
+
+## 02.07.2015
+### RNG Seeding
+A change has been made to how each processor's RNG is seeded.
+
+Now the seed is dependent on *time* and *proc* (the processor rank).
