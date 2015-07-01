@@ -204,7 +204,6 @@ class GAEngine
         double m_bestFitness;
         bool m_bBestFitnessAssigned;
         VariablesHolder m_bestVariables;
-        bool m_UseBlockSample;
 
     public:
         typedef Genome GENOME;
