@@ -23,11 +23,6 @@ using namespace iface::cellml_api;
 using namespace iface::cellml_services;
 
 
-//If SUPPORT_BLOCK_SAMPLING is defined
-//the selection algorithms may use either
-//probabilistic search or blocking search
-//#define SUPPORT_BLOCK_SAMPLING
-
 ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap; //CellML api bootstrap
 ObjRef<iface::cellml_services::CellMLIntegrationService> cis;
 
@@ -80,8 +75,7 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
     double mutation=atof(elem.GetAttribute("Mutation_proportion").GetValue().c_str());
     double cross=atof(elem.GetAttribute("Crossover_proportion").GetValue().c_str());
     int generations=atoi(elem.GetAttribute("Generations").GetValue().c_str());
-    int block_sample=atoi(elem.GetAttribute("Sampling").GetValue().c_str());
-
+    
     // Check for default and limit for params
     if(!initPopulation)
         initPopulation=100;
@@ -93,9 +87,6 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
     ga.prob_mutate()=mutation;
     ga.part_cross()=(int)((double)initPopulation*cross);
     ga.part_mutate()=(int)((double)initPopulation*mutation);
-#ifdef SUPPORT_BLOCK_SAMPLING
-    ga.block_sample()=(block_sample==0);
-#endif
     
     // Read alleles information
     for(int i=0;;i++)

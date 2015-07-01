@@ -737,7 +737,7 @@ Comments: Range for parameters is far too large and unrealistic(?). Running a fe
 
 ### TODO Jobs from the meeting
 * [x] Disallow user from supplying VE with zero target (cannot implement a satisfactory normalisation yet)
-* [ ] Check for chronological ordering of assessment points in XML file
+* [x] Check for chronological ordering of assessment points in XML file
 * [ ] Implement ReportStep in CellML API as default
   * [ ] GCD of all timepoints 
 * [ ] Remove *Block Sampling* feature in GA
@@ -772,3 +772,5 @@ Error: VirtualExperiment: assessment points are not in chronological order
 srun: error: compute-b1-015: task 0: Exited with exit code 255
 srun: error: compute-b1-019: task 1: Exited with exit code 255
 ```
+
+### Remove "Block Sampling" feature in GA

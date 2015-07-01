@@ -59,11 +59,13 @@ class Genome
                    bind1st(pair_equal_to<std::wstring,double>(),name));		// pair_equal_to argument std::wstring& ?
             return (it==m_Alleles.end()?double(0.0):it->second);			// returns 0.0 if name not found and m_Alleles' second value if found 
         }
+
 		// Index the ith allele in genome
         double allele(int index)
         {
             return ((index>=0 && index<m_Alleles.size())?m_Alleles[index].second:0.0);	// second val of ith pair of m_Alleles; if index out of range, 0.0
         }
+
 		// Add/update an allele and corresponding value
         void allele(const std::wstring& name,double val)		// if m_Alleles has an element with first==name, assign the second to val; push_back <name,val> into m_Allele
         {
@@ -74,6 +76,7 @@ class Genome
             else
                m_Alleles.push_back(std::make_pair<std::wstring,double>(std::wstring(name),double(val)));
         }
+
 		// Update the ith allele's value
         void allele(int index,double val)		
         {
@@ -209,7 +212,7 @@ class GAEngine
 		// default GA Engine constructor
         GAEngine():m_MaxPopulation(0),m_Generations(1),
                    m_CrossProbability(0.2),m_MutationProbability(0.01),
-                   m_bBestFitnessAssigned(false),m_UseBlockSample(false),
+                   m_bBestFitnessAssigned(false),
                    m_crossPartition(0),m_mutatePartition(0)
         {
         }
@@ -221,8 +224,6 @@ class GAEngine
         double& prob_mutate() { return m_MutationProbability; }
         int& part_cross() { return m_crossPartition; }
         int& part_mutate() { return m_mutatePartition; }
-
-        bool& block_sample() { return m_UseBlockSample; }
 
 		// Set the maximum population size of GA and resize the population Genome vector accordingly
         void set_borders(int max_population)
@@ -384,11 +385,9 @@ class GAEngine
                 {
 					// vector of genome indices selected for genetic operations
                     std::vector<int> sample;
-
-                    if(!m_UseBlockSample)
-                        build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);		// fill sample with unique and valid indices to genomes for performing crossover
-                    else
-                        build_rnd_sample(sample,m_crossPartition,true,true);			// disallow duplicates and invalids in building a fixed size sample
+					
+					// fill sample with unique and valid indices to genomes for performing crossover
+					build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);
 
                     for(int i=0;i<sample.size();i++)
                     {
@@ -468,10 +467,7 @@ class GAEngine
                     std::vector<int> sample;
 
 					// Mutation welcomes invalid genomes
-                    if(!m_UseBlockSample)
-                        build_rnd_sample_rnd(sample,m_MutationProbability*100.0,false);	// invalid Genomes may be picked into sample
-                    else
-                        build_rnd_sample(sample,m_mutatePartition,false,false);	// allow duplicates and invalid genomes to build sample of fixed size
+					build_rnd_sample_rnd(sample,m_MutationProbability*100.0,false);
 
 					// Treatment of invalid genomes in the population
                     for(int i=0;i<m_Population.size();i++)
