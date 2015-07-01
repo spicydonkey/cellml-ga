@@ -740,7 +740,7 @@ Comments: Range for parameters is far too large and unrealistic(?). Running a fe
 * [x] Check for chronological ordering of assessment points in XML file
 * [ ] Implement ReportStep in CellML API as default
   * [ ] GCD of all timepoints 
-* [ ] Remove *Block Sampling* feature in GA
+* [x] Remove *Block Sampling* feature in GA
 
 ### Checking for invalid VEs
 Added a member function in VirtualExperiment class *isValid* to check for a VE's validity.
@@ -774,3 +774,11 @@ srun: error: compute-b1-019: task 1: Exited with exit code 255
 ```
 
 ### Remove "Block Sampling" feature in GA
+Done
+
+### Report steps to CellML API as default
+#### TODO
+* Read CellML API documentation
+ 
+### Clean code
+Clean patched code from seqmode including preprocessor directives.
