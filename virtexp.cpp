@@ -210,7 +210,7 @@ bool VirtualExperiment::isValid()
 		}
 
 		// Check for chronological ordering
-		if (!i && (m_Timepoints[i].first - m_Timepoints[i - 1].first < 0.0))
+		if (i && (m_Timepoints[i].first - m_Timepoints[i - 1].first < 0.0))
 		{
 			fprintf(stderr, "Error: VirtualExperiment: assessment points are not in chronological order\n");
 			return false;
