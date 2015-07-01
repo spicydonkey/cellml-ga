@@ -763,3 +763,5 @@ Add a further condition to VirtualExperiment::isValid function to check for chro
 A few minor advantages we see from checking chronological ordering are:
 * Checks some user typos
 * Readability of Virtual experiment data in XML file
+
+Test file: test_order.xml
