@@ -200,14 +200,16 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 
 bool VirtualExperiment::isValid()
 {
-	// Check for zero target value
 	for (int i = 0; i < m_Timepoints.size(); i++)
 	{
+		// Check for zero target value
 		if (m_Timepoints[i].second == 0.0)
 		{
 			fprintf(stderr, "Error: VirtualExperiment: invalid target value: zero target\n");
 			return false;
 		}
+
+		// Check for chronological ordering
 	}
 	return true;
 }

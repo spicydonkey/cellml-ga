@@ -757,3 +757,9 @@ srun: error: compute-gpu-d1-005: tasks 0-3: Exited with exit code 255
 Reassigning the target to 0.1... and re-running the test, no error message is generated, and the test is successful.
 
 ## 01.07.2015
+### Check chronological ordering of assessment points
+Add a further condition to VirtualExperiment::isValid function to check for chronological ordering of assessment points.
+
+A few minor advantages we see from checking chronological ordering are:
+* Checks some user typos
+* Readability of Virtual experiment data in XML file
