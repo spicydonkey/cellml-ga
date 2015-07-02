@@ -792,5 +792,17 @@ A change has been made to how each processor's RNG is seeded.
 
 Now the seed is dependent on *time* and *proc* (the processor rank).
 
-### Clean-up
-* [ ] Tidy-up the section in experiment.cpp summarising the best genome in GA
+### Clean-up best genome summary
+Tidy-up the section in experiment.cpp summarising the best genome in GA
+
+New style: (a test on 2D shifted Schwefel function)
+```
+==========================================
+BEST GENOME (0.000060):
+x1=920.826503  x2=920.769700
+==========================================
+```
+
+### TODO
+* GAEngine.h getting too large with details
+  * [ ] Create GAEngine.cpp to handle function definitions
