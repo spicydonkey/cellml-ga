@@ -793,7 +793,7 @@ A change has been made to how each processor's RNG is seeded.
 Now the seed is dependent on *time* and *proc* (the processor rank).
 
 ### Clean-up best genome summary
-Tidy-up the section in experiment.cpp summarising the best genome in GA
+Tidy-up the section in experiment.cpp summarising the best genome in GA, so that it is consistent in format with other genome reports
 
 New style: (a test on 2D shifted Schwefel function)
 ```
@@ -822,3 +822,7 @@ Isn't IP3 the 10th variable? (time being the 0th)
   * Rpc = 4.61 
 
 From analysing the result of test, we see that a solution completely different to test solution return a very small fitness... Something is wrong
+
+## 03.07.2015
+### Diagnosing ip3model-1 test
+1. Check estimation vector

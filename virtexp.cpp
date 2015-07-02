@@ -301,6 +301,25 @@ double VirtualExperiment::Evaluate()
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
 		   }
 
+#ifdef DEBUG_BUILD
+		   // print assessment points and results vector
+		   std::cerr << "----------------------------------------\n";
+		   std::cerr << "DEBUG:\n";
+		   std::cerr << "m_Timepoints: ";
+		   for(int i=0;i<m_Timepoints.size();i++)
+		   {
+			   std::cerr << "(" << m_Timepoints[i].first << "," << m_Timepoints[i].second << "), ";
+		   }
+		   std::cerr << std::endl;
+		   std::cerr << "results: ";
+		   for(int i=0;i<results.size();i++)
+		   {
+			   std::cerr << "(" << results[i].first << "," << results[i].second << "), ";
+		   }
+		   std::cerr << std::endl;
+		   std::cerr << "----------------------------------------\n";
+#endif
+
 		   // Evaluate the squared-sum-residual of the model
 		   res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
 	   }
