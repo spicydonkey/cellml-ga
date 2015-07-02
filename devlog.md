@@ -820,3 +820,5 @@ Isn't IP3 the 10th variable? (time being the 0th)
   * kf4 = 0.3 
   * kf16 = 1.25 
   * Rpc = 4.61 
+
+From analysing the result of test, we see that a solution completely different to test solution return a very small fitness... Something is wrong
