@@ -245,13 +245,13 @@ int main(int argc,char *argv[])
 		// load the GA parameters from file and initialise the engine
         if(!proc)
         {
-			// Only the Master initialises the GA engine
+			// Master processor initialises the GA engine
 			// get max generations and GA parameters
             generations=SetAndInitEngine(ga,root("GA",0));
         }
         else
         {
-			// The slaves initialise the template variable holder for storing Genome structure
+			// The slaves initialise the template variable holder to create gene-pool
             initialize_template_var(root("GA",0));
         }
     }
@@ -267,7 +267,6 @@ int main(int argc,char *argv[])
     // Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
-        // Master task
         VariablesHolder v;	// storage for the best chromosome
 
 		// Initialise the population in GA engine
@@ -277,14 +276,20 @@ int main(int argc,char *argv[])
         
 		// Print best genome from the run
 		double bf=ga.GetBest(v);
-		printf("Best fitness: %lf\n",bf);
+		// TODO test below code
+		std::cout << "==========================================\n";
+		fprintf(stdout,"BEST GENOME (%lf):\n",bf);
+		v.print(stdout);
+		std::cout << "==========================================\n";
+		
+		/*printf("Best fitness: %lf\n",bf);
         for(int i=0;;i++)
         {
             wstring name=v.name(i);
             if(!name.size())
                 break;
             printf("Best[%s]=%lf\n",convert(name).c_str(),v(name));
-        }
+        }*/
         Distributor::instance().finish();
     }
     else

@@ -791,3 +791,6 @@ Clean patched code from seqmode including preprocessor directives, unreferenced 
 A change has been made to how each processor's RNG is seeded.
 
 Now the seed is dependent on *time* and *proc* (the processor rank).
+
+### Clean-up
+* [ ] Tidy-up the section in experiment.cpp summarising the best genome in GA
