@@ -838,3 +838,43 @@ results: (0,0.015), (1,0.100309), (2,0.100309), (3,0.100309), (4,0.100309), (5,0
 ----------------------------------------
 ```
 Okay, so we are still missing what the sim-times are: add another debug message
+```
+<Assessment time,best_est>=<0.000000,0.000000>
+<Assessment time,best_est>=<200.000000,200.165996>
+<Assessment time,best_est>=<400.000000,400.165996>
+<Assessment time,best_est>=<600.000000,600.165996>
+<Assessment time,best_est>=<800.000000,800.165996>
+<Assessment time,best_est>=<1000.000000,1000.000000>
+----------------------------------------
+DEBUG:
+m_Timepoints: (0,0.015), (200,0.03264), (400,0.03548), (600,0.03472), (800,0.03345), (1000,0.03209),
+results: (0,0.015), (1,0.0258055), (2,0.0258055), (3,0.0258055), (4,0.0258055), (5,0.0258055),
+```
+
+The above output is just one example, and the *ip3* (?) values are *quite* close! For the sake of debugging, SSR is calculated:
+```MATLAB
+data = [0.015, 0.03264, 0.03548, 0.03472, 0.03345, 0.03209];
+sim = [0.015, 0.0258055, 0.0258055, 0.0258055, 0.0258055, 0.0258055];
+
+SSR = sum(abs((data-sim)./data).^2);
+```
+
+OUTPUT:
+```
+SSR =
+
+    0.2747
+```
+
+Which probably matches to the genome:
+```
+[30](0.274699) [92] kf5=21.250300   kf4=547.342355   kf16=932.391349   Rpc=3593.062508
+```
+
+While the best genome gives fitness (SSR):
+```
+==========================================
+BEST GENOME (0.006986):
+kf5=997.290339  kf4=547.987246  kf16=926.621998  Rpc=4632.879708
+==========================================
+```
