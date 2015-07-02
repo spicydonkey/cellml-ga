@@ -269,54 +269,19 @@ double VirtualExperiment::Evaluate()
        {
            std::vector<double> vd;
            std::vector<std::pair<int,double> > results;
-           int recsize=po->GetResults(vd);	// get ODE simulation result as 1D-vector and per-time record size
+           int recsize=po->GetResults(vd);	// get ODE simulation result as 1D-vector and record size
  
-		   // Collate the set of estimation model points corresponding to VE data points
-		   // 
-		   // TODO Cleanup: What's going on below is messy
-#ifndef DEBUG_BUILD
-		   // TODO Shouldn't we search for the t-point in the simulation result that is in range to a t-point specified in VE?
-				// in original code, multiple points from the simulation can be mapped in-range of a point in VE
-				// should we look for the closest simulation point wrt time?
-		   for(int i=0;i<vd.size();i+=recsize)	// iterate through the time-points in simulation
-           {
-			   // record the result if the simulation point is in a close range to a VE point
-               for(int j=0;j<m_Timepoints.size();j++)
-                   
-					//if(in_range(vd[i],m_Timepoints[j].first,EPSILON))	// TODO should in_range gap be EPSILON or 'accuracy'?
-					if (in_range(vd[i], m_Timepoints[j].first, m_Accuracy))
-					{
-						results.push_back(make_pair(j,vd[i+m_nResultColumn]));	// add the variable of interest
-						break;
-					}
-           }
-#else
-		   // FIX Replace above nested loop for building estimation vector with code below:
-		   // Guaranteed to match 1-1 OR output error message
-		   // May not find the closest estimation, but finds an appropriate one
-		   //
-		   // iterate through the data points
+		   // Construct model estimation vector by collating points from simulation closest to the VE data with respect to time
 		   for(int i=0;i<m_Timepoints.size();i++)
 		   {
-			   bool b_match=false;	// flag to indicate if a data point has been matched with an appropriate estimation
+			   bool b_match=false;
 			   double diff;
-			   double t_target=m_Timepoints[i].first;	// target assessment time
+			   double t_target=m_Timepoints[i].first;
 			   int best_est;
 
-			   // get an estimation from simulation result
+			   // Get an estimation from simulation result
 			   for(int j=0;j<vd.size();j+=recsize)
 			   {
-				   /*	Match to the first simulation result in-range
-				   // check if sim-point is in range
-				   if (in_range(vd[j],m_Timepoints[i].first,m_Accuracy))
-				   {
-					   results.push_back(make_pair(i,vd[j+m_nResultColumn]));	// add the var of interest
-					   b_match=true;
-					   break;	// done with this data-point
-				   }
-				   */
-
-				   // Get the closest estimate wrt time
 				   if (!b_match)
 				   {
 						diff=fabs(vd[j]-t_target);
@@ -333,52 +298,10 @@ double VirtualExperiment::Evaluate()
 					   }
 				   }
 			   }
-
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
-
-			   if(!b_match)
-			   {
-				   std::cerr << "Error: Simulation cannot estimate VE data-point" << std::endl;
-
-				   //// print the data-point and simulation result as a check
-				   //std::cerr << "DATA POINT: " << m_Timepoints[i].first << "\n";
-				   //std::cerr << "Simulation:\n";
-				   //for(int j=0;j<vd.size();j+=recsize)
-				   //{
-					  // std::cerr << vd[j] << " ";
-				   //}
-				   //std::cerr << std::endl;
-			   }
 		   }
-#endif
 
-#ifdef DEBUG_BUILD
-		   // TODO Unnecessary if using minimal discrepancy estimation selector
-		   //
-		   // Check if estimates are assigned 1-1 with data points
-		   for(int data_index=0;data_index<m_Timepoints.size();data_index++)
-		   {
-			   int count=0;
-			   // iterate through results vector and count the number of estimations
-			   for(int i=0;i<results.size();i++)
-			   {
-				   if(results[i].first==data_index)
-					   count++;
-			   }
-			   if(count!=1)
-			   {
-				   std::cerr << "Error: in VirtualExperiment::Evaluate invalid estimates: data:#est=" << data_index << ":" << count << std::endl;
-					// return INFINITY;
-			   }
-		   }
-#endif
-
-           if(!results.size())
-           {
-               fprintf(stderr,"Results vector is empty, Observer returned %d bytes (%d records)\n",vd.size(),vd.size()/recsize);
-           }
-
-		   // Calculate the squared-sum-residual
+		   // Evaluate the squared-sum-residual of the model
 		   res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
 	   }
        else
@@ -417,7 +340,7 @@ VEGroup& VEGroup::instance()
 
 
 /**
- *	Evaluate model parameters based on the average SSR across the whole VEs
+ *	Evaluate the fitness for the set of model parameters based on the average fitness from supplied VEs
  *	
  *	v contains a list of parameters to characterise a CellML model
  *	
