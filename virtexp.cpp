@@ -299,6 +299,10 @@ double VirtualExperiment::Evaluate()
 				   }
 			   }
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
+#ifdef DEBUG_BUILD
+			   // print assessment time and sim-time
+
+#endif
 		   }
 
 #ifdef DEBUG_BUILD

@@ -825,4 +825,15 @@ From analysing the result of test, we see that a solution completely different t
 
 ## 03.07.2015
 ### Diagnosing ip3model-1 test
-1. Check estimation vector
+Simplify the test further:
+* timepoints: 0, 200, ..., 1000 sec
+
+#### Check estimation vector
+```
+----------------------------------------
+DEBUG:
+m_Timepoints: (0,0.015), (200,0.03264), (400,0.03548), (600,0.03472), (800,0.03345), (1000,0.03209),
+results: (0,0.015), (1,0.100309), (2,0.100309), (3,0.100309), (4,0.100309), (5,0.100309),
+----------------------------------------
+```
+Okay, so we are still missing what the sim-times are: add another debug message
