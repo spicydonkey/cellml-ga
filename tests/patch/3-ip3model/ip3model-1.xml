@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<CellMLTimeSeriesFit>
+	<GA InitialPopulation="100" MaxPopulation="100" Generations="30" Mutation_proportion="0.08" Crossover_proportion="0.30">
+		<Alleles>
+			<Allele Name="kf5" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+			<Allele Name="kf4" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+			<Allele Name="kf16" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+			<Allele Name="Rpc" LowerBound="1.0e-2" UpperBound="5e3"/>
+		</Alleles>
+	</GA>
+	<VirtualExperiments>
+		<VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="10">
+		<!-- note this VE doesn't have any Parameters to set, but next VE does (ie optional Parameters entity here) -->
+			<AssessmentPoints>
+				<AssessmentPoint time="0.0" target="0.015" />
+				<AssessmentPoint time="200.0" target="0.03264" />
+				<AssessmentPoint time="400.0" target="0.03548" />
+				<AssessmentPoint time="600.0" target="0.03472" />
+				<AssessmentPoint time="800.0" target="0.03345" />
+				<AssessmentPoint time="1000.0" target="0.03209" />
+				<AssessmentPoint time="1200.0" target="0.03080" />
+				<AssessmentPoint time="1400.0" target="0.02963" />
+				<AssessmentPoint time="2000.0" target="0.02657" />
+			</AssessmentPoints>
+		</VirtualExperiment>
+	</VirtualExperiments>
+</CellMLTimeSeriesFit>
+

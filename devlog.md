@@ -806,3 +806,17 @@ x1=920.826503  x2=920.769700
 ### TODO
 * GAEngine.h getting too large with details
   * [ ] Create GAEngine.cpp to handle function definitions
+
+### New test
+A sensible test VE data for  *ip3model* is added: ip3model-1.xml
+
+Isn't IP3 the 10th variable? (time being the 0th)
+
+* As a *simple* test, only ip3 will be *measured* by the VE
+* Default CellML model param setting used
+* Measurement taken from the OpenCOR simulation at constant time-intervals: 200s (Except at the end we do a slightly big jump)
+* Searching 4 param space
+  * kf5 = 0.0004
+  * kf4 = 0.3 
+  * kf16 = 1.25 
+  * Rpc = 4.61 
