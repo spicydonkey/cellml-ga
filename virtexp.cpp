@@ -301,7 +301,7 @@ double VirtualExperiment::Evaluate()
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
 #ifdef DEBUG_BUILD
 			   // print assessment time and sim-time
-
+			   fprintf(stderr,"<Assessment time,best_est>=<%lf,%lf>\n",m_Timepoints[i].first,vd[best_est]);
 #endif
 		   }
 
@@ -321,7 +321,6 @@ double VirtualExperiment::Evaluate()
 			   std::cerr << "(" << results[i].first << "," << results[i].second << "), ";
 		   }
 		   std::cerr << std::endl;
-		   std::cerr << "----------------------------------------\n";
 #endif
 
 		   // Evaluate the squared-sum-residual of the model

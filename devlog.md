@@ -827,6 +827,7 @@ From analysing the result of test, we see that a solution completely different t
 ### Diagnosing ip3model-1 test
 Simplify the test further:
 * timepoints: 0, 200, ..., 1000 sec
+* Run on a single processor for comprehensible debugging
 
 #### Check estimation vector
 ```

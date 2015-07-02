@@ -2,8 +2,8 @@
 #SBATCH -J CellML_Test
 #SBATCH -A uoa00322
 #SBATCH --time=01:00:00     # Walltime
-#SBATCH --ntasks=4
-#SBATCH --cpus-per-task=2
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=1024  # memory/cpu (in MB)
 #SBATCH -o exper_cellml_%j.out       # OPTIONAL
 #SBATCH -e exper_cellml_%j.err       # OPTIONAL
