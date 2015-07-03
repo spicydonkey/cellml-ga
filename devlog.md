@@ -931,5 +931,5 @@ srun: error: compute-c1-014: tasks 0-3: Killed
 
 Possible memory leakage in the program
 
-### ip3model test with many assessment points
-ip3model-1-many.xml
+### ip3model test with many assessment points: ip3model-1-many.xml
+More assessment points will be provided, not necessarily at constant intervals, such that the ip3 curve can be better interpolated.

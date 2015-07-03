@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J CellML_Test
 #SBATCH -A uoa00322
-#SBATCH --time=01:00:00     # Walltime
+#SBATCH --time=05:00:00     # Walltime
 #SBATCH --ntasks=4
 #SBATCH --cpus-per-task=2
 #SBATCH --mem-per-cpu=1024  # memory/cpu (in MB)
@@ -18,4 +18,4 @@ module load ictce/5.4.0
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
 export LIBRARY_PATH=$LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
-srun /projects/uoa00322/david.shin/cellml-ga/experiment ip3model.xml -v -v 
+srun /projects/uoa00322/david.shin/cellml-ga/experiment ip3model-1-many.xml -v -v 
