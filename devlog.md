@@ -887,3 +887,14 @@ kf5=997.290339  kf4=547.987246  kf16=926.621998  Rpc=4632.879708
 #### Check against simulation on OpenCOR
 The matching parameter-set should be simulated on OpenCOR to compare against the program's ODE solver results.
 i.e. does **kf5=21.250300   kf4=547.342355   kf16=932.391349   Rpc=3593.062508** reproduce *Ip3* behaviour of result **(0,0.015), (1,0.0258055), (2,0.0258055), (3,0.0258055), (4,0.0258055), (5,0.0258055)**?
+
+Yes. *Ip3* is initialised at 0.015 and quickly settles to 0.0258055. The behaviour overall resembles a step function which is definitely not what the test param-set gives - a rise and decay type.
+
+#### Conclusion
+The program is running as it should. To optimize the parameters further (and to get a sensible solution):
+* Increase generation
+* Increase population
+* Narrower range (realistic)
+
+### Larger ip3model test
+ip3model-1-lge.xml
