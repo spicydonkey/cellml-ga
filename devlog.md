@@ -895,6 +895,41 @@ The program is running as it should. To optimize the parameters further (and to 
 * Increase generation
 * Increase population
 * Narrower range (realistic)
+* More assessment points
 
 ### Larger ip3model test
 ip3model-1-lge.xml
+* Encountered error at Gen 255
+
+Error output:
+```
+Error evaluating model
+Error in evaluating Experiment[0] with parameters: kf5=675.378570  kf4=281.417074  kf16=923.599894  Rpc=4632.879708
+srun: error: compute-b1-039: task 0: Killed
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 14366332.0 CANCELLED AT 2015-07-03T17:35:33 DUE TO TIME LIMIT on compute-b1-039 ***
+slurmstepd: error: *** JOB 14366332 CANCELLED AT 2015-07-03T17:35:33 DUE TO TIME LIMIT on compute-b1-039 ***
+```
+
+* Population at Gen-255 is still far from the test solution
+
+Check the param set with OpenCOR:
+* Can solve, but almost a step function
+
+### Narrow range ip3model test
+ip3model-1-nrw.xml
+* Encountered error at Gen 209
+
+Error output:
+```
+slurmstepd: error: Step 14366338.0 exceeded memory limit (8485688 > 8388608), being killed
+slurmstepd: error: Exceeded job memory limit
+slurmstepd: error: *** STEP 14366338.0 CANCELLED AT 2015-07-03T13:20:09 *** on compute-c1-014
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: error: compute-c1-014: tasks 0-3: Killed
+```
+
+Possible memory leakage in the program
+
+### ip3model test with many assessment points
+ip3model-1-many.xml
