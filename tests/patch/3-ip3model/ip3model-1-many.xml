@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <CellMLTimeSeriesFit>
-	<GA InitialPopulation="200" Generations="1000" Mutation_proportion="0.30" Crossover_proportion="0.70">
+	<GA InitialPopulation="100" Generations="1000" Mutation_proportion="0.30" Crossover_proportion="0.70">
 		<Alleles>
-			<Allele Name="kf5" LowerBound="1.0e-8" UpperBound="9.999e0"/>
+			<Allele Name="kf5" LowerBound="1.0e-8" UpperBound="9.999e-2"/>
 			<Allele Name="kf4" LowerBound="1.0e-8" UpperBound="9.999e0"/>
 			<Allele Name="kf16" LowerBound="1.0e-8" UpperBound="9.999e0"/>
-			<Allele Name="Rpc" LowerBound="1.0e-2" UpperBound="5e2"/>
+			<Allele Name="Rpc" LowerBound="1.0e-2" UpperBound="5e1"/>
 		</Alleles>
 	</GA>
 	<VirtualExperiments>
