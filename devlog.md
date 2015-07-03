@@ -933,3 +933,7 @@ Possible memory leakage in the program
 
 ### ip3model test with many assessment points: ip3model-1-many.xml
 More assessment points will be provided, not necessarily at constant intervals, such that the ip3 curve can be better interpolated.
+
+Total of 22 points have been selected from range 0-9395s.
+
+Limit for parameters have been significantly narrowed, also.
