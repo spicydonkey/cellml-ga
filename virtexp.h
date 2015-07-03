@@ -12,7 +12,7 @@
 #include <algorithm>
 
 // DEBUG macro
-#define DEBUG_BUILD
+//#define DEBUG_BUILD
 
 // COMP_FUNC is a function object class for <= comparisons on doubles
 #define COMP_FUNC std::less_equal<double>
