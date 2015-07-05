@@ -18,4 +18,4 @@ module load ictce/5.4.0
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
 export LIBRARY_PATH=$LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
-srun /projects/uoa00322/david.shin/cellml-ga/experiment ip3model-1-many.xml -v -v 
+srun /projects/uoa00322/david.shin/cellml-ga/experiment ip3model-1-many-2.xml -v -v 
