@@ -937,3 +937,16 @@ More assessment points will be provided, not necessarily at constant intervals, 
 Total of 22 points have been selected from range 0-9395s.
 
 Limit for parameters have been significantly narrowed, also.
+
+#### Results
+The test failed due to time-limit but the output until 992th generation has been logged.
+
+The best chromosome in the 992th generation is:
+```
+[992](0.025468) [0] kf5=0.000507   kf4=0.251391   kf16=2.565132   Rpc=8.496967
+```
+
+Which is at least *graphically* a reasonable fit to the solution (run OpenCOR simulation).
+
+## 06.07.2015
+### Merge the newtest branch onto patch
