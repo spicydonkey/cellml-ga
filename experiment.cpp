@@ -11,6 +11,7 @@
 #include "AdvXMLParser.h"
 #include "GAEngine.h"
 #include "virtexp.h"
+#include "utils.h"
 
 
 using namespace std;
@@ -208,7 +209,8 @@ int main(int argc,char *argv[])
 	// Read input file and store contents in buffer
     if((pBuffer=OpenXmlFile(filename,nSize)) == NULL)
     {
-		fprintf(stderr,"Error opening input file %s\n",argv[1]);
+		std::cerr << "Error: main: error opening input file " << argv[1] << ": " << currentDateTime() << std::endl;
+		//fprintf(stderr,"Error opening input file %s\n",argv[1]);
 		return -1;
     }
 	// Read success: pBuffer is a C-string containing file and nSize is size of file
@@ -276,20 +278,11 @@ int main(int argc,char *argv[])
         
 		// Print best genome from the run
 		double bf=ga.GetBest(v);
-		// TODO test below code
 		std::cout << "==========================================\n";
 		fprintf(stdout,"BEST GENOME (%lf):\n",bf);
 		v.print(stdout);
 		std::cout << "==========================================\n";
 		
-		/*printf("Best fitness: %lf\n",bf);
-        for(int i=0;;i++)
-        {
-            wstring name=v.name(i);
-            if(!name.size())
-                break;
-            printf("Best[%s]=%lf\n",convert(name).c_str(),v(name));
-        }*/
         Distributor::instance().finish();
     }
     else
