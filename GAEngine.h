@@ -576,6 +576,8 @@ class GAEngine
             if(verbosity>1)
             {
 				printf("--------------------------------------------------------\n");
+				std::cout << currentDateTime() << std::endl;	// tag generation output with timestamp
+
                 for(int j=0;j<m_Population.size();j++)
 				{
 					//print validity, generation #, and fitness of each chromosome
@@ -591,6 +593,8 @@ class GAEngine
 				// and fittest chromosome of this generation
 			else if(verbosity==1)
 			{
+				std::cout << currentDateTime() << std::endl;	// tag generation output with timestamp
+
 				//VariablesHolder v;
 				double f;
 				

@@ -973,3 +973,6 @@ Test output:
 Error: VirtualExperiment::isValid: assessment points are not in chronological order: 2015-07-06.17:16:23
 srun: error: compute-d1-055: task 0: Exited with exit code 255
 ```
+
+### Timestamping output
+* Per generation summary
