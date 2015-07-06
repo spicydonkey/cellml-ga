@@ -595,20 +595,10 @@ class GAEngine
 				double f;
 				
 				// Fittest chromosome in this gen is the first genome in sorted population
-				//m_Population[0].var(v);
 				f=m_Population[0].fitness();
 
 				printf("Generation %d. Best fitness: %lf\n",g+1,f);
 				print_genome(0);
-
-				/*for(int k=0;;k++)
-				{
-					std::wstring name=v.name(k);
-					if(name.empty())
-						break;
-					printf("%s=%lf    ",convert(name).c_str(),v(name));
-				}
-                printf("\n");*/
                 printf("--------------------------------------------------------\n");
 			}
 		}

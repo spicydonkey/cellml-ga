@@ -31,8 +31,8 @@ int verbosity=0;	// verbosity initialised to 0
 
 void usage(const char *name)
 {
-    printf("Usage: %s <experiment definition xml> [-v [-v]]\n",name);
-    printf("Where -v increases the verbosity of the output\n");
+	std::cerr << "Error: usage: " << name << " <experiment definition xml> [-v [-v [...]]]\n";
+	std::cerr << "Where -v increases the verbosity of the output" << std::endl;
 }
 
 //Open and read XML configuration file
@@ -56,7 +56,6 @@ char *OpenXmlFile(const char *name,long& nSize)
     pBuffer=new char[nSize+1];
 
     fread(pBuffer,nSize,1,f);	//copy the file into buffer (usage of fread)
-	//fread(pBuffer,1,nSize,f);
     
 	pBuffer[nSize]=0;	// null terminate the char array buffer
     fclose(f);
@@ -210,7 +209,6 @@ int main(int argc,char *argv[])
     if((pBuffer=OpenXmlFile(filename,nSize)) == NULL)
     {
 		std::cerr << "Error: main: error opening input file " << argv[1] << ": " << currentDateTime() << std::endl;
-		//fprintf(stderr,"Error opening input file %s\n",argv[1]);
 		return -1;
     }
 	// Read success: pBuffer is a C-string containing file and nSize is size of file
@@ -259,7 +257,8 @@ int main(int argc,char *argv[])
     }
     catch(ParsingException e)
     {
-        printf("Parsing error at line %d\n",e.GetLine());
+        //printf("Parsing error at line %d\n",e.GetLine());
+		std::cerr << "Error: main: parsing error at line " << e.GetLine() << std::endl;
     }
     delete [] pBuffer;	// free memory used to store file
 
