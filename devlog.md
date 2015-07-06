@@ -979,3 +979,47 @@ srun: error: compute-d1-055: task 0: Exited with exit code 255
 
 ### Report time-step
 Enforce user to supply timestep used in gathering experimental data
+
+## 07.07.2015
+
+### Job outputs
+
+#### 14449533
+SLURM Job_id=14449533 Name=CellML_Test Failed, Run time 05:00:08, TIMEOUT
+
+Output stops at 256th generation!
+
+**exper_cellml_14449533.err**
+```
+Error: VirtualExperiment::Evaluate: error evaluating model: 2015-07-06.19:10:18
+Error: VEGroup::Evaluate: error in evaluating Experiment[0] with parameters: kf5=8.918041  kf4=8.868596  kf16=5.695204  Rpc=26.014640
+: 2015-07-06.19:10:18
+srun: error: compute-d1-054: task 0: Killed
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 14449533 CANCELLED AT 2015-07-06T23:42:22 DUE TO TIME LIMIT on compute-d1-054 ***
+slurmstepd: error: *** STEP 14449533.0 CANCELLED AT 2015-07-06T23:42:22 DUE TO TIME LIMIT on compute-d1-054 ***
+```
+
+Timeout failure email (*SLURM Job_id=14449533 Name=CellML_Test Failed, Run time 05:00:08, TIMEOUT*) received at 11:42pm, which was much later than when the task was killed.
+
+Conclusion: the reported runtime errors are **fatal** to the program
+
+#### 14449566
+SLURM Job_id=14449566 Name=CellML_Test Ended, Run time 01:27:44, COMPLETED, ExitCode 0
+
+No error messages generated.
+
+Example per-gen output:
+```
+2015-07-06.18:56:44
+Generation 23. Best fitness: 0.426895
+[0] kf5=0.001430   kf4=0.282692   kf16=6.074622   Rpc=19.165585
+```
+
+Best genome:
+```
+==========================================
+BEST GENOME (0.009884):
+kf5=0.000337  kf4=0.386681  kf16=1.935865  Rpc=6.215836
+==========================================
+```
