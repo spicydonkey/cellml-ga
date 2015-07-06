@@ -60,7 +60,8 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 		{
 			// TODO output an error message if ReportStep attribute is unspecified
 				// ReportStep unspecified! keeping it as 0.0 as lazy-mode - cannot guarantee accuracy and efficiency
-			std::cerr << "TODO REPORT ERROR HERE: default ReportStep: " << vx->m_ReportStep << std::endl;
+			// TODO should we QUIT the program?
+			std::cerr << "Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - program will continue with default settings: " << currentDateTime() << std::endl;
 		}
 		else
 		{
