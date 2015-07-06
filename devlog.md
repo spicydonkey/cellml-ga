@@ -967,3 +967,9 @@ Error message format:
 ```
 Error: IN_LOCATION: REASON: TIMESTAMP 
 ```
+
+Test output:
+```
+Error: VirtualExperiment::isValid: assessment points are not in chronological order: 2015-07-06.17:16:23
+srun: error: compute-d1-055: task 0: Exited with exit code 255
+```
