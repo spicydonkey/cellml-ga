@@ -949,4 +949,6 @@ The best chromosome in the 992th generation is:
 Which is at least *graphically* a reasonable fit to the solution (run OpenCOR simulation).
 
 ## 06.07.2015
-### Merge the newtest branch onto patch
+Merged the newtest branch onto patch
+
+### CellML API: setTabulationStepControl setting
