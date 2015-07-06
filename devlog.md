@@ -956,6 +956,8 @@ Merged the newtest branch onto patch
 ### Meeting minutes
 * [x] Attach timestamps on error logs and output to make debugging easier
 * [ ] User must report the timestep used in gathering experiment data; easier to set up solver
+  * [ ] Quit program if unspecified?
+  * [x] Error message if unspecified
 * [ ] Modify random selection of allele values to be a mantessa-exponent type 
 * [ ] Organise the GAEngine code into source-header style
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
@@ -1033,4 +1035,10 @@ Enforce user to supply timestep used in gathering experimental data in each *Vir
 Note that the timestep is accessed at *VirtualExperiment::LoadExperiment* when the program - by all procs - is reading each VE data:
 ```c++
 vx->m_ReportStep=atof(elem.GetAttribute("ReportStep").GetValue().c_str());
+```
+
+2 VEs both with ReportStep unspecified:
+```
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - program will continue with default settings: 2015-07-07.11:29:43
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - program will continue with default settings: 2015-07-07.11:29:43
 ```

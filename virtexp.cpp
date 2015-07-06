@@ -58,8 +58,6 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 			// For convenience, 0.0 should be the default ReportStep for which ODE solver output will not be optimised
         if(!elem.GetAttribute("ReportStep").GetValue().size())
 		{
-			// TODO output an error message if ReportStep attribute is unspecified
-				// ReportStep unspecified! keeping it as 0.0 as lazy-mode - cannot guarantee accuracy and efficiency
 			// TODO should we QUIT the program?
 			std::cerr << "Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - program will continue with default settings: " << currentDateTime() << std::endl;
 		}
