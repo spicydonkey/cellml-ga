@@ -957,8 +957,9 @@ Merged the newtest branch onto patch
 * [x] Attach timestamps on error logs and output to make debugging easier
 * [ ] User must report the timestep used in gathering experiment data; easier to set up solver
 * [ ] Modify random selection of allele values to be a mantessa-exponent type 
-* [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
 * [ ] Organise the GAEngine code into source-header style
+* [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
+  * Force an INF and find out whether they are being handled properly
 * [ ] Test the code with multiple experiments (multiple curve fitting)
 * [ ] What makes a slurm job blow up?
 
@@ -1023,3 +1024,6 @@ BEST GENOME (0.009884):
 kf5=0.000337  kf4=0.386681  kf16=1.935865  Rpc=6.215836
 ==========================================
 ```
+
+### TODO
+* [ ] Summarise at the start of the *.out* file the main GA settings
