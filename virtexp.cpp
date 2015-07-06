@@ -54,8 +54,21 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 		// Set maximum time limit on simulator (no time limit on default)
         vx->m_MaxTime=atoi(elem.GetAttribute("MaxSecondsForSimulation").GetValue().c_str());
 
-        vx->m_ReportStep=atof(elem.GetAttribute("ReportStep").GetValue().c_str());
-        
+		// TODO ReportStep needs to be supplied by user for each VirtualExperiment
+			// For convenience, 0.0 should be the default ReportStep for which ODE solver output will not be optimised
+        if(!elem.GetAttribute("ReportStep").GetValue().size())
+		{
+			// TODO output an error message if ReportStep attribute is unspecified
+				// ReportStep unspecified! keeping it as 0.0 as lazy-mode - cannot guarantee accuracy and efficiency
+			std::cerr << "TODO REPORT ERROR HERE: default ReportStep: " << vx->m_ReportStep << std::endl;
+		}
+		else
+		{
+			// Get user-specified ReportStep
+			vx->m_ReportStep=atof(elem.GetAttribute("ReportStep").GetValue().c_str());
+			std::cerr << "DEBUG: ReportStep: " << vx->m_ReportStep << std::endl;
+		}
+
 		// Acquire the v-experiment data points
 		for(int i=0;;i++)
         {
@@ -126,7 +139,6 @@ bool VirtualExperiment::LoadModel(const std::string& model_name)
     catch(CellMLException e)
     {
 		std::cerr << "Error: VirtualExperiment::LoadModel: error loading model " << model_name << ": " << currentDateTime() << std::endl;
-        //printf("Error loading model %s\n",model_name.c_str());
         res=false;
     }
     return res;
