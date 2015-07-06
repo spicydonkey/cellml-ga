@@ -954,7 +954,7 @@ Merged the newtest branch onto patch
 ### CellML API: setTabulationStepControl setting
 
 ### Meeting minutes
-* [ ] Attach timestamps on error logs and output to make debugging easier
+* [x] Attach timestamps on error logs and output to make debugging easier
 * [ ] User must report the timestep used in gathering experiment data; easier to set up solver
 * [ ] Modify random selection of allele values to be a mantessa-exponent type 
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
@@ -976,3 +976,6 @@ srun: error: compute-d1-055: task 0: Exited with exit code 255
 
 ### Timestamping output
 * Per generation summary
+
+### Report time-step
+Enforce user to supply timestep used in gathering experimental data
