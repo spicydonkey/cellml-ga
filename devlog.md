@@ -952,3 +952,12 @@ Which is at least *graphically* a reasonable fit to the solution (run OpenCOR si
 Merged the newtest branch onto patch
 
 ### CellML API: setTabulationStepControl setting
+
+### Meeting minutes
+* [ ] Attach timestamps on error logs and output to make debugging easier
+* [ ] User must report the timestep used in gathering experiment data; easier to set up solver
+* [ ] Modify random selection of allele values to be a mantessa-exponent type 
+* [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
+* [ ] Organise the GAEngine code into source-header style
+* [ ] Test the code with multiple experiments (multiple curve fitting)
+* [ ] What makes a slurm job blow up?
