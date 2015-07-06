@@ -961,3 +961,9 @@ Merged the newtest branch onto patch
 * [ ] Organise the GAEngine code into source-header style
 * [ ] Test the code with multiple experiments (multiple curve fitting)
 * [ ] What makes a slurm job blow up?
+
+### Timestamping error messages
+Error message format:
+```
+Error: IN_LOCATION: REASON: TIMESTAMP 
+```
