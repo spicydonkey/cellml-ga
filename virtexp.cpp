@@ -96,7 +96,7 @@ double VirtualExperiment::getSSRD(std::vector<std::pair<int,double> >& d)
 	// Check if estimation and experimental data are of same size
 	if(d.size()!=m_Timepoints.size())
 	{
-		fprintf(stderr,"Error: in getSSRD: estimation and data vector need to have the same size but are different\n");
+		std::cerr << "Error: VirtualExperiment::getSSRD: estimation and data need to have the same size but are different: " << currentDateTime() << std::endl;
 		return INFINITY;
 	}
 
@@ -195,23 +195,20 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 
 
 bool VirtualExperiment::isValid()
-{
-	// Testing currentDateTime(): timestamp
-	std::cerr << "Current time is " << currentDateTime() << std::endl;
-	
+{	
 	for (int i = 0; i < m_Timepoints.size(); i++)
 	{
 		// Check for zero target value
 		if (m_Timepoints[i].second == 0.0)
 		{
-			fprintf(stderr, "Error: VirtualExperiment: invalid target value: zero target\n");
+			std::cerr << "Error: VirtualExperiment::isValid: invalid target value: zero target: " << currentDateTime() << std::endl;
 			return false;
 		}
 
 		// Check for chronological ordering
 		if (i && (m_Timepoints[i].first - m_Timepoints[i - 1].first < 0.0))
 		{
-			fprintf(stderr, "Error: VirtualExperiment: assessment points are not in chronological order\n");
+			std::cerr << "Error: VirtualExperiment::isValid: assessment points are not in chronological order: " << currentDateTime() << std::endl;
 			return false;
 		}
 	}
