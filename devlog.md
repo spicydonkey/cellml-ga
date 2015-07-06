@@ -978,9 +978,6 @@ srun: error: compute-d1-055: task 0: Exited with exit code 255
 ### Timestamping output
 * Per generation summary
 
-### Report time-step
-Enforce user to supply timestep used in gathering experimental data
-
 ## 07.07.2015
 
 ### Job outputs
@@ -1027,3 +1024,13 @@ kf5=0.000337  kf4=0.386681  kf16=1.935865  Rpc=6.215836
 
 ### TODO
 * [ ] Summarise at the start of the *.out* file the main GA settings
+  * the job number doesn't explain much about what the run was about, esp. during debugging stages
+
+
+### Report time-step
+Enforce user to supply timestep used in gathering experimental data in each *VirtualExperiment* tag.
+
+Note that the timestep is accessed at *VirtualExperiment::LoadExperiment* when the program - by all procs - is reading each VE data:
+```c++
+vx->m_ReportStep=atof(elem.GetAttribute("ReportStep").GetValue().c_str());
+```
