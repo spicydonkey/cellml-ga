@@ -31,3 +31,5 @@ inline bool in_range(double point, double value, double eps)
 
 #endif
 
+// Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+const std::string currentDateTime();

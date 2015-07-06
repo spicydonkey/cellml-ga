@@ -196,6 +196,9 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 
 bool VirtualExperiment::isValid()
 {
+	// Testing currentDateTime(): timestamp
+	std::cerr << "Current time is " << currentDateTime() << std::endl;
+	
 	for (int i = 0; i < m_Timepoints.size(); i++)
 	{
 		// Check for zero target value

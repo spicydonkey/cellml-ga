@@ -3,6 +3,8 @@
 #include <locale>
 #include <vector>
 #include <stdlib.h>
+#include <time.h>
+
 
 using namespace std;
 
@@ -38,3 +40,14 @@ double rnd_generate(double min, double max)
     return min + r * (max - min);
 }
 
+// Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+const std::string currentDateTime()
+{
+	time_t now=time(NULL);
+	struct tm tstruct;
+	char buf[80];
+	tstruct = *localtime(&now);
+	strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+	return buf;
+}
