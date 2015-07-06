@@ -125,7 +125,8 @@ bool VirtualExperiment::LoadModel(const std::string& model_name)
     }
     catch(CellMLException e)
     {
-        printf("Error loading model %s\n",model_name.c_str());
+		std::cerr << "Error: VirtualExperiment::LoadModel: error loading model " << model_name << ": " << currentDateTime() << std::endl;
+        //printf("Error loading model %s\n",model_name.c_str());
         res=false;
     }
     return res;
@@ -331,7 +332,7 @@ double VirtualExperiment::Evaluate()
     }
     catch(CellMLException e)
     {
-        fprintf(stderr,"Error evaluating model\n");
+		std::cerr << "Error: VirtualExperiment::Evaluate: error evaluating model: " << currentDateTime() << std::endl;
         res=INFINITY;
     }
     return res;
@@ -394,8 +395,9 @@ double VEGroup::Evaluate(VariablesHolder& v)
         }
 		else
 		{
-			fprintf(stderr,"Error in evaluating Experiment[%d] with parameters: ",i);
+			std::cerr << "Error: VEGroup::Evaluate: error in evaluating Experiment[" << i << "] with parameters: ";
 			v.print(stderr);	// print model parameters
+			std::cerr << ": " << currentDateTime() << std::endl;
 			return INFINITY;
 		}
     }
