@@ -1063,3 +1063,10 @@ Two VE's: ReportSte: 0.0 and 50.0
 DEBUG: ReportStep: 0
 DEBUG: ReportStep: 50
 ```
+
+#### Outputs v2
+```
+Error: VirtualExperiment::LoadExperiment: raising error flag: ReportStep is unspecified - set to 0.0 if unknown: 2015-07-07.14:50:10
+Error: VirtualExperiment::isValid: an error was encountered in this VirtualExperiment: 2015-07-07.14:50:10
+srun: error: compute-b1-033: task 0: Exited with exit code 255
+```

@@ -59,7 +59,7 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
         if(!elem.GetAttribute("ReportStep").GetValue().size())
 		{
 			vx->b_Error=true;	// raise the error flag for unspecified attribute
-			std::cerr << "Error: VirtualExperiment::LoadExperiment: raising error flag: ReportStep is unspecified - set to 0.0 if unknown: " << currentDateTime() << std::endl;
+			std::cerr << "Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: " << currentDateTime() << std::endl;
 		}
 		else
 		{
@@ -227,7 +227,7 @@ bool VirtualExperiment::isValid()
 	// Check for any other errors
 	if(b_Error)
 	{
-		std::cerr << "Error: VirtualExperiment::isValid: an error was encountered in this VirtualExperiment: " << currentDateTime() << std::endl;
+		std::cerr << "Error: VirtualExperiment::isValid: error flag is raised: " << currentDateTime() << std::endl;
 		return false;
 	}
 
