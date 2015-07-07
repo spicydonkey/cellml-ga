@@ -234,7 +234,7 @@ int main(int argc,char *argv[])
 			if(!vx)
                break;	// loaded all the VE in file
 			
-			// Quit program with err msg if any VE is invalid
+			// Quit program with err msg if VE is invalid
 			if (!vx->isValid())
 				return -1;
 

@@ -1049,3 +1049,17 @@ A similar behaviour is programmed if *ReportStep* is unspecfied.
 For this case, a new member (*b_Error*) has been added to the VirtualExperiment class to act as a flag that is raised when any other error is encountered during any stage of handling of a VE object, such as encountering an unspecified ReportStep during the loading stage.
 
 VirtualExperiment::isValid is programmed to check b_Error, and it is up to the programmer to decide when/where to raise the flag.
+
+#### Outputs
+Two VE's: One with unspecified ReportStep:
+```
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - program will continue with default settings: 2015-07-07.14:35:40
+Error: VirtualExperiment::isValid: an error was encountered in this VirtualExperiment: 2015-07-07.14:35:40
+srun: error: compute-b1-033: task 0: Exited with exit code 255
+```
+
+Two VE's: ReportSte: 0.0 and 50.0
+```
+DEBUG: ReportStep: 0
+DEBUG: ReportStep: 50
+```
