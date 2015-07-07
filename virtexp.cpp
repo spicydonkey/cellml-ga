@@ -239,8 +239,6 @@ bool VirtualExperiment::isValid()
 	{
 		for(int i=0;i<m_Timepoints.size();i++)
 		{
-			std::cerr << "DEBUG HERE: " << i << "\n";
-
 			double n=m_Timepoints[i].first/m_ReportStep;
 			if(fabs(n-round(n))>0.1)
 			{
@@ -251,7 +249,7 @@ bool VirtualExperiment::isValid()
 	}
 	else
 	{
-		std::cerr << "DEBUGGING: user supplied 0.0 ReportStep\n";
+		std::cerr << "Warning: VirtualExperiment::isValid: user has supplied 0.0 ReportStep: ODE solver will automatically determine steps and cannot guarantee accurate regression analysis: " << currentDateTime() << std::endl;;
 	}
 
 	return true;
