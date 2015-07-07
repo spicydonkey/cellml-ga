@@ -193,6 +193,8 @@ class VirtualExperiment
         double m_ReportStep;
         unsigned long m_MaxTime;		// maximum time limit (sec) given to the solver
         double m_Accuracy;
+
+		bool b_Error;		// error indicator
 };
 
 

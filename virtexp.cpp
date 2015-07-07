@@ -17,7 +17,7 @@ using namespace iface::cellml_services;
 extern ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap; //CellML api bootstrap
 extern ObjRef<iface::cellml_services::CellMLIntegrationService> cis;
 
-VirtualExperiment::VirtualExperiment():m_nResultColumn(-1),m_ReportStep(0.0),m_MaxTime(0),m_Accuracy(EPSILON)
+VirtualExperiment::VirtualExperiment():m_nResultColumn(-1),m_ReportStep(0.0),m_MaxTime(0),m_Accuracy(EPSILON),b_Error(false)
 {
 }
 
@@ -58,7 +58,8 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 			// For convenience, 0.0 should be the default ReportStep for which ODE solver output will not be optimised
         if(!elem.GetAttribute("ReportStep").GetValue().size())
 		{
-			// TODO should we QUIT the program?
+			// TODO should we QUIT the program? (then, keep the flag)
+			vx->b_Error=true;	// raise the error flag for unspecified attribute
 			std::cerr << "Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - program will continue with default settings: " << currentDateTime() << std::endl;
 		}
 		else
@@ -224,6 +225,14 @@ bool VirtualExperiment::isValid()
 			return false;
 		}
 	}
+
+	// Check for any other errors
+	if(b_Error)
+	{
+		std::cerr << "Error: VirtualExperiment::isValid: an error was encountered in this VirtualExperiment: " << currentDateTime() << std::endl;
+		return false;
+	}
+
 	return true;
 }
 
