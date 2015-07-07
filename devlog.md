@@ -1130,6 +1130,27 @@ srun: error: compute-b1-011: task 0: Exited with exit code 255
 Good, still working
 
 ##### Non-zero inconsistent ReportStep
+```
+DEBUG HERE: 0
+Error: VirtualExperiment::isValid: inconsistent ReportStep 10 with time 100: 2015-07-08.10:55:53
+srun: error: compute-b1-061: task 0: Exited with exit code 255
+```
+BUG! THe inconsistency error is raised at the wrong place.
 
+CODE:
+```c++
+for(int i=0;i<m_Timepoints.size();i++)
+		{
+			std::cerr << "DEBUG HERE: " << i << "\n";
+
+			double n=m_Timepoints[i].first/m_ReportStep;
+			if(fabs(n-round(n))<0.1)
+			{
+				std::cerr << "Error: VirtualExperiment::isValid: inconsistent ReportStep " << m_ReportStep << " with time " << m_Timepoints[i].first << ": " << currentDateTime() << std::endl;
+				return false;
+			}
+		}
+```
+Oops! the bug is at the conditional *if(fabs(n-round(n))<0.1)*: Wrong comparator. Should check if |n-round(n)| **>** 0.1
 
 ##### Consistent ReportStep
