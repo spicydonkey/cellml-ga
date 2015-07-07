@@ -1153,4 +1153,45 @@ for(int i=0;i<m_Timepoints.size();i++)
 ```
 Oops! the bug is at the conditional *if(fabs(n-round(n))<0.1)*: Wrong comparator. Should check if |n-round(n)| **>** 0.1
 
+##### Non-zero inconsistent ReportStep v2
+```
+DEBUG HERE: 0
+DEBUG HERE: 1
+DEBUG HERE: 2
+DEBUG HERE: 3
+DEBUG HERE: 4
+DEBUG HERE: 5
+DEBUG HERE: 6
+DEBUG HERE: 7
+DEBUG HERE: 0
+DEBUG HERE: 1
+DEBUG HERE: 2
+DEBUG HERE: 3
+Error: VirtualExperiment::isValid: inconsistent ReportStep 100 with time 650: 2015-07-08.11:30:17
+srun: error: compute-b1-032: task 0: Exited with exit code 255
+```
+Correctly, consistency checking passes the first VE, for which the reportstep was 10.0 s and all time points were exactly integer multiples of it.
+The exception case in the second VE was spotted by the program, the 4th AssessmentPoint with time 650, not an int multiple of supplied RepStep 100s.
+
+A comprehensible error message too.
+
 ##### Consistent ReportStep
+```
+DEBUG HERE: 0
+DEBUG HERE: 1
+DEBUG HERE: 2
+DEBUG HERE: 3
+DEBUG HERE: 4
+DEBUG HERE: 5
+DEBUG HERE: 6
+DEBUG HERE: 7
+DEBUG HERE: 0
+DEBUG HERE: 1
+DEBUG HERE: 2
+DEBUG HERE: 3
+DEBUG HERE: 4
+DEBUG HERE: 5
+DEBUG HERE: 6
+DEBUG HERE: 7
+```
+Very good, all times were checked and passed.
