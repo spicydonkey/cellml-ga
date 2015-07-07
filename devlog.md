@@ -1114,6 +1114,21 @@ DEBUG HERE: 7
 ```
 Uh oh... This is okay, but what we've missed is that when ReportStep is zero, we are *dividing time by zero* which gives a meaningless result. In fact, if user specifies zero ReportStep, we should skip the consistency check!
 
+##### 0.0 ReportStep v2
+```
+DEBUGGING: user supplied 0.0 ReportStep
+DEBUGGING: user supplied 0.0 ReportStep
+```
+Better! Now the program has skipped the check for ReportStep when it has been intentionally declared zero by user.
+
+##### No ReportStep v2
+```
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: 2015-07-07.16:41:01
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-07.16:41:01
+srun: error: compute-b1-011: task 0: Exited with exit code 255
+```
+Good, still working
+
 ##### Non-zero inconsistent ReportStep
 
 
