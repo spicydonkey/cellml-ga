@@ -1083,3 +1083,38 @@ srun: error: compute-e1-021: task 0: Exited with exit code 255
 Should be capable of working with floating precision times and ReportStep values.
 
 Check how close each time-point is as a multiple of ReportStep.
+
+#### Tests
+##### No ReportStep
+```
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: 2015-07-07.16:22:10
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-07.16:22:10
+srun: error: compute-b1-033: task 0: Exited with exit code 255
+```
+Okay good
+
+##### 0.0 ReportStep
+```
+DEBUG HERE: 0
+DEBUG HERE: 1
+DEBUG HERE: 2
+DEBUG HERE: 3
+DEBUG HERE: 4
+DEBUG HERE: 5
+DEBUG HERE: 6
+DEBUG HERE: 7
+DEBUG HERE: 0
+DEBUG HERE: 1
+DEBUG HERE: 2
+DEBUG HERE: 3
+DEBUG HERE: 4
+DEBUG HERE: 5
+DEBUG HERE: 6
+DEBUG HERE: 7
+```
+Uh oh... This is okay, but what we've missed is that when ReportStep is zero, we are *dividing time by zero* which gives a meaningless result. In fact, if user specifies zero ReportStep, we should skip the consistency check!
+
+##### Non-zero inconsistent ReportStep
+
+
+##### Consistent ReportStep

@@ -235,16 +235,23 @@ bool VirtualExperiment::isValid()
 	}
 
 	// Check consistency of ReportStep with t-data
-	for(int i=0;i<m_Timepoints.size();i++)
+	if(m_ReportStep)
 	{
-		std::cerr << "DEBUG HERE: " << i << "\n";
-
-		double n=m_Timepoints[i].first/m_ReportStep;
-		if(fabs(n-round(n))<0.1)
+		for(int i=0;i<m_Timepoints.size();i++)
 		{
-			std::cerr << "Error: VirtualExperiment::isValid: inconsistent ReportStep " << m_ReportStep << " with time " << m_Timepoints[i].first << ": " << currentDateTime() << std::endl;
-			return false;
+			std::cerr << "DEBUG HERE: " << i << "\n";
+
+			double n=m_Timepoints[i].first/m_ReportStep;
+			if(fabs(n-round(n))<0.1)
+			{
+				std::cerr << "Error: VirtualExperiment::isValid: inconsistent ReportStep " << m_ReportStep << " with time " << m_Timepoints[i].first << ": " << currentDateTime() << std::endl;
+				return false;
+			}
 		}
+	}
+	else
+	{
+		std::cerr << "DEBUGGING: user supplied 0.0 ReportStep\n";
 	}
 
 	return true;
