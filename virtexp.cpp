@@ -207,28 +207,44 @@ void VirtualExperiment::SetVariables(VariablesHolder& v)
 
 bool VirtualExperiment::isValid()
 {	
-	for (int i = 0; i < m_Timepoints.size(); i++)
+	// Check the error flag
+	if(b_Error)
 	{
-		// Check for zero target value
-		if (m_Timepoints[i].second == 0.0)
+		std::cerr << "Error: VirtualExperiment::isValid: error flag is raised: " << currentDateTime() << std::endl;
+		return false;
+	}
+
+	// Check for zero target value
+	for(int i=0;i<m_Timepoints.size();i++)
+	{
+		if(m_Timepoints[i].second==0.0)
 		{
 			std::cerr << "Error: VirtualExperiment::isValid: invalid target value: zero target: " << currentDateTime() << std::endl;
 			return false;
 		}
+	}
 
-		// Check for chronological ordering
-		if (i && (m_Timepoints[i].first - m_Timepoints[i - 1].first < 0.0))
+	// Check for chronological ordering
+	for(int i=0;i<m_Timepoints.size();i++)
+	{
+		if (i && (m_Timepoints[i].first-m_Timepoints[i-1].first<0.0))
 		{
 			std::cerr << "Error: VirtualExperiment::isValid: assessment points are not in chronological order: " << currentDateTime() << std::endl;
 			return false;
 		}
 	}
 
-	// Check for any other errors
-	if(b_Error)
+	// Check consistency of ReportStep with t-data
+	for(int i=0;i<m_Timepoints.size();i++)
 	{
-		std::cerr << "Error: VirtualExperiment::isValid: error flag is raised: " << currentDateTime() << std::endl;
-		return false;
+		std::cerr << "DEBUG HERE: " << i << "\n";
+
+		double n=m_Timepoints[i].first/m_ReportStep;
+		if(fabs(n-round(n))<0.1)
+		{
+			std::cerr << "Error: VirtualExperiment::isValid: inconsistent ReportStep " << m_ReportStep << " with time " << m_Timepoints[i].first << ": " << currentDateTime() << std::endl;
+			return false;
+		}
 	}
 
 	return true;

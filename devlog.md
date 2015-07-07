@@ -956,8 +956,9 @@ Merged the newtest branch onto patch
 ### Meeting minutes
 * [x] Attach timestamps on error logs and output to make debugging easier
 * [ ] User must report the timestep used in gathering experiment data; easier to set up solver
-  * [ ] Quit program if unspecified?
+  * [x] Quit program if unspecified?
   * [x] Error message if unspecified
+  * [ ] Check supplied ReportStep for consistency with data points
 * [ ] Modify random selection of allele values to be a mantessa-exponent type 
 * [ ] Organise the GAEngine code into source-header style
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
@@ -1070,3 +1071,15 @@ Error: VirtualExperiment::LoadExperiment: raising error flag: ReportStep is unsp
 Error: VirtualExperiment::isValid: an error was encountered in this VirtualExperiment: 2015-07-07.14:50:10
 srun: error: compute-b1-033: task 0: Exited with exit code 255
 ```
+
+#### Outputs v3
+```
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: 2015-07-07.15:51:56
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-07.15:51:56
+srun: error: compute-e1-021: task 0: Exited with exit code 255
+```
+
+### Checking ReportStep for consistency with data points
+Should be capable of working with floating precision times and ReportStep values.
+
+Check how close each time-point is as a multiple of ReportStep.
