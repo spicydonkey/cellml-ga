@@ -242,7 +242,7 @@ bool VirtualExperiment::isValid()
 			std::cerr << "DEBUG HERE: " << i << "\n";
 
 			double n=m_Timepoints[i].first/m_ReportStep;
-			if(fabs(n-round(n))<0.1)
+			if(fabs(n-round(n))>0.1)
 			{
 				std::cerr << "Error: VirtualExperiment::isValid: inconsistent ReportStep " << m_ReportStep << " with time " << m_Timepoints[i].first << ": " << currentDateTime() << std::endl;
 				return false;
