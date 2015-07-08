@@ -1220,6 +1220,15 @@ However, we must consider the scale of the parameter as most significant. We req
 
 #### Limitations
 * *logging* limits puts restriction of domain: Limits *MUST* be **positive**!
-  * [ ] Expand VirtualExperiment::isValid check to include *limit checking*
+  * [ ] Expand ~VirtualExperiment::isValid~ check to include *limit checking*
+    * Limits are specified for the *GA*, NOT for VE's!
 * Following from previous point, if lower limit of zero is desired, a positive lower limit should be assigned instead
   * [ ] zero lower limit is re-set to a very small positive value: e.g. 1E-10
+
+### GA validation
+There isn't a validation for GA in the code. We have addressed a problem for this if the logarithmic random selection is to be implemented with the outlined method.
+
+Therefore, GA validation step will be included in *main* program. Since only the *root* (0) processor accesses all the information regarding GA config settings in the XML file, a GA validity test will be performed by the root before the GAEngine is initialised and run.
+
+Since the validity of GA is essentially the parameters that configure it, the criterion is specific to a problem. It makes sense to do validation checking inside *SetAndInitEngine*, which is called only by the root proc, and raise an overall QUIT flag as an exception case of the output (generation=-1).
+Comprehensible error messages are essential.
