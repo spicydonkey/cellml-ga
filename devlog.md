@@ -955,10 +955,10 @@ Merged the newtest branch onto patch
 
 ### Meeting minutes
 * [x] Attach timestamps on error logs and output to make debugging easier
-* [ ] User must report the timestep used in gathering experiment data; easier to set up solver
+* [x] User must report the timestep used in gathering experiment data; easier to set up solver
   * [x] Quit program if unspecified?
   * [x] Error message if unspecified
-  * [ ] Check supplied ReportStep for consistency with data points
+  * [x] Check supplied ReportStep for consistency with data points
 * [ ] Modify random selection of allele values to be a mantessa-exponent type 
 * [ ] Organise the GAEngine code into source-header style
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
