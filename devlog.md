@@ -1204,3 +1204,6 @@ Warning: VirtualExperiment::isValid: user has supplied 0.0 ReportStep: ODE solve
 ```
 Okay.
 
+## 08.07.2015
+### Default ReportStep
+If user defaults ReportStep to 0.0, then the ODE solver will be configured to report every 1 second.
