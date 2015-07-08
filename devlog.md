@@ -1277,4 +1277,7 @@ OUTPUT:
 BEST GENOME (1.344512):
 kf5=0.000000  kf4=760.172711  kf16=738.460461  Rpc=1770.249858
 ```
-Exactly.
+~~Exactly.~~ There is something small but annoying here. kf5 is not 0.0, is should be displayed as 1e-10, the value of ZERO_LIM. It could make sense to display params in *scientific notation*.
+
+### TODO
+* [ ] Display allele vals in **scientific notation**
