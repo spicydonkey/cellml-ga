@@ -1207,3 +1207,19 @@ Okay.
 ## 08.07.2015
 ### Default ReportStep
 If user defaults ReportStep to 0.0, then the ODE solver will be configured to report every 1 second.
+
+### Random selection of allele values
+Until now, when an allele's value was to be randomly asssigned, a standard *RNG* function was called that selects a number between the limits, at equal probability.
+However, we must consider the scale of the parameter as most significant. We require a new method that selects different *scales* at equal probability.
+
+#### Method
+1. Get limits: *min* and *max*
+2. Evaluate logged limits: *log(min)* and *log(max)*
+3. Randomly select a number between the logged limits --> **X**
+4. Re-scale number to original scale of the limits: *exp(**X**)*
+
+#### Limitations
+* *logging* limits puts restriction of domain: Limits *MUST* be **positive**!
+  * [ ] Expand VirtualExperiment::isValid check to include *limit checking*
+* Following from previous point, if lower limit of zero is desired, a positive lower limit should be assigned instead
+  * [ ] zero lower limit is re-set to a very small positive value: e.g. 1E-10
