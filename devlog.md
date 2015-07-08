@@ -1220,11 +1220,11 @@ However, we must consider the scale of the parameter as most significant. We req
 
 #### Limitations
 * *logging* limits puts restriction of domain: Limits *MUST* be **positive**!
-  * [ ] Expand ~VirtualExperiment::isValid~ check to include *limit checking*
+  * [ ] ~~Expand VirtualExperiment::isValid check to include *limit checking*~~
     * Limits are specified for the *GA*, NOT for VE's!
-	* [ ] validity checking done in SetAndInitEngine while reading settings from XML by the root; any error encountered will return -1
+	* [x] validity checking done in SetAndInitEngine while reading settings from XML by the root; any error encountered will return -1
 * Following from previous point, if lower limit of zero is desired, a positive lower limit should be assigned instead
-  * [ ] zero lower limit is re-set to a very small positive value: e.g. 1.0e-10 define in ZERO_LIM
+  * [x] zero lower limit is re-set to a very small positive value: e.g. 1.0e-10 define in ZERO_LIM
 
 ### GA validation
 There isn't a validation for GA in the code. We have addressed a problem for this if the logarithmic random selection is to be implemented with the outlined method.
@@ -1233,3 +1233,48 @@ Therefore, GA validation step will be included in *main* program. Since only the
 
 Since the validity of GA is essentially the parameters that configure it, the criterion is specific to a problem. It makes sense to do validation checking inside *SetAndInitEngine*, which is called only by the root proc, and raise an overall QUIT flag as an exception case of the output (generation=-1).
 Comprehensible error messages are essential.
+
+## 09.07.2015
+### Testing GA validation
+##### Lower > Upper
+```
+Error: SetAndInitEngine: invalid limits for Allele[2]: limits should be non-negative: 2015-07-09.11:10:38
+Error: main: invalid settings for the Genetic Algorithm: 2015-07-09.11:10:38
+```
+Good. Although error message does not explicitly inform user of the reason, it should be a straight forward error to catch.
+
+#### Negative limit
+```
+Error: SetAndInitEngine: invalid limits for Allele[2]: limits should be non-negative: 2015-07-09.11:14:42
+Error: main: invalid settings for the Genetic Algorithm: 2015-07-09.11:14:42
+```
+Good catch. exactly as it should.
+
+#### Zero limit
+```
+Error: SetAndInitEngine: 0.0 is an invalid LowerBound for Allele[0]: resetting to ZERO_LIM=1e-10: 2015-07-09.11:16:13
+Error: SetAndInitEngine: 0.0 is an invalid UpperBound for Allele[0]: resetting to ZERO_LIM=1e-10: 2015-07-09.11:16:13
+Error: SetAndInitEngine: 0.0 is an invalid LowerBound for Allele[2]: resetting to ZERO_LIM=1e-10: 2015-07-09.11:16:13
+```
+Very good.
+
+OUTPUT:
+```
+--------------------------------------------------------
+2015-07-09.11:16:24
+ [10](1.344512) [0] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [1] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [2] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [3] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [4] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [5] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [6] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [7] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [8] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+ [10](1.344512) [9] kf5=0.000000   kf4=720.880248   kf16=738.460461   Rpc=1770.249858
+--------------------------------------------------------
+==========================================
+BEST GENOME (1.344512):
+kf5=0.000000  kf4=760.172711  kf16=738.460461  Rpc=1770.249858
+```
+Exactly.
