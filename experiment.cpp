@@ -94,7 +94,18 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
            break;	// no more alleles specified
         name=convert(al.GetAttribute("Name").GetValue());
 		ga.AddAllele(name);
-        ga.AddLimit(name,atof(al.GetAttribute("LowerBound").GetValue().c_str()),atof(al.GetAttribute("UpperBound").GetValue().c_str()));
+
+		// TODO validate Limits (positivity, and zero -> 1e-10)
+		double min_lim=atof(al.GetAttribute("LowerBound").GetValue().c_str());
+		double max_lim=atof(al.GetAttribute("UpperBound").GetValue().c_str());
+		
+		if((min_lim>max_lim)||(min_lim<0.0))
+		{
+			std::cerr << "Error: SetAndInitEngine: invalid limits for Allele[" << i << "]: limits should be non-negative: " << currentDateTime() << std::endl;
+			return -1;	// GA should NOT be run!
+		}
+		
+        ga.AddLimit(name,min_lim,max_lim);
         var_template(name,0.0);		// update allele list in var_template
     }
     ga.set_borders(initPopulation);		// set max population of GA and initialise the population with default genomes
@@ -257,7 +268,6 @@ int main(int argc,char *argv[])
     }
     catch(ParsingException e)
     {
-        //printf("Parsing error at line %d\n",e.GetLine());
 		std::cerr << "Error: main: parsing error at line " << e.GetLine() << std::endl;
     }
     delete [] pBuffer;	// free memory used to store file
@@ -268,21 +278,28 @@ int main(int argc,char *argv[])
     // Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
-        VariablesHolder v;	// storage for the best chromosome
-
-		// Initialise the population in GA engine
-        ga.Initialise();
-		// Run GA
-        ga.RunGenerations(generations);
+		//TODO validate the GA
+		if(generations>0)
+		{
+			// Initialise the population in GA engine
+			ga.Initialise();
+			// Run GA
+			ga.RunGenerations(generations);
         
-		// Print best genome from the run
-		double bf=ga.GetBest(v);
-		std::cout << "==========================================\n";
-		fprintf(stdout,"BEST GENOME (%lf):\n",bf);
-		v.print(stdout);
-		std::cout << "==========================================\n";
-		
-        Distributor::instance().finish();
+			// Print best genome from the run
+			VariablesHolder v;
+			double bf=ga.GetBest(v);
+			std::cout << "==========================================\n";
+			fprintf(stdout,"BEST GENOME (%lf):\n",bf);
+			v.print(stdout);
+			std::cout << "==========================================\n";
+		}
+		else
+		{
+			std::cerr << "Error: main: invalid settings for the Genetic Algorithm: " << currentDateTime() << std::endl;
+		}
+
+        Distributor::instance().finish();	// request end of service to all slaves
     }
     else
     {
