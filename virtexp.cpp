@@ -281,6 +281,9 @@ double VirtualExperiment::Evaluate()
        osr->setResultRange(0.0,m_Timepoints[m_Timepoints.size()-1].first,m_Timepoints[m_Timepoints.size()-1].first);	// TODO Maximum point density?
        
 	   // TODO refer to CellML API doc and set TabStepControl as default so that the solver will automatically generate solutions at exact data points
+
+	   std::cerr << "DEBUG: m_ReportStep=" << m_ReportStep << ": " << currentDateTime() << std::endl;
+
 	   if(m_ReportStep)
             osr->setTabulationStepControl(m_ReportStep,true);
 

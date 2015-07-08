@@ -1195,3 +1195,12 @@ DEBUG HERE: 6
 DEBUG HERE: 7
 ```
 Very good, all times were checked and passed.
+
+##### 0.0 ReportStep v3
+Add a warning message when user leaves report step from ODE solver to default (refer to CellML API).
+
+```
+Warning: VirtualExperiment::isValid: user has supplied 0.0 ReportStep: ODE solver will automatically determine steps and cannot guarantee accurate regression analysis: 2015-07-08.11:57:06
+```
+Okay.
+
