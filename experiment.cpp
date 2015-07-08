@@ -20,6 +20,7 @@ using namespace AdvXMLParser;
 using namespace iface::cellml_api;
 using namespace iface::cellml_services;
 
+#define ZERO_LIM 1e-10
 
 ObjRef<iface::cellml_api::CellMLBootstrap> bootstrap;	//CellML api bootstrap
 ObjRef<iface::cellml_services::CellMLIntegrationService> cis;
@@ -64,7 +65,7 @@ char *OpenXmlFile(const char *name,long& nSize)
 }
 
 // Initialise GA engine
-// returns number of generations to run GA
+// returns number of generations to run GA; -1 if any error occurred
 int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 {
 	//Get GA parameters from XML file
@@ -95,7 +96,7 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
         name=convert(al.GetAttribute("Name").GetValue());
 		ga.AddAllele(name);
 
-		// TODO validate Limits (positivity, and zero -> 1e-10)
+		// Validate parameter limits for non-negativity
 		double min_lim=atof(al.GetAttribute("LowerBound").GetValue().c_str());
 		double max_lim=atof(al.GetAttribute("UpperBound").GetValue().c_str());
 		
@@ -103,6 +104,18 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 		{
 			std::cerr << "Error: SetAndInitEngine: invalid limits for Allele[" << i << "]: limits should be non-negative: " << currentDateTime() << std::endl;
 			return -1;	// GA should NOT be run!
+		}
+		
+		// TODO default 0.0 limits to 1e-10 (defined in ZERO_LIM)
+		if(min_lim==0.0)
+		{
+			std::cerr << "Error: SetAndInitEngine: 0.0 is an invalid LowerBound for Allele[" << i << "]: resetting to ZERO_LIM=" << ZERO_LIM << ": " << currentDateTime() << std::endl;
+			min_lim=ZERO_LIM;
+		}
+		if(max_lim==0.0)
+		{
+			std::cerr << "Error: SetAndInitEngine: 0.0 is an invalid UpperBound for Allele[" << i << "]: resetting to ZERO_LIM=" << ZERO_LIM << ": " << currentDateTime() << std::endl;
+			max_lim=ZERO_LIM;
 		}
 		
         ga.AddLimit(name,min_lim,max_lim);
@@ -257,7 +270,7 @@ int main(int argc,char *argv[])
         if(!proc)
         {
 			// Master processor initialises the GA engine
-			// get max generations and GA parameters
+			// get max generations (-1 for errors) and GA parameters
             generations=SetAndInitEngine(ga,root("GA",0));
         }
         else

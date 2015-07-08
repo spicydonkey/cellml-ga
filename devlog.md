@@ -1222,8 +1222,9 @@ However, we must consider the scale of the parameter as most significant. We req
 * *logging* limits puts restriction of domain: Limits *MUST* be **positive**!
   * [ ] Expand ~VirtualExperiment::isValid~ check to include *limit checking*
     * Limits are specified for the *GA*, NOT for VE's!
+	* [ ] validity checking done in SetAndInitEngine while reading settings from XML by the root; any error encountered will return -1
 * Following from previous point, if lower limit of zero is desired, a positive lower limit should be assigned instead
-  * [ ] zero lower limit is re-set to a very small positive value: e.g. 1E-10
+  * [ ] zero lower limit is re-set to a very small positive value: e.g. 1.0e-10 define in ZERO_LIM
 
 ### GA validation
 There isn't a validation for GA in the code. We have addressed a problem for this if the logarithmic random selection is to be implemented with the outlined method.
