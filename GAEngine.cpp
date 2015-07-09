@@ -1,6 +1,11 @@
 #include "GAEngine.h"
 
 
+bool reverse_compare(const Genome& v1,const Genome& v2) 
+{
+	return (v1<v2); 
+}
+
 Genome::Genome():m_Fitness(0.0),m_Valid(true)
 {
 }

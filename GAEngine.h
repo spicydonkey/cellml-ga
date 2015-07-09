@@ -79,7 +79,7 @@ class Genome
         void set(VariablesHolder& v);
 };
 
-bool reverse_compare(const Genome& v1,const Genome& v2) { return (v1<v2); }
+bool reverse_compare(const Genome& v1,const Genome& v2);
 extern bool observer(WorkItem *w,double answer,void *);
 
 
