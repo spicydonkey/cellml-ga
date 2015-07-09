@@ -1294,9 +1294,6 @@ For this, it makes sense to add a flag in GAEngine class that decides which RNG 
 
 Let's call it **RNG**, default it to 0 for the common RNG, and 1 for the log RNG.
 
-### GAEngine.cpp
-
-
 ### TODO
 * [ ] Display allele vals in **scientific notation**
 
@@ -1306,3 +1303,6 @@ Member functions declared in GAEngine.h are defined in GAEngine.cpp - the source
 
 The source is included by the header, so it does not need to be compiled separately (e.g. by a makefile).
 
+### TODO
+* [ ] Implement the log selection method to mutate alleles
+  * [ ] Make it user-selecatble with default "linear" case
