@@ -218,10 +218,10 @@ void GAEngine<void>::process_workitem(WorkItem *w,double answer)
 // Run the GA engine for given number of generations
 void GAEngine<void>::RunGenerations(int gener)
 {
-    VariablesHolder v;		// temporary genome storage
-    m_Generations=gener;	// number of generations to run
+	VariablesHolder v;		// temporary genome storage
+	m_Generations=gener;	// number of generations to run
 
-    // Create initial fitness set
+	// Create initial fitness set
 	for(int i=0;i<m_Population.size();i++)
 	{
 		Genome& g=m_Population[i];	// get the ith Genome in population
@@ -229,49 +229,49 @@ void GAEngine<void>::RunGenerations(int gener)
 		g.var(v);	// store the genomic information in a temporary variable
 		WorkItem *w=var_to_workitem(v);		// collate the genome in a workitem for processing
 		w->key=i;	// the key stores a reference to genome
-				
+
 		Distributor::instance().push(w);	// push this work onto the distributor singleton
 	}
 
 	// Process the work item collected by distributor
-		// evaluate and assign fitness for each Genome in population
+	// evaluate and assign fitness for each Genome in population
 	Distributor::instance().process(observer,this);
 
 	std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort population in ascending order of fitness
-            
-	// Update fittest genome
-		// the fittest genome after sorting population is the 0th member
-	if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
-    {
-        m_bestFitness=m_Population[0].fitness();	// assign min ftns as the best fitness
-        m_Population[0].var(m_bestVariables);		// update the bestVars
-        m_bBestFitnessAssigned=true;
-    }
 
-    print_stage(-1);		// generation 0
+	// Update fittest genome
+	// the fittest genome after sorting population is the 0th member
+	if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
+	{
+		m_bestFitness=m_Population[0].fitness();	// assign min ftns as the best fitness
+		m_Population[0].var(m_bestVariables);		// update the bestVars
+		m_bBestFitnessAssigned=true;
+	}
+
+	print_stage(-1);		// generation 0
 
 	for(int g=0;g<gener;g++)
-    {
+	{
 		// Do the genetics
 		int limit=m_Population.size();
-        POPULATION prev(m_Population);	// temporary copy of current pop vector
-        m_Population.clear();			// clear current population vector
+		POPULATION prev(m_Population);	// temporary copy of current pop vector
+		m_Population.clear();			// clear current population vector
 
 		// SELECTION
 		// Weighted-selection with replacement from the previous generation's population
-        for(int i=0;i<limit;i++)
-        {
-            int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
+		for(int i=0;i<limit;i++)
+		{
+			int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
 
 			// Genetic operator feedback
 			if(verbosity>3)
 				printf("SELECT: Adding %d to population\n",mem);
 
 			m_Population.push_back(prev[mem]);	// add the selected genome into the new population for breeding
-        }
+		}
 
 		// Print the new selected population
-		if (verbosity>2)
+		if(verbosity>2)
 		{
 			printf("--------------------------------------------------------\n");
 			printf("Selected Population:\n");
@@ -279,22 +279,22 @@ void GAEngine<void>::RunGenerations(int gener)
 			printf("--------------------------------------------------------\n");
 		}
 
-        // CROSSOVER
+		// CROSSOVER
 		// Caution: Multiple crossovers allowed in single generation iteration
-        if(m_crossPartition)
-        {
+		if(m_crossPartition)
+		{
 			// vector of genome indices selected for genetic operations
-            std::vector<int> sample;
-					
+			std::vector<int> sample;
+
 			// fill sample with unique and valid indices to genomes for performing crossover
 			build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);
 
-            for(int i=0;i<sample.size();i++)
-            {
-                std::vector<int> arena; // initialise arena for breeding
-                arena.push_back(sample[i]);	// sampled genome enters arena 
+			for(int i=0;i<sample.size();i++)
+			{
+				std::vector<int> arena; // initialise arena for breeding
+				arena.push_back(sample[i]);	// sampled genome enters arena 
 				//bulid tournament sample
-                build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
+				build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
 
 				// Genetic operator feedback
 				// Output genomes in arena pre-crossover
@@ -315,8 +315,8 @@ void GAEngine<void>::RunGenerations(int gener)
 
 				// cross the genomes in arena before a randomly selected point
 				// multiple degree crossover in a single generation iteration possible (i.e. crossover processed genome may be tournament selected for additional crossover)
-	    		cross(m_Population[arena[0]],m_Population[arena[1]],
-					(int)rnd_generate(1.0,m_Population[sample[i]].size()));
+				cross(m_Population[arena[0]],m_Population[arena[1]],
+					  (int)rnd_generate(1.0,m_Population[sample[i]].size()));
 
 				// Output genomes in arena post-crossover
 				if(verbosity>3)
@@ -334,21 +334,21 @@ void GAEngine<void>::RunGenerations(int gener)
 					printf("---------------------------------------\n");
 				}
 
-                for(int j=0;j<2;j++)
-                {
+				for(int j=0;j<2;j++)
+				{
 					m_Population[arena[j]].var(v);	// store the Xover operated genome in template
-                    Distributor::instance().remove_key(arena[j]);	// remove previously requested processing
+					Distributor::instance().remove_key(arena[j]);	// remove previously requested processing
 
 					// Set-up workitem for Xover'd genome job
 					WorkItem *w=var_to_workitem(v);
 					w->key=arena[j];
 					Distributor::instance().push(w);
-                }
+				}
 				// genomes weight-selected into population that did not undergo Xover do not need to be re-worked for fitness 
-            }
-				
+			}
+
 			// Print population after crossover
-			if (verbosity>2)
+			if(verbosity>2)
 			{
 				printf("--------------------------------------------------------\n");
 				printf("Crossover:\n");
@@ -357,25 +357,25 @@ void GAEngine<void>::RunGenerations(int gener)
 			}
 		}
 
-        // MUTATION
-        if(m_mutatePartition)
-        {
-            std::vector<int> sample;
+		// MUTATION
+		if(m_mutatePartition)
+		{
+			std::vector<int> sample;
 
 			// Mutation welcomes invalid genomes
 			build_rnd_sample_rnd(sample,m_MutationProbability*100.0,false);
 
 			// Treatment of invalid genomes in the population
-            for(int i=0;i<m_Population.size();i++)
-            {
+			for(int i=0;i<m_Population.size();i++)
+			{
 				// add all unselected invalid genomes into sample
 				if(!m_Population[i].valid() && std::find(sample.begin(),sample.end(),i)==sample.end())
 					sample.push_back(i);
-            }
+			}
 
 			// Mutate the selected genomes
-            for(int i=0;i<sample.size();i++)
-            {
+			for(int i=0;i<sample.size();i++)
+			{
 				// Genetic operator feedback
 				// Output genomes pre-mutation
 				if(verbosity>3)
@@ -391,7 +391,7 @@ void GAEngine<void>::RunGenerations(int gener)
 					print_genome(sample[i]);
 				}
 
-	    		mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
+				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
 
 				// Output genomes post-mutation
 				if(verbosity>3)
@@ -402,42 +402,42 @@ void GAEngine<void>::RunGenerations(int gener)
 				}
 
 				m_Population[sample[i]].var(v);
-                Distributor::instance().remove_key(sample[i]); //remove previously requested processing
+				Distributor::instance().remove_key(sample[i]); //remove previously requested processing
 				WorkItem *w=var_to_workitem(v);
-                m_Population[sample[i]].set(v);		// TODO may not be necessary 
+				m_Population[sample[i]].set(v);		// TODO may not be necessary 
 				w->key=sample[i];
 				Distributor::instance().push(w);
-            }
+			}
 
 			// Print population after mutation
-			if (verbosity>2)
+			if(verbosity>2)
 			{
 				printf("--------------------------------------------------------\n");
 				printf("Mutation:\n");
 				print_population();
 				printf("--------------------------------------------------------\n");
 			}
-        }
+		}
 
 		// Distribute the fitness evaluation for this generation
 		Distributor::instance().process(observer,this);
 		// Sort the population
 		std::sort(m_Population.begin(),m_Population.end(),reverse_compare);
 
-        if(m_Population.size()>m_MaxPopulation)
-        {
-            //Cull it
+		if(m_Population.size()>m_MaxPopulation)
+		{
+			//Cull it
 			m_Population.erase(m_Population.begin()+m_MaxPopulation,m_Population.end());
-        }
-				
+		}
+
 		// update best fitness
-        if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
-        {
-            m_bestFitness=m_Population[0].fitness();
-            m_Population[0].var(m_bestVariables);
-            m_bBestFitnessAssigned=true;
-        }
-        print_stage(g);
+		if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
+		{
+			m_bestFitness=m_Population[0].fitness();
+			m_Population[0].var(m_bestVariables);
+			m_bBestFitnessAssigned=true;
+		}
+		print_stage(g);
 	}
 }
 
