@@ -155,204 +155,31 @@ class GAEngine
 		// TODO different verbosity settings
         void print_stage(int g);
 
-		// mutate
-		// if		name is non-emtpy wstring, only the allele with matching name is mutated at the mutation rate
-		// else if	name is an empty wstring, mutate all alleles
+		// Mutation operator
+		// if name is an empty wstring, mutate all alleles
+		// else only the allele with matching name is mutated at the mutation rate
 		// setting mutate_all to false will mutate approx. just 1 allele
-        void mutate(const std::wstring& name,Genome& g,bool mutate_all=false)
-        {
-            double prob=(mutate_all?101.0:100.0/g.size());
+        void mutate(const std::wstring& name,Genome& g,bool mutate_all=false);
 
-            for(int i=0;i<g.size();i++)
-            {
-                double p=rnd_generate(0.0,100.0);
-                
-				// mutate if ( p <= prob )
-                if(p>prob)		// chance to skip mutation
-                   continue;
+		// TODO a strange mutate operator. Unused
+        //void mutate(double probability,Genome& g,int count=-1);
 
-                if(!name.size() || g.name(i)==name)		
-                {
-                    LIMITS::iterator it=m_Limits.find(g.name(i));	// check for param limits of this allele
-                    double val;
-                    if(it==m_Limits.end())
-                    {
-                        //no limits, just use [-RAND_MAX/2,RAND_MAX/2] as a limit
-                        val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
-                    }
-                    else
-                    {
-						// restrict RNG to set limits
-                        val=rnd_generate(it->second.first,it->second.second);
-                    }
-                    g.allele(i,val);	// set the RNG value to allele
-
-                    if(name.size())		// only mutate this allele if name specified
-                        break;
-                }
-            }
-        }
-
-        void mutate(double probability,Genome& g,int count=-1)
-        {
-            int cnt=0;
-            double prob=rnd_generate(0.0,100.0);
- 
-            for(int i=0;i<g.size();i++)
-            {
-                if(prob<=probability)
-                {
-                    LIMITS::iterator it=m_Limits.find(g.name(i));
-                    double val;
-                    if(it==m_Limits.end())
-                    {
-                        //no limits, just use [-RAND_MAX/2,RAND_MAX] as a limit
-                        val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
-                    }
-                    else
-                    {
-                        val=rnd_generate(it->second.first,it->second.second);
-                    }
-                    g.allele(i,val);
-                    cnt++;
-                    if(count>=0 && cnt>=count)
-                       break;
-                }
-            }
-        }
-
-		// cross
-        bool cross(Genome& one,Genome& two,int crosspoint,Genome& out)
-        {
-            if(one.size()!=two.size() || one.size()<crosspoint+1)
-                return false;
-            for(int i=0;i<crosspoint;i++)
-                out[i]=one[i];
-            for(int i=crosspoint;i<one.size();i++)
-                out[i]=two[i];
-            return true;
-        }
-        bool cross(Genome& one,Genome& two,int crosspoint)
-        {
-            Genome n1,n2;
-
-			// check if genomes' alleles have same size and crosspoint lies in valid range
-            if(one.size()!=two.size() || one.size()<crosspoint+1)
-                return false;
-			// genomes equal size and crosspoint valid
-
-			// swap alleles before the crosspoint
-            for(int i=0;i<crosspoint;i++)
-            {
-                n1[i]=two[i];
-                n2[i]=one[i];
-            }
-            
-            for(int i=crosspoint;i<one.size();i++)
-            {
-                n2[i]=two[i];
-                n1[i]=one[i];
-            }
-
-            one=n1;
-            two=n2;
-
-            return true;
-        }
-
-		// build_rnd_sample
-		// append a defined number of randomly selected indices to genomes onto sample
-        void build_rnd_sample(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid)
-        {
-            double limit=(double)m_Population.size()-0.5;
-
-            for(;count>0;count--)
-            {
-                int v;
-
-				// randomly assign an int to v 
-				// if reject_duplicates set true, add a unique index to sample
-				// if check_valid set true, add a valid index
-                do
-                {
-					// nested do-while until genome is both valid and unique
-					do
-					{
-						v=(int)(rnd_generate(0.0,limit));
-					} while (check_valid && !m_Population[v].valid());
-                } while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
-                //Found next genome
-                sample.push_back(v);
-            }
-        }
+		// TODO a strange cross operator. Unused
+        //bool cross(Genome& one,Genome& two,int crosspoint,Genome& out);
 		
-        void build_rnd_sample_tournament(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid)
-        {
-            double limit=(double)m_Population.size()-0.5;
-            count*=2; //create tournament pairs
-            int index=sample.size();
+		// Crossover operator
+		// swap allele-string before the crosspoint
+        bool cross(Genome& one,Genome& two,int crosspoint);
 
-            for(;count>0;count--)
-            {
-                int v;
+		// Append a defined number of randomly selected indices to genomes onto a vector
+        void build_rnd_sample(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid);
+		
+        void build_rnd_sample_tournament(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid);
 
-                do
-                {
-                    v=(int)(rnd_generate(0.0,limit));
-                    if(check_valid && !m_Population[v].valid())
-                       continue;
-                }
-                while(reject_duplicates && std::find(sample.begin(),sample.end(),v)!=sample.end());
-                //Found next value
-                sample.push_back(v);
-            }
-            //let the fight begins!
-            for(int i=index;i<sample.size();i++)
-            {
-                Genome& one=m_Population[sample[i]];    
-                Genome& two=m_Population[sample[i+1]];
-                
-                if(one>two)
-                    sample.erase(sample.begin()+i);
-                else  
-                    sample.erase(sample.begin()+i+1);
-            }     
-        }
+        void build_rnd_sample_rnd(std::vector<int>& sample,double prob,bool check_valid);
 
-		// build_rnd_sample_rnd
-        void build_rnd_sample_rnd(std::vector<int>& sample,double prob,bool check_valid)
-        {
-			// if check_valid, only appends indices of m_Population for which Genomes are valid, at given probability (%)
-			// else (check_valid==false), appends Genomes at given rate (%)
-            for(int i=0;i<m_Population.size();i++)
-            {
-                if((!check_valid || m_Population[i].valid()) && prob>=rnd_generate(0.0,100.0))
-                    sample.push_back(i);
-            }
-        }
-
-		// select_weighted
-        int select_weighted(POPULATION& p)
-        {
-			double sum=0.0;
-			double zero_lim=0.000000000001;
-
-			// total population fitness
-            for(int i=0;i<p.size();i++)
-			{	
-				sum+=(p[i].valid()?1.0/(p[i].fitness()?p[i].fitness():zero_lim):0.0);	//TODO sum can overflow?
-			}
-			// use a randomly selected threshold for a cumulative-sum selection
-            double choice=sum*rnd_generate(0.0,1.0);
-            for(int i=0;i<p.size();i++)
-            {
-				choice-=1.0/(p[i].fitness()?p[i].fitness():zero_lim);
-                if(choice<=0.0)
-					return i;
-            }
-			// choice is larger than total sum
-            return p.size()-1;	// return the index to last (least-fit) genome
-        }
+		// Randomly select a member from the population using the inverse of fitness as the weight (Roullete selection)
+        int select_weighted(POPULATION& p);
 };
 
 #endif

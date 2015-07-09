@@ -537,44 +537,44 @@ void GAEngine<void>::mutate(const std::wstring& name,Genome& g,bool mutate_all=f
 	}
 }
 
-void GAEngine<void>::mutate(double probability,Genome& g,int count=-1)
-{
-	int cnt=0;
-	double prob=rnd_generate(0.0,100.0);
+//void GAEngine<void>::mutate(double probability,Genome& g,int count=-1)
+//{
+//	int cnt=0;
+//	double prob=rnd_generate(0.0,100.0);
+//
+//	for(int i=0;i<g.size();i++)
+//	{
+//		if(prob<=probability)
+//		{
+//			LIMITS::iterator it=m_Limits.find(g.name(i));
+//			double val;
+//			if(it==m_Limits.end())
+//			{
+//				//no limits, just use [-RAND_MAX/2,RAND_MAX] as a limit
+//				val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
+//			}
+//			else
+//			{
+//				val=rnd_generate(it->second.first,it->second.second);
+//			}
+//			g.allele(i,val);
+//			cnt++;
+//			if(count>=0 && cnt>=count)
+//				break;
+//		}
+//	}
+//}
 
-	for(int i=0;i<g.size();i++)
-	{
-		if(prob<=probability)
-		{
-			LIMITS::iterator it=m_Limits.find(g.name(i));
-			double val;
-			if(it==m_Limits.end())
-			{
-				//no limits, just use [-RAND_MAX/2,RAND_MAX] as a limit
-				val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
-			}
-			else
-			{
-				val=rnd_generate(it->second.first,it->second.second);
-			}
-			g.allele(i,val);
-			cnt++;
-			if(count>=0 && cnt>=count)
-				break;
-		}
-	}
-}
-
-bool GAEngine<void>::cross(Genome& one,Genome& two,int crosspoint,Genome& out)
-{
-	if(one.size()!=two.size() || one.size()<crosspoint+1)
-		return false;
-	for(int i=0;i<crosspoint;i++)
-		out[i]=one[i];
-	for(int i=crosspoint;i<one.size();i++)
-		out[i]=two[i];
-	return true;
-}
+//bool GAEngine<void>::cross(Genome& one,Genome& two,int crosspoint,Genome& out)
+//{
+//	if(one.size()!=two.size() || one.size()<crosspoint+1)
+//		return false;
+//	for(int i=0;i<crosspoint;i++)
+//		out[i]=one[i];
+//	for(int i=crosspoint;i<one.size();i++)
+//		out[i]=two[i];
+//	return true;
+//}
 
 bool GAEngine<void>::cross(Genome& one,Genome& two,int crosspoint)
 {
