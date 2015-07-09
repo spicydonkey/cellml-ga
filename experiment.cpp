@@ -106,7 +106,7 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 			return -1;	// GA should NOT be run!
 		}
 		
-		// TODO default 0.0 limits to 1e-10 (defined in ZERO_LIM)
+		// reassign zero bounds to ZERO_LIM
 		if(min_lim==0.0)
 		{
 			std::cerr << "Error: SetAndInitEngine: 0.0 is an invalid LowerBound for Allele[" << i << "]: resetting to ZERO_LIM=" << ZERO_LIM << ": " << currentDateTime() << std::endl;
@@ -291,7 +291,7 @@ int main(int argc,char *argv[])
     // Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
-		//TODO validate the GA
+		// Validate and run GA
 		if(generations>0)
 		{
 			// Initialise the population in GA engine
