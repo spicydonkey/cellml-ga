@@ -150,11 +150,11 @@ void GAEngine<void>::set_borders(int max_population)
 bool GAEngine<void>::Initialise()
 {
 	// Create a representative genome for the population
-    Genome v;
-			
+	Genome v;
+
 	// exit exceptions
-    if(!m_Population.size() || !m_AlleleList.size())
-        return false;
+	if(!m_Population.size() || !m_AlleleList.size())
+		return false;
 
 	// Attach alleles to the representative genome
 	for(typename std::vector<std::wstring>::iterator it=m_AlleleList.begin();it!=m_AlleleList.end();++it)	// iterate through the list of alleles
@@ -164,13 +164,13 @@ bool GAEngine<void>::Initialise()
 	}
 
 	// Fill the population with each mutation of the genome
-    for(int i=0;i<m_Population.size();i++)
-    {
-        mutate(std::wstring(),v,true);	// mutate all the alleles of v
-        m_Population[i]=v;				// a randomly generated genome enters the population
-    }
+	for(int i=0;i<m_Population.size();i++)
+	{
+		mutate(std::wstring(),v,true);	// mutate all the alleles of v
+		m_Population[i]=v;				// a randomly generated genome enters the population
+	}
 
-    return true;
+	return true;
 }
 
 void GAEngine<void>::AddAllele(const std::wstring& name)
