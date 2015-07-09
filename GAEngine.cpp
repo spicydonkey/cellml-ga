@@ -1,6 +1,5 @@
 #include "GAEngine.h"
 
-
 bool reverse_compare(const Genome& v1,const Genome& v2) 
 {
 	return (v1<v2); 
@@ -134,8 +133,8 @@ void Genome::set(VariablesHolder& v)
 
 
 // TODO How to override class definition by template
-template<typename COMP>
-GAEngine<COMP>::GAEngine():m_MaxPopulation(0),m_Generations(1),
+template<typename COMP >
+GAEngine<COMP >::GAEngine():m_MaxPopulation(0),m_Generations(1),
 					m_CrossProbability(0.2),m_MutationProbability(0.01),
 					m_bBestFitnessAssigned(false),
 					m_crossPartition(0),m_mutatePartition(0)
