@@ -1,4 +1,7 @@
 #include "GAEngine.h"
+#include "utils.h"
+#include "virtexp.h"
+#include "distributor.h"
 
 bool reverse_compare(const Genome& v1,const Genome& v2) 
 {
