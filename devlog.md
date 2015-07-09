@@ -1279,5 +1279,20 @@ kf5=0.000000  kf4=760.172711  kf16=738.460461  Rpc=1770.249858
 ```
 ~~Exactly.~~ There is something small but annoying here. kf5 is not 0.0, is should be displayed as 1e-10, the value of ZERO_LIM. It could make sense to display params in *scientific notation*.
 
+### Random selection cont'd
+Since we have validated the limits specified in XML to be non-negative, and reassigned zeros to a default ZERO_LIM, we can safely implement the *logged random selector*.
+
+A hard change on existing GAEngine code should be avoided. 
+
+In GAEngine::Initialise, which is called by the root to initialise the GA engine, the random selection is delegated to GAengine::**mutate**.
+
+In turn, **mutate**, with all it's statistical decision making processes, calls **rnd_generate** in *utils* as RNG, which is *linear*.
+
+In essence, the user should be able to *select* which RNG method to implememnt: One that searches all points in space equally, or one that searches different scales equally (the new feature)
+
+For this, it makes sense to add a flag in GAEngine class that decides which RNG method to implement.
+
+Let's call it **RNG**, default it to 0 for the common RNG, and 1 for the log RNG.
+
 ### TODO
 * [ ] Display allele vals in **scientific notation**
