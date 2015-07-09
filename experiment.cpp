@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "AdvXMLParser.h"
 #include "GAEngine.h"
+#include "GAEngine.cpp"
 #include "virtexp.h"
 #include "utils.h"
 
