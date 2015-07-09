@@ -28,160 +28,57 @@ class Genome
         bool m_Valid;
 
     public:
-		// constructors & destructors
-        Genome():m_Fitness(0.0),m_Valid(true)
-        {
-        }
-        Genome(const Genome& other):m_Fitness(other.m_Fitness),m_Valid(other.m_Valid)
-        {
-            m_Alleles.assign(other.m_Alleles.begin(),other.m_Alleles.end());
-        }
-        ~Genome()
-        {
-        }
+        Genome();
+        Genome(const Genome& other);
+        ~Genome();
 
-		// assignment operator
-        Genome operator=(const Genome& other)
-        {
-            if(&other!=this)
-            {
-                m_Alleles.assign(other.m_Alleles.begin(),other.m_Alleles.end());
-                m_Fitness=other.m_Fitness;
-                m_Valid=other.m_Valid;
-             }
-            return *this;
-        }
+		// assignment
+        Genome operator=(const Genome& other);
 
-		// Find allele's value given name (0.0 if not found)
-        double allele(const std::wstring& name)
-        {
-            ALLELE::iterator it=find_if(m_Alleles.begin(),m_Alleles.end(),
-                   bind1st(pair_equal_to<std::wstring,double>(),name));		// pair_equal_to argument std::wstring& ?
-            return (it==m_Alleles.end()?double(0.0):it->second);			// returns 0.0 if name not found and m_Alleles' second value if found 
-        }
+		// Get an allele value from allele name (0.0 if not found)
+        double allele(const std::wstring& name);
 
-		// Index the ith allele in genome
-        double allele(int index)
-        {
-            return ((index>=0 && index<m_Alleles.size())?m_Alleles[index].second:0.0);	// second val of ith pair of m_Alleles; if index out of range, 0.0
-        }
+		// Get an allele value from indexing the genome (0.0 if out of range)
+        double allele(int index);
 
-		// Add/update an allele and corresponding value
-        void allele(const std::wstring& name,double val)		// if m_Alleles has an element with first==name, assign the second to val; push_back <name,val> into m_Allele
-        {
-            ALLELE::iterator it=find_if(m_Alleles.begin(),m_Alleles.end(),
-                   bind1st(pair_equal_to<std::wstring,double>(),name));
-            if(it!=m_Alleles.end())
-               it->second=val;
-            else
-               m_Alleles.push_back(std::make_pair<std::wstring,double>(std::wstring(name),double(val)));
-        }
+		// Update allele in genome by name and value
+        void allele(const std::wstring& name,double val);
 
-		// Update the ith allele's value
-        void allele(int index,double val)		
-        {
-            if(index>=0 && index<m_Alleles.size())
-               m_Alleles[index].second=val;
-        }
+		// Update the value of ith allele in genome
+        void allele(int index,double val);
 
-		// valid
+		// Get validity of genome
         bool valid() const { return m_Valid; }
         void valid(bool b) { m_Valid=b; }		// assign m_Valid member to b
 
-		// name
-        std::wstring name(int index)
-        {
-			// rts ith allele's name; if index out of range, an empty string
-            return ((index>=0 && index<m_Alleles.size())?m_Alleles[index].first:std::wstring());
-        }
+		// Get the name of ith allele in genome (empty if oor)
+        std::wstring name(int index);
 
-		// size
-        int size()
-        {	
-			// rts the size of m_Alleles memb vector
-            return m_Alleles.size();
-        }
+		// Get the size of genome
+        int size() { return m_Alleles.size(); }
 
-		// [] operator (indexing) a Genome
-        std::pair<std::wstring,double>& operator[](int index)
-        {	
-			// pushback <emptystr, 0.0> to m_Alleles until vector index is in range, then return that elem of m_Alleles
-            while(m_Alleles.size()<=index)
-				m_Alleles.push_back(std::make_pair(std::wstring(),double(0.0)));
-			return m_Alleles[index];
-        }
+		// Get the allele by indexing the genome sequence
+        std::pair<std::wstring,double>& operator[](int index);
 
-		// fitness
+		// Get the fitness value
         double fitness() const { return m_Fitness; }
-        void fitness(double v) { m_Fitness=v; m_Valid=(v!=INFINITY); }		// assigns v to m_Fitness, m_Valid set to finity of v
+        void fitness(double v) { m_Fitness=v; m_Valid=(v!=INFINITY); }	// an INF fit genome is invalid
         
-		// </>/== operators (comparator) : Compares the fitness() memb fun of Genomes
-		bool operator<(const Genome& other) const
-        {
-			// returns fitness() < other.fitness(); if at least one invalid, returns this->valid()
-            if(valid() && other.valid())
-                return fitness()<other.fitness();
-            return valid();
-        }
-        bool operator>(const Genome& other) const
-        {
-            if(valid() && other.valid())
-                return fitness()>other.fitness();
-            return valid();
-        }
-        bool operator==(const Genome& other) const
-        {
-            if(valid() && other.valid())
-                return fitness()==other.fitness();
-            return false;
-        }
+		// Compare genomes by fitness
+		bool operator<(const Genome& other) const;
+        bool operator>(const Genome& other) const;
+        bool operator==(const Genome& other) const;
 
-		// same
-        bool same(const Genome& other) const
-        {
-			if(!(valid() && other.valid()))
-				return false;
-
-			if(other.m_Alleles.size()!=m_Alleles.size())
-                return false;
-            for(int i=0;i<m_Alleles.size();i++)
-            {
-                if(m_Alleles[i].first!=other.m_Alleles[i].first ||
-                   m_Alleles[i].second!=other.m_Alleles[i].second)
-                   return false;
-            }
-            return true;
-        }
+		// Test if two genomes are identical
+        bool same(const Genome& other) const;
 
 		// Store the genomic data
 			// 'update' all alleles of this genome to v
 			// if this genome is missing some alleles, v may contain some alleles unknown to genome
-        void var(VariablesHolder& v)
-        {
-			// iterate through the alleles in this genome
-            for(ALLELE::iterator it=m_Alleles.begin();it!=m_Alleles.end();++it)
-            {
-				// update each allele in v
-                v(it->first,it->second);
-            }
-        }
+        void var(VariablesHolder& v);
 
-		// set
-        void set(VariablesHolder& v)
-        {
-			// rebuild alleles from that stored in a varholder
-
-            m_Alleles.clear();	// clear m_Alleles vector
-
-            for(int k=0;;k++)
-            {
-				std::wstring name=v.name(k);
-				if(name.empty())	// k reached the end of m_Var in v
-					break;
-
-                m_Alleles.push_back(std::make_pair<std::wstring,double>(name,v(name)));		// append a pair made from m_Vars of v to m_Alleles
-            }
-        }
+		// Rebuild a genome from a temporary sequence
+        void set(VariablesHolder& v);
 };
 
 bool reverse_compare(const Genome& v1,const Genome& v2) { return (v1<v2); }
