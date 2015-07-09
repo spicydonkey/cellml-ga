@@ -133,7 +133,7 @@ void Genome::set(VariablesHolder& v)
 
 
 // TODO How to override class definition by template
-template<typename COMP >
+template<class COMP >
 GAEngine<COMP >::GAEngine():m_MaxPopulation(0),m_Generations(1),
 					m_CrossProbability(0.2),m_MutationProbability(0.01),
 					m_bBestFitnessAssigned(false),
@@ -141,12 +141,12 @@ GAEngine<COMP >::GAEngine():m_MaxPopulation(0),m_Generations(1),
 {
 }
 
-template<typename COMP>
+template<class COMP>
 GAEngine<COMP>::~GAEngine()
 {
 }
  
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::set_borders(int max_population)
 {
 	m_MaxPopulation=max_population;
@@ -154,7 +154,7 @@ void GAEngine<COMP>::set_borders(int max_population)
 }
 
 // Initialise the population with randomly generated genomes
-template<typename COMP>
+template<class COMP>
 bool GAEngine<COMP>::Initialise()
 {
 	// Create a representative genome for the population
@@ -181,19 +181,19 @@ bool GAEngine<COMP>::Initialise()
 	return true;
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::AddAllele(const std::wstring& name)
 {
     m_AlleleList.push_back(name);
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::AddLimit(const std::wstring& name,double lower,double upper)
 {
     m_Limits[name]=std::make_pair(double(lower),double(upper));
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::var_template(VariablesHolder& v)
 {
     for(std::vector<std::wstring>::iterator it=m_AlleleList.begin();it!=m_AlleleList.end();++it)
@@ -202,14 +202,14 @@ void GAEngine<COMP>::var_template(VariablesHolder& v)
     }
 }
 
-template<typename COMP>
+template<class COMP>
 double GAEngine<COMP>::GetBest(VariablesHolder& v)
 {
     v=m_bestVariables;
     return m_bestFitness;
 }
 
-template<typename COMP>
+template<class COMP>
 WorkItem *GAEngine<COMP>::var_to_workitem(VariablesHolder& h)
 {
     WorkItem *w=new WorkItem;
@@ -218,7 +218,7 @@ WorkItem *GAEngine<COMP>::var_to_workitem(VariablesHolder& h)
     return w;
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::process_workitem(WorkItem *w,double answer)
 {
     if(w->key<m_Population.size())
@@ -230,7 +230,7 @@ void GAEngine<COMP>::process_workitem(WorkItem *w,double answer)
 }
 
 // Run the GA engine for given number of generations
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::RunGenerations(int gener)
 {
 	VariablesHolder v;		// temporary genome storage
@@ -456,7 +456,7 @@ void GAEngine<COMP>::RunGenerations(int gener)
 	}
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::print_genome(int ind_genome)
 {
 	VariablesHolder v;
@@ -473,7 +473,7 @@ void GAEngine<COMP>::print_genome(int ind_genome)
 	printf("\n");
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::print_population()
 {
 	int popsize=m_Population.size();
@@ -483,7 +483,7 @@ void GAEngine<COMP>::print_population()
 	}
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::print_stage(int g)
 {
 	//verbose summary of GA: print all chromosomes of curr gen
@@ -521,7 +521,7 @@ void GAEngine<COMP>::print_stage(int g)
 	}
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 {
 	double prob=(mutate_all?101.0:100.0/g.size());
@@ -595,7 +595,7 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 //	return true;
 //}
 
-template<typename COMP>
+template<class COMP>
 bool GAEngine<COMP>::cross(Genome& one,Genome& two,int crosspoint)
 {
 	Genome n1,n2;
@@ -624,7 +624,7 @@ bool GAEngine<COMP>::cross(Genome& one,Genome& two,int crosspoint)
 	return true;
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::build_rnd_sample(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid)
 {
 	double limit=(double)m_Population.size()-0.5;
@@ -649,7 +649,7 @@ void GAEngine<COMP>::build_rnd_sample(std::vector<int>& sample,int count,bool re
 	}
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::build_rnd_sample_tournament(std::vector<int>& sample,int count,bool reject_duplicates,bool check_valid)
 {
 	double limit=(double)m_Population.size()-0.5;
@@ -682,7 +682,7 @@ void GAEngine<COMP>::build_rnd_sample_tournament(std::vector<int>& sample,int co
 	}
 }
 
-template<typename COMP>
+template<class COMP>
 void GAEngine<COMP>::build_rnd_sample_rnd(std::vector<int>& sample,double prob,bool check_valid)
 {
 	// if check_valid, only appends indices of m_Population for which Genomes are valid, at given probability (%)
@@ -694,7 +694,7 @@ void GAEngine<COMP>::build_rnd_sample_rnd(std::vector<int>& sample,double prob,b
 	}
 }
 
-template<typename COMP>
+template<class COMP>
 int GAEngine<COMP>::select_weighted(POPULATION& p)
 {
 	double sum=0.0;

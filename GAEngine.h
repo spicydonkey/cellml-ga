@@ -83,7 +83,7 @@ bool reverse_compare(const Genome& v1,const Genome& v2);
 extern bool observer(WorkItem *w,double answer,void *);
 
 
-template<typename COMP>
+template<class COMP>
 class GAEngine
 {
     private:
