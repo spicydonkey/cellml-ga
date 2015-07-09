@@ -72,9 +72,7 @@ class Genome
 		// Test if two genomes are identical
         bool same(const Genome& other) const;
 
-		// Store the genomic data
-			// 'update' all alleles of this genome to v
-			// if this genome is missing some alleles, v may contain some alleles unknown to genome
+		// Store the genetic data in a temporary storage
         void var(VariablesHolder& v);
 
 		// Rebuild a genome from a temporary sequence
@@ -105,404 +103,57 @@ class GAEngine
     public:
         typedef Genome GENOME;
 
-		// default GA Engine constructor
-        GAEngine():m_MaxPopulation(0),m_Generations(1),
-                   m_CrossProbability(0.2),m_MutationProbability(0.01),
-                   m_bBestFitnessAssigned(false),
-                   m_crossPartition(0),m_mutatePartition(0)
-        {
-        }
-        ~GAEngine()
-        {
-        }
+        GAEngine();
+        ~GAEngine();
 
         double& prob_cross() { return m_CrossProbability; }
         double& prob_mutate() { return m_MutationProbability; }
         int& part_cross() { return m_crossPartition; }
         int& part_mutate() { return m_mutatePartition; }
 
-		// Set the maximum population size of GA and resize the population Genome vector accordingly
-        void set_borders(int max_population)
-        {
-            m_MaxPopulation=max_population;
-            m_Population.resize(max_population);
-        }
-
+		// Set the maximum population of GA
+        void set_borders(int max_population);
 
 		// Initialise the population with randomly generated genomes
-        bool Initialise()
-        {
-			// Create a representative genome for the population
-            Genome v;
-			
-			// exit exceptions
-            if(!m_Population.size() || !m_AlleleList.size())
-                return false;
-
-			// Attach alleles to the representative genome
-			for(typename std::vector<std::wstring>::iterator it=m_AlleleList.begin();it!=m_AlleleList.end();++it)	// iterate through the list of alleles
-			{
-				// Create each allele with all values initialised to 0.0
-				v.allele(*it,(double)0.0);
-			}
-
-			// Fill the population with each mutation of the genome
-            for(int i=0;i<m_Population.size();i++)
-            {
-                mutate(std::wstring(),v,true);	// mutate all the alleles of v
-                m_Population[i]=v;				// a randomly generated genome enters the population
-            }
-
-            return true;
-        }
+        bool Initialise();
 
 		// Size of a GAEngine
-        int size() { return m_Population.size(); }	// population size
+        int size() { return m_Population.size(); }
 
-		// Add an allele (name) to engine's storage
-        void AddAllele(const std::wstring& name)
-        {
-            m_AlleleList.push_back(name);
-        }
+		// Add a new genotype into the central gene-pool
+        void AddAllele(const std::wstring& name);
 
-		// Add limits to the range of allele's valid values
-        void AddLimit(const std::wstring& name,double lower,double upper)
-        {
-            m_Limits[name]=std::make_pair(double(lower),double(upper));
-        }
+		// Set limits to an allele's values
+        void AddLimit(const std::wstring& name,double lower,double upper);
 		
-		// var_template
-		// store in a VarHolder argument the template allele name list
-        void var_template(VariablesHolder& v)
-        {
-            for(std::vector<std::wstring>::iterator it=m_AlleleList.begin();it!=m_AlleleList.end();++it)
-            {
-                v(*it,0.0);
-            }
-        }
+		// Copy the gene-pool into a temporary storage
+        void var_template(VariablesHolder& v);
 
-		// Store in the VarHolder argument the currently fittest chromosome and return its fitness
-        double GetBest(VariablesHolder& v)
-        {
-            v=m_bestVariables;
-            return m_bestFitness;
-        }
+		// Get the currently fittest genome and its fitness and store them
+        double GetBest(VariablesHolder& v);
 
 		// Create a work item to be processed from chromosome data
-        WorkItem *var_to_workitem(VariablesHolder& h)
-        {
-            WorkItem *w=new WorkItem;
-            w->key=0;	// key initialised to 0
-            h.collate(w->data);
-            return w;
-        }
+        WorkItem *var_to_workitem(VariablesHolder& h);
 
-		// Assign the workitem.key-th Genome's fitness, and deletes the WorkItem
-        void process_workitem(WorkItem *w,double answer)
-        {
-            if(w->key<m_Population.size())
-            {
-                Genome& g=m_Population[w->key];		// get the genome corresponding to this workitem
-                g.fitness(answer);	// assign the evaluated fitness to the genome
-            }
-            delete w;
-        }
+		// Process the results in the workitem by updating the fitness of the corresponding genome
+        void process_workitem(WorkItem *w,double answer);
 
 		// Run the GA engine for given number of generations
-        void RunGenerations(int gener)
-        {
-            VariablesHolder v;		// temporary genome storage
-            m_Generations=gener;	// number of generations to run
-
-            // Create initial fitness set
-			for(int i=0;i<m_Population.size();i++)
-			{
-				Genome& g=m_Population[i];	// get the ith Genome in population
-
-				g.var(v);	// store the genomic information in a temporary variable
-				WorkItem *w=var_to_workitem(v);		// collate the genome in a workitem for processing
-				w->key=i;	// the key stores a reference to genome
-				
-				Distributor::instance().push(w);	// push this work onto the distributor singleton
-			}
-
-			// Process the work item collected by distributor
-				// evaluate and assign fitness for each Genome in population
-			Distributor::instance().process(observer,this);
-
-			std::sort(m_Population.begin(),m_Population.end(),reverse_compare);		// sort population in ascending order of fitness
-            
-			// Update fittest genome
-				// the fittest genome after sorting population is the 0th member
-			if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
-            {
-                m_bestFitness=m_Population[0].fitness();	// assign min ftns as the best fitness
-                m_Population[0].var(m_bestVariables);		// update the bestVars
-                m_bBestFitnessAssigned=true;
-            }
-
-            print_stage(-1);		// generation 0
-
-			for(int g=0;g<gener;g++)
-            {
-				// Do the genetics
-				int limit=m_Population.size();
-                POPULATION prev(m_Population);	// temporary copy of current pop vector
-                m_Population.clear();			// clear current population vector
-
-				// SELECTION
-				// Weighted-selection with replacement from the previous generation's population
-                for(int i=0;i<limit;i++)
-                {
-                    int mem=select_weighted(prev);		// genome's index [p.size()-1 when err]
-
-					// Genetic operator feedback
-					if(verbosity>3)
-						printf("SELECT: Adding %d to population\n",mem);
-
-					m_Population.push_back(prev[mem]);	// add the selected genome into the new population for breeding
-                }
-
-				// Print the new selected population
-				if (verbosity>2)
-				{
-					printf("--------------------------------------------------------\n");
-					printf("Selected Population:\n");
-					print_population();
-					printf("--------------------------------------------------------\n");
-				}
-
-                // CROSSOVER
-				// Caution: Multiple crossovers allowed in single generation iteration
-                if(m_crossPartition)
-                {
-					// vector of genome indices selected for genetic operations
-                    std::vector<int> sample;
-					
-					// fill sample with unique and valid indices to genomes for performing crossover
-					build_rnd_sample_rnd(sample,m_CrossProbability*100.0,true);
-
-                    for(int i=0;i<sample.size();i++)
-                    {
-                        std::vector<int> arena; // initialise arena for breeding
-                        arena.push_back(sample[i]);	// sampled genome enters arena 
-						//bulid tournament sample
-                        build_rnd_sample(arena,1,true,true);	// a unique and valid genome enters arena for crossbreeding
-
-						// Genetic operator feedback
-						// Output genomes in arena pre-crossover
-						if(verbosity>3)
-						{
-							/* output format
-							CROSSOVER
-							-[i] x1=_________ x2=__________
-							-[j] x1=_________ x2=__________
-							*/
-							printf("CROSSOVER:\n");
-							for(int j=0;j<arena.size();j++)
-							{
-								printf("-");
-								print_genome(arena[j]);
-							}
-						}
-
-						// cross the genomes in arena before a randomly selected point
-						// multiple degree crossover in a single generation iteration possible (i.e. crossover processed genome may be tournament selected for additional crossover)
-	    				cross(m_Population[arena[0]],m_Population[arena[1]],
-							(int)rnd_generate(1.0,m_Population[sample[i]].size()));
-
-						// Output genomes in arena post-crossover
-						if(verbosity>3)
-						{
-							/*
-							+[i] x1=_________ x2=__________
-							+[j] x1=_________ x2=__________
-							-----------------------------------
-							*/
-							for(int j=0;j<arena.size();j++)
-							{
-								printf("+");
-								print_genome(arena[j]);
-							}
-							printf("---------------------------------------\n");
-						}
-
-                        for(int j=0;j<2;j++)
-                        {
-							m_Population[arena[j]].var(v);	// store the Xover operated genome in template
-                            Distributor::instance().remove_key(arena[j]);	// remove previously requested processing
-
-							// Set-up workitem for Xover'd genome job
-							WorkItem *w=var_to_workitem(v);
-							w->key=arena[j];
-							Distributor::instance().push(w);
-                        }
-						// genomes weight-selected into population that did not undergo Xover do not need to be re-worked for fitness 
-                    }
-				
-					// Print population after crossover
-					if (verbosity>2)
-					{
-						printf("--------------------------------------------------------\n");
-						printf("Crossover:\n");
-						print_population();
-						printf("--------------------------------------------------------\n");
-					}
-				}
-
-                // MUTATION
-                if(m_mutatePartition)
-                {
-                    std::vector<int> sample;
-
-					// Mutation welcomes invalid genomes
-					build_rnd_sample_rnd(sample,m_MutationProbability*100.0,false);
-
-					// Treatment of invalid genomes in the population
-                    for(int i=0;i<m_Population.size();i++)
-                    {
-						// add all unselected invalid genomes into sample
-						if(!m_Population[i].valid() && std::find(sample.begin(),sample.end(),i)==sample.end())
-							sample.push_back(i);
-                    }
-
-					// Mutate the selected genomes
-                    for(int i=0;i<sample.size();i++)
-                    {
-						// Genetic operator feedback
-						// Output genomes pre-mutation
-						if(verbosity>3)
-						{
-							/*
-							MUTATION:
-							-[i] x1=_________ x2=__________
-							+[i] x1=_________ x2=__________
-							-----------------------------------
-							*/
-							printf("MUTATION:\n");
-							printf("-");
-							print_genome(sample[i]);
-						}
-
-	    				mutate(std::wstring(),m_Population[sample[i]],!(m_Population[sample[i]].valid()));	// mutate the whole chromosome iff genome is invalid. else mutate approx 1 allele
-
-						// Output genomes post-mutation
-						if(verbosity>3)
-						{
-							printf("+");
-							print_genome(sample[i]);
-							printf("---------------------------------------\n");
-						}
-
-						m_Population[sample[i]].var(v);
-                        Distributor::instance().remove_key(sample[i]); //remove previously requested processing
-						WorkItem *w=var_to_workitem(v);
-                        m_Population[sample[i]].set(v);		// TODO may not be necessary 
-						w->key=sample[i];
-						Distributor::instance().push(w);
-                    }
-
-					// Print population after mutation
-					if (verbosity>2)
-					{
-						printf("--------------------------------------------------------\n");
-						printf("Mutation:\n");
-						print_population();
-						printf("--------------------------------------------------------\n");
-					}
-                }
-
-				// Distribute the fitness evaluation for this generation
-				Distributor::instance().process(observer,this);
-				// Sort the population
-				std::sort(m_Population.begin(),m_Population.end(),reverse_compare);
-
-                if(m_Population.size()>m_MaxPopulation)
-                {
-                    //Cull it
-					m_Population.erase(m_Population.begin()+m_MaxPopulation,m_Population.end());
-                }
-				
-				// update best fitness
-                if(!m_bBestFitnessAssigned || m_bestFitness>m_Population[0].fitness())
-                {
-                    m_bestFitness=m_Population[0].fitness();
-                    m_Population[0].var(m_bestVariables);
-                    m_bBestFitnessAssigned=true;
-                }
-                print_stage(g);
-			}
-        }
+        void RunGenerations(int gener);
 
     private:
         typedef std::map<std::wstring,std::pair<double,double> > LIMITS;
         LIMITS m_Limits;
 
-		// Print a genome sequence
-		// A genome can be sequenced at any stage of the program, since it does not ask for its fitness, validity, generation, etc.
-		void print_genome(int ind_genome)
-		{
-			VariablesHolder v;
-			m_Population[ind_genome].var(v);	// store alleles data in a temporary variable
-			printf("[%d] ", ind_genome);		// print the genome's index
-			for(int i=0;;i++)
-			{
-				std::wstring name=v.name(i);
-				// sequence all alleles in genome
-				if(name.empty())
-					break;
-				printf("%s=%lf   ",convert(name).c_str(),v(name));
-			}
-			printf("\n");
-		}
+		// Print the genetic data of a member in population
+		void print_genome(int ind_genome);
 
-		// Print the current population
-		void print_population()
-		{
-			int popsize=m_Population.size();
-			for (int i=0;i<popsize;i++)
-			{
-				print_genome(i);
-			}
-		}
+		// Print the genetic data of the current population
+		void print_population();
 
-		// Output a current summary for GA
-        void print_stage(int g)
-        {
-			//verbose summary of GA: print all chromosomes of curr gen
-            if(verbosity>1)
-            {
-				printf("--------------------------------------------------------\n");
-				std::cout << currentDateTime() << std::endl;	// tag generation output with timestamp
-
-                for(int j=0;j<m_Population.size();j++)
-				{
-					//print validity, generation #, and fitness of each chromosome
-					printf("%s[%d](%lf) ",(m_Population[j].valid()?(m_Population[j].fitness()<0?"!":" "):"*"),g+1,m_Population[j].fitness());
-
-					// Sequence the chromosome
-					print_genome(j);
-				}
-				printf("--------------------------------------------------------\n");
-			}
-             
-			//shorter summary of GA: print currently fittest chromosome
-				// and fittest chromosome of this generation
-			else if(verbosity==1)
-			{
-				std::cout << currentDateTime() << std::endl;	// tag generation output with timestamp
-
-				//VariablesHolder v;
-				double f;
-				
-				// Fittest chromosome in this gen is the first genome in sorted population
-				f=m_Population[0].fitness();
-
-				printf("Generation %d. Best fitness: %lf\n",g+1,f);
-				print_genome(0);
-                printf("--------------------------------------------------------\n");
-			}
-		}
+		// Output a current summary of GA
+		// TODO different verbosity settings
+        void print_stage(int g);
 
 		// mutate
 		// if		name is non-emtpy wstring, only the allele with matching name is mutated at the mutation rate
