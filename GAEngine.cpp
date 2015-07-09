@@ -503,7 +503,7 @@ void GAEngine<void>::print_stage(int g)
 	}
 }
 
-void GAEngine<void>::mutate(const std::wstring& name,Genome& g,bool mutate_all=false)
+void GAEngine<void>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 {
 	double prob=(mutate_all?101.0:100.0/g.size());
 
