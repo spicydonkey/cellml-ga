@@ -139,7 +139,7 @@ class Genome
 		// same
         bool same(const Genome& other) const
         {
-			if(!valid() && other.valid())
+			if(!(valid() && other.valid()))
 				return false;
 
 			if(other.m_Alleles.size()!=m_Alleles.size())
