@@ -1299,3 +1299,10 @@ Let's call it **RNG**, default it to 0 for the common RNG, and 1 for the log RNG
 
 ### TODO
 * [ ] Display allele vals in **scientific notation**
+
+## 10.07.2015
+### GAEngine library
+Member functions declared in GAEngine.h are defined in GAEngine.cpp - the source for Genetic Algorithm library.
+
+The source is included by the header, so it does not need to be compiled separately (e.g. by a makefile).
+
