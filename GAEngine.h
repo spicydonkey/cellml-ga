@@ -99,6 +99,7 @@ class GAEngine
         double m_bestFitness;
         bool m_bBestFitnessAssigned;
         VariablesHolder m_bestVariables;
+		int m_RNG;
 
     public:
         typedef Genome GENOME;
@@ -110,6 +111,9 @@ class GAEngine
         double& prob_mutate() { return m_MutationProbability; }
         int& part_cross() { return m_crossPartition; }
         int& part_mutate() { return m_mutatePartition; }
+		
+		// Get RNG method selector
+		int& RNG_method() { return m_RNG; }
 
 		// Set the maximum population of GA
         void set_borders(int max_population);

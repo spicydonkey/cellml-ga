@@ -1313,3 +1313,7 @@ Log selection has some layers that process the conversion from the core RNG to a
 ### TODO
 * [ ] Implement the log selection method to mutate alleles
   * [ ] Make it user-selecatble with default "linear" case
+
+## 13.07.2015
+### randsel cont'd 3
+* [x] add RNG member into GAEngine class
