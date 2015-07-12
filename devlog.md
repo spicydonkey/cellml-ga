@@ -1310,10 +1310,13 @@ So, in **GAEngine::mutate**, there must be a conditional that decides which RNG 
 Log selection has some layers that process the conversion from the core RNG to a transformed RNG.
 
 
-### TODO
-* [ ] Implement the log selection method to mutate alleles
-  * [ ] Make it user-selecatble with default "linear" case
-
 ## 13.07.2015
 ### randsel cont'd 3
 * [x] add RNG member into GAEngine class
+
+
+### TODO
+* [ ] Implement the log selection method to mutate alleles
+  * Make it user-selecatble with default "linear" case
+    * [x] User-selectable
+	* [x] Default to linear-type RNG

@@ -73,7 +73,8 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
     double mutation=atof(elem.GetAttribute("Mutation_proportion").GetValue().c_str());
     double cross=atof(elem.GetAttribute("Crossover_proportion").GetValue().c_str());
     int generations=atoi(elem.GetAttribute("Generations").GetValue().c_str());
-    
+    int RNG_type=atoi(elem.GetAttribute("RNG").GetValue().c_str());
+
     // Check for default and limit for params
     if(!initPopulation)
         initPopulation=100;
@@ -81,11 +82,22 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
         cross=1.0;
     if(mutation>1.0)
         mutation=1.0;
+	if(generations<1)
+	{
+		std::cerr << "Error: SetAndInitEngine: invalid value for Generations: setting to default 1" << std::endl;
+		generations=1;
+	}
+	if((RNG_type<0)||(RNG_type>1))
+	{
+		std::cerr << "Error: SetAndInitEngine: invalid value for RNG: setting to default linear-type RNG" << std::endl;
+		RNG_type=0;
+	}
     ga.prob_cross()=cross;
     ga.prob_mutate()=mutation;
     ga.part_cross()=(int)((double)initPopulation*cross);
     ga.part_mutate()=(int)((double)initPopulation*mutation);
-    
+    ga.RNG_method()=RNG_type;
+
     // Read alleles information
     for(int i=0;;i++)
     {
@@ -124,7 +136,8 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
     ga.set_borders(initPopulation);		// set max population of GA and initialise the population with default genomes
 
 	// return the num of generations to run GA
-    return (generations?generations:1);	// default number of generations to run is 1
+    //return (generations?generations:1);	// default number of generations to run is 1
+	return generations;
 }
 
 
