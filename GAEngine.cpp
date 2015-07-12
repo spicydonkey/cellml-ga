@@ -531,7 +531,7 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 	{
 		double p=rnd_generate(0.0,100.0);
 
-		// mutate if ( p <= prob )
+		// mutate if p <= prob
 		if(p>prob)		// chance to skip mutation
 			continue;
 
@@ -539,16 +539,52 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 		{
 			LIMITS::iterator it=m_Limits.find(g.name(i));	// check for param limits of this allele
 			double val;
-			if(it==m_Limits.end())
+
+			// TODO selection of RNG implementation
+			if(m_RNG==0)
 			{
-				//no limits, just use [-RAND_MAX/2,RAND_MAX/2] as a limit
-				val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
+				// DEBUG
+				std::cerr << "DEBUG: default RNG" << std::endl;
+
+				// Default linear RNG
+				if(it==m_Limits.end())
+				{
+					// no limits, just use [-RAND_MAX/2,RAND_MAX/2] as a limit
+					val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
+				}
+				else
+				{
+					// restrict RNG to set limits
+					val=rnd_generate(it->second.first,it->second.second);
+				}
+			}
+			else if(m_RNG==1)
+			{
+				// DEBUG
+				std::cerr << "DEBUG: log-type RNG" << std::endl;
+
+				// TODO Log-type RNG
+				if(it==m_Limits.end())
+				{
+					// DEBUG
+					std::cerr << "DEBUG: log-type RNG ERROR" << std::endl;
+
+					// TODO find a method for no-limit case
+					// no limits, just use [-RAND_MAX/2,RAND_MAX/2] as a limit
+					val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
+				}
+				else
+				{
+					// restrict RNG to the logarithm of set limits (positive definite) and exponentiate to tranform to original scale
+					val=exp(rnd_generate(log(it->second.first),log(it->second.second)));
+				}
 			}
 			else
 			{
-				// restrict RNG to set limits
-				val=rnd_generate(it->second.first,it->second.second);
+				// DEBUG ERROR
+				std::cerr << "DEBUG: unexpected error" << std::endl; 
 			}
+
 			g.allele(i,val);	// set the RNG value to allele
 
 			if(name.size())		// only mutate this allele if name specified
@@ -556,45 +592,6 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 		}
 	}
 }
-
-//void GAEngine<void>::mutate(double probability,Genome& g,int count=-1)
-//{
-//	int cnt=0;
-//	double prob=rnd_generate(0.0,100.0);
-//
-//	for(int i=0;i<g.size();i++)
-//	{
-//		if(prob<=probability)
-//		{
-//			LIMITS::iterator it=m_Limits.find(g.name(i));
-//			double val;
-//			if(it==m_Limits.end())
-//			{
-//				//no limits, just use [-RAND_MAX/2,RAND_MAX] as a limit
-//				val=rnd_generate(-RAND_MAX*0.5,RAND_MAX*0.5);
-//			}
-//			else
-//			{
-//				val=rnd_generate(it->second.first,it->second.second);
-//			}
-//			g.allele(i,val);
-//			cnt++;
-//			if(count>=0 && cnt>=count)
-//				break;
-//		}
-//	}
-//}
-
-//bool GAEngine<void>::cross(Genome& one,Genome& two,int crosspoint,Genome& out)
-//{
-//	if(one.size()!=two.size() || one.size()<crosspoint+1)
-//		return false;
-//	for(int i=0;i<crosspoint;i++)
-//		out[i]=one[i];
-//	for(int i=crosspoint;i<one.size();i++)
-//		out[i]=two[i];
-//	return true;
-//}
 
 template<class COMP>
 bool GAEngine<COMP>::cross(Genome& one,Genome& two,int crosspoint)
