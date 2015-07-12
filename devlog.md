@@ -1314,6 +1314,11 @@ Log selection has some layers that process the conversion from the core RNG to a
 ### randsel cont'd 3
 * [x] add RNG member into GAEngine class
 
+#### Testing
+GA param setting
+* [ ] Generations should be positive (def to 1)
+* [ ] RNG should be 0 or 1 (def to 0)
+
 
 ### TODO
 * [ ] Implement the log selection method to mutate alleles
