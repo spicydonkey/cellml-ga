@@ -1303,6 +1303,13 @@ Member functions declared in GAEngine.h are defined in GAEngine.cpp - the source
 
 The source is included by the header, so it does not need to be compiled separately (e.g. by a makefile).
 
+
+### Random selection cont'd2
+So, in **GAEngine::mutate**, there must be a conditional that decides which RNG method to implement, but they must both rely on - at the core - **rnd_generate**.
+
+Log selection has some layers that process the conversion from the core RNG to a transformed RNG.
+
+
 ### TODO
 * [ ] Implement the log selection method to mutate alleles
   * [ ] Make it user-selecatble with default "linear" case
