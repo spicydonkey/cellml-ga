@@ -306,7 +306,7 @@ int main(int argc,char *argv[])
     if(!proc)
     {
 		// TODO print configuration of GA engine and VEs
-		std::cout << "Generations=" << generations << std::endl;
+		printf("Generations=%d  ",generations);
 		ga.print_config();
 		// VEGroup::instance().print_summary();
 

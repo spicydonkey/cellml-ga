@@ -460,17 +460,14 @@ void GAEngine<COMP>::RunGenerations(int gener)
 template<class COMP>
 void GAEngine<COMP>::print_config()
 {
-	std::cout << "============================================================================" << std::endl;
 	printf("Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
 	
-	// Allele list
-	std::cout << "Alleles:\n";
+	// Allele list	
 	for(int i=0;i<m_AlleleList.size();i++)
 	{
 		printf("* %s: [%lf,%lf]\n",convert(m_AlleleList[i]).c_str(),m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
 	}
-	std::cout << "============================================================================" << std::endl;
-}	
+}
 
 template<class COMP>
 void GAEngine<COMP>::print_genome(int ind_genome)
