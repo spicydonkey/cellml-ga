@@ -186,7 +186,7 @@ class GAEngine
         int select_weighted(POPULATION& p);
 };
 
-#include "GAEngine.cpp"
+//#include "GAEngine.cpp"
 
 #endif
 

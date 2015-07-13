@@ -6,7 +6,7 @@ CELLML_PATH=/projects/uoa00322/mike.cooling/cellml-sdk
 CFLAGS=-I $(PROJ_PATH)/AdvXMLParser -I $(CELLML_PATH)/include -O
 LFLAGS=-L $(PROJ_PATH)/AdvXMLParser -ladvxml -L $(CELLML_PATH)/lib -lcellml -lcis -Wl,-rpath=$(CELLML_PATH)/lib 
 SOURCES=experiment.cpp virtexp.cpp utils.cpp distributor.cpp 
-INCLUDES=virtexp.h utils.h GAEngine.h cellml_observer.h distributor.h
+INCLUDES=virtexp.h utils.h GAEngine.h GAEngine.cpp cellml_observer.h distributor.h
 
 all: experiment
 
