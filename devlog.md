@@ -1357,6 +1357,26 @@ Fix this by including the source in the client source... OR tell makefile to che
 
 Done. Fixed by #include-ing the GAEngine source, rather than sourcing it at the makefile. 
 
+### Log-type vs lin-type selection
+Run both types against the single VE large test.
+
+* Supply param limits of range ~8 orders of magnitude (reasonably hard test?)
+
+### Summary of GA configuration
+#### Genetic Algorithm
+* Generations
+* Population size
+* Mutation proportion
+* Crossover proportion
+* RNG method
+
+#### Experiment
+* Model name
+* Virtual Experiment
+  * number
+  * variable names (get from ResultColumn)
+    * number of assessment pts supplied
+
 ### TODO
 * [x] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
