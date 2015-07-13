@@ -82,10 +82,10 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
         cross=1.0;
     if(mutation>1.0)
         mutation=1.0;
-	if(generations<1)
+	if(generations<0)
 	{
-		std::cerr << "Error: SetAndInitEngine: invalid value for Generations: setting to default 1" << std::endl;
-		generations=1;
+		std::cerr << "Error: SetAndInitEngine: invalid value for Generations: setting to default 0" << std::endl;
+		generations=0;
 	}
 	if((RNG_type<0)||(RNG_type>1))
 	{
@@ -211,7 +211,7 @@ int main(int argc,char *argv[])
     long nSize=0;
     GAEngine<COMP_FUNC > ga;	// initialise GA engine for the program
 	int proc,nproc;
-    int generations=1;
+    int generations=0;
     const char *filename=NULL;
 
     MPI_Init(&argc,&argv);
@@ -305,7 +305,11 @@ int main(int argc,char *argv[])
     if(!proc)
     {
 		// Validate and run GA
-		if(generations>0)
+		if(generations<0)
+		{
+			std::cerr << "Error: main: invalid settings for the Genetic Algorithm: " << currentDateTime() << std::endl;
+		}
+		else
 		{
 			// Initialise the population in GA engine
 			ga.Initialise();
@@ -319,10 +323,6 @@ int main(int argc,char *argv[])
 			fprintf(stdout,"BEST GENOME (%lf):\n",bf);
 			v.print(stdout);
 			std::cout << "==========================================\n";
-		}
-		else
-		{
-			std::cerr << "Error: main: invalid settings for the Genetic Algorithm: " << currentDateTime() << std::endl;
 		}
 
         Distributor::instance().finish();	// request end of service to all slaves

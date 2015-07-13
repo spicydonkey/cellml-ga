@@ -264,7 +264,7 @@ void GAEngine<COMP>::RunGenerations(int gener)
 		m_bBestFitnessAssigned=true;
 	}
 
-	print_stage(-1);		// generation 0
+	print_stage(0);
 
 	for(int g=0;g<gener;g++)
 	{
@@ -496,7 +496,7 @@ void GAEngine<COMP>::print_stage(int g)
 		for(int j=0;j<m_Population.size();j++)
 		{
 			//print validity, generation #, and fitness of each chromosome
-			printf("%s[%d](%lf) ",(m_Population[j].valid()?(m_Population[j].fitness()<0?"!":" "):"*"),g+1,m_Population[j].fitness());
+			printf("%s[%d](%lf) ",(m_Population[j].valid()?(m_Population[j].fitness()<0?"!":" "):"*"),g,m_Population[j].fitness());
 
 			// Sequence the chromosome
 			print_genome(j);
@@ -516,7 +516,7 @@ void GAEngine<COMP>::print_stage(int g)
 		// Fittest chromosome in this gen is the first genome in sorted population
 		f=m_Population[0].fitness();
 
-		printf("Generation %d. Best fitness: %lf\n",g+1,f);
+		printf("Generation %d. Best fitness: %lf\n",g,f);
 		print_genome(0);
 		printf("--------------------------------------------------------\n");
 	}
@@ -543,9 +543,6 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 			// TODO selection of RNG implementation
 			if(m_RNG==0)
 			{
-				// DEBUG
-				std::cerr << "DEBUG: default RNG" << std::endl;
-
 				// Default linear RNG
 				if(it==m_Limits.end())
 				{
@@ -560,10 +557,7 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 			}
 			else if(m_RNG==1)
 			{
-				// DEBUG
-				std::cerr << "DEBUG: log-type RNG" << std::endl;
-
-				// TODO Log-type RNG
+				// Log-type RNG
 				if(it==m_Limits.end())
 				{
 					// DEBUG
@@ -578,11 +572,6 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 					// restrict RNG to the logarithm of set limits (positive definite) and exponentiate to tranform to original scale
 					val=exp(rnd_generate(log(it->second.first),log(it->second.second)));
 				}
-			}
-			else
-			{
-				// DEBUG ERROR
-				std::cerr << "DEBUG: unexpected error" << std::endl; 
 			}
 
 			g.allele(i,val);	// set the RNG value to allele
