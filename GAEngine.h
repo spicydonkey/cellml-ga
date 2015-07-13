@@ -165,12 +165,6 @@ class GAEngine
 		// setting mutate_all to false will mutate approx. just 1 allele
         void mutate(const std::wstring& name,Genome& g,bool mutate_all=false);
 
-		// TODO a strange mutate operator. Unused
-        //void mutate(double probability,Genome& g,int count=-1);
-
-		// TODO a strange cross operator. Unused
-        //bool cross(Genome& one,Genome& two,int crosspoint,Genome& out);
-		
 		// Crossover operator
 		// swap allele-string before the crosspoint
         bool cross(Genome& one,Genome& two,int crosspoint);
@@ -185,8 +179,6 @@ class GAEngine
 		// Randomly select a member from the population using the inverse of fitness as the weight (Roullete selection)
         int select_weighted(POPULATION& p);
 };
-
-//#include "GAEngine.cpp"
 
 #endif
 
