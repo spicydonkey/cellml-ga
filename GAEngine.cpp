@@ -266,7 +266,7 @@ void GAEngine<COMP>::RunGenerations(int gener)
 
 	print_stage(0);
 
-	for(int g=0;g<gener;g++)
+	for(int g=1;g<=gener;g++)
 	{
 		// Do the genetics
 		int limit=m_Population.size();
