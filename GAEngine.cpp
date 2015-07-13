@@ -463,8 +463,14 @@ void GAEngine<COMP>::print_config()
 	std::cout << "DEBUG: GAEngine::print_config" << std::endl;
 	std::cout << "============================================================================" << std::endl;
 	printf("Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
+	
+	// Allele list
+	for(int i=0;i<m_AlleleList.size();i++)
+	{
+		//printf("%s",m_AlleleList[i]);
+	}
 	std::cout << "============================================================================" << std::endl;
-}
+}	
 
 template<class COMP>
 void GAEngine<COMP>::print_genome(int ind_genome)
