@@ -305,6 +305,10 @@ int main(int argc,char *argv[])
     // Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
+		// TODO print configuration of GA engine and VEs
+		ga.print_config();
+		// VEGroup::instance().print_summary();
+
 		// Validate and run GA
 		if(generations<0)
 		{
