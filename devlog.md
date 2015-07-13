@@ -805,7 +805,7 @@ x1=920.826503  x2=920.769700
 
 ### TODO
 * GAEngine.h getting too large with details
-  * [ ] Create GAEngine.cpp to handle function definitions
+  * [x] Create GAEngine.cpp to handle function definitions
 
 ### New test
 A sensible test VE data for  *ip3model* is added: ip3model-1.xml
@@ -959,8 +959,8 @@ Merged the newtest branch onto patch
   * [x] Quit program if unspecified?
   * [x] Error message if unspecified
   * [x] Check supplied ReportStep for consistency with data points
-* [ ] Modify random selection of allele values to be a mantessa-exponent type 
-* [ ] Organise the GAEngine code into source-header style
+* [x] Modify random selection of allele values to be a mantessa-exponent type 
+* [x] Organise the GAEngine code into source-header style
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
 * [ ] Test the code with multiple experiments (multiple curve fitting)
@@ -1220,7 +1220,7 @@ However, we must consider the scale of the parameter as most significant. We req
 
 #### Limitations
 * *logging* limits puts restriction of domain: Limits *MUST* be **positive**!
-  * [ ] ~~Expand VirtualExperiment::isValid check to include *limit checking*~~
+  * ~~Expand VirtualExperiment::isValid check to include *limit checking*~~
     * Limits are specified for the *GA*, NOT for VE's!
 	* [x] validity checking done in SetAndInitEngine while reading settings from XML by the root; any error encountered will return -1
 * Following from previous point, if lower limit of zero is desired, a positive lower limit should be assigned instead
@@ -1358,7 +1358,15 @@ Fix this by including the source in the client source... OR tell makefile to che
 Done. Fixed by #include-ing the GAEngine source, rather than sourcing it at the makefile. 
 
 ### TODO
-* [ ] Implement the log selection method to mutate alleles
+* [x] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
     * [x] User-selectable
 	* [x] Default to linear-type RNG
+* [ ] Summarise at the start of the *.out* file the main GA settings
+  * the job number doesn't explain much about what the run was about, esp. during debugging stages
+* [ ] Display allele vals in **scientific notation**
+
+* [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
+  * Force an INF and find out whether they are being handled properly
+* [ ] Test the code with multiple experiments (multiple curve fitting)
+* [ ] What makes a slurm job blow up?
