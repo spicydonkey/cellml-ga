@@ -1370,6 +1370,9 @@ Settings specific to the GA Engine:
 * Mutation proportion
 * Crossover proportion
 * RNG method
+* Allele list
+  * name
+  * limits
 
 #### Experiment
 Settings specific to a problem (VEs in our case):
