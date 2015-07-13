@@ -1364,6 +1364,7 @@ Run both types against the single VE large test.
 
 ### Summary of GA configuration
 #### Genetic Algorithm
+Settings specific to the GA Engine:
 * Generations
 * Population size
 * Mutation proportion
@@ -1371,19 +1372,25 @@ Run both types against the single VE large test.
 * RNG method
 
 #### Experiment
+Settings specific to a problem (VEs in our case):
 * Model name
 * Virtual Experiment
   * number
   * variable names (get from ResultColumn)
     * number of assessment pts supplied
 
+For simplicity, a print_config function will be added to each class: GAEngine and VEGroup.
+
+
+
 ### TODO
 * [x] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
     * [x] User-selectable
 	* [x] Default to linear-type RNG
-* [ ] Summarise at the start of the *.out* file the main GA settings
-  * the job number doesn't explain much about what the run was about, esp. during debugging stages
+* [ ] Summarise at the start of the *.out* file the main GA settings: the job number doesn't explain much about what the run was about, esp. during debugging stages
+  * [ ] GAEngine::print_config
+  * [ ] VEGroup::print_summary
 * [ ] Display allele vals in **scientific notation**
 
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
