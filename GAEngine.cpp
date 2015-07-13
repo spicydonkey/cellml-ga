@@ -462,7 +462,7 @@ void GAEngine<COMP>::print_config()
 {
 	std::cout << "DEBUG: GAEngine::print_config" << std::endl;
 	std::cout << "============================================================================" << std::endl;
-	printf("Generations=%d  Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",m_Generations,m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
+	printf("Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
 	std::cout << "============================================================================" << std::endl;
 }
 
