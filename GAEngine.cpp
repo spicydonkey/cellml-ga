@@ -467,7 +467,7 @@ void GAEngine<COMP>::print_config()
 	// Allele list
 	for(int i=0;i<m_AlleleList.size();i++)
 	{
-		printf("%s: [%lf,%lf]\n",m_AlleleList[i],m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
+		printf("%s: [%lf,%lf]\n",convert(m_AlleleList[i]).c_str(),m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
 	}
 	std::cout << "============================================================================" << std::endl;
 }	
