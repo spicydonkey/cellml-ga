@@ -305,7 +305,7 @@ int main(int argc,char *argv[])
     // Only master task needs GA engine to be initialised and used   
     if(!proc)
     {
-		// TODO print configuration of GA engine and VEs
+		// Print a summary of configuration of GA engine and VEs
 		printf("Generations=%d  ",generations);
 		ga.print_config();
 		// VEGroup::instance().print_summary();

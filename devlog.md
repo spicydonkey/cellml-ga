@@ -1392,7 +1392,7 @@ For simplicity, a print_config function will be added to each class: GAEngine an
     * [x] User-selectable
 	* [x] Default to linear-type RNG
 * [ ] Summarise at the start of the *.out* file the main GA settings: the job number doesn't explain much about what the run was about, esp. during debugging stages
-  * [ ] GAEngine::print_config
+  * [x] GAEngine::print_config
   * [ ] VEGroup::print_summary
 * [ ] Display allele vals in **scientific notation**
 
