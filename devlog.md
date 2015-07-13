@@ -1316,7 +1316,7 @@ Log selection has some layers that process the conversion from the core RNG to a
 
 #### Testing
 GA param setting
-* [ ] Generations should be *non-negative* ~~positive~~ (def to 0-->just initialisation ~~1~~)
+* [x] Generations should be *non-negative* ~~positive~~ (def to 0-->just initialisation ~~1~~)
   * 0 Generations actually corresponds to just initialising (random scatter) plus evaluation of init generation
 * [x] RNG should be 0 or 1 (def to 0)
 
@@ -1349,6 +1349,11 @@ GA param setting
  [0](6182152182320.643555) [8] kf5=0.000257   kf4=0.000000   kf16=0.000003   Rpc=605.446058
  [0](25459634130635.023438) [9] kf5=2.944549   kf4=64.089259   kf16=0.000075   Rpc=1727.843121
 ```
+
+### BUG
+Makefile cannot detect changes made to GAEngine.cpp, since the source is included at the header.
+
+Fix this by including the source in the client source... OR tell makefile to check the sources explicitly.
 
 ### TODO
 * [ ] Implement the log selection method to mutate alleles
