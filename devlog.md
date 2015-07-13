@@ -1355,6 +1355,8 @@ Makefile cannot detect changes made to GAEngine.cpp, since the source is include
 
 Fix this by including the source in the client source... OR tell makefile to check the sources explicitly.
 
+Done. Fixed by #include-ing the GAEngine source, rather than sourcing it at the makefile. 
+
 ### TODO
 * [ ] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
