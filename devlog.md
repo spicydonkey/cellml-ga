@@ -1411,6 +1411,42 @@ Model=ip3model.cellml  Variable=9  nPoints=8
 Model=ip3model.cellml  Variable=1  nPoints=8
 ```
 
+### Scientific notation reporting of allele values
+**Configuration reporting**:
+```
+Genetic Algorithm:
+Generations=10  Population=10  MutationRate=0.400000  CrossoverRate=0.300000  RNG=1
+* kf5: [1.000e-08,9.999e+02]
+* kf4: [1.000e-08,9.999e+02]
+* kf16: [1.000e-08,9.999e+02]
+* Rpc: [1.000e-02,5.000e+03]
+Experiments:
+Model=ip3model.cellml  Variable=9  nPoints=8
+Model=ip3model.cellml  Variable=1  nPoints=8
+```
+
+**Population:**
+```
+2015-07-14.17:04:47
+ [0](1.352183) [0] kf5=1.661e-08   kf4=4.944e-08   kf16=4.753e+02   Rpc=7.069e+02
+ [0](1.790516) [1] kf5=2.770e+02   kf4=8.843e-08   kf16=1.975e-01   Rpc=9.735e-01
+ [0](2.677068) [2] kf5=1.804e-05   kf4=5.850e-03   kf16=5.017e+02   Rpc=2.489e+02
+ [0](3.560788) [3] kf5=1.779e+02   kf4=8.520e-01   kf16=1.330e+00   Rpc=1.042e+00
+ [0](4.001832) [4] kf5=8.656e-03   kf4=2.305e+00   kf16=2.213e-01   Rpc=1.674e-02
+ [0](44141218263.921951) [5] kf5=1.241e-02   kf4=8.271e-02   kf16=4.440e-03   Rpc=1.665e+03
+ [0](1876721019981.708008) [6] kf5=2.179e-04   kf4=6.065e+00   kf16=1.490e-06   Rpc=2.388e+02
+ [0](2186265368601.956543) [7] kf5=7.767e-01   kf4=4.749e-02   kf16=4.696e-06   Rpc=3.828e+02
+ [0](6182152182320.643555) [8] kf5=2.573e-04   kf4=1.574e-07   kf16=2.517e-06   Rpc=6.054e+02
+ [0](25459634130635.023438) [9] kf5=2.945e+00   kf4=6.409e+01   kf16=7.534e-05   Rpc=1.728e+03
+```
+
+**Best Genome:** 5 sf precision after decimal point
+```
+BEST GENOME (0.511541):
+kf5=1.66055e-08  kf4=2.30517e+00  kf16=5.01745e+02  Rpc=7.06914e+02
+```
+
+
 ### TODO
 * [x] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
@@ -1419,7 +1455,7 @@ Model=ip3model.cellml  Variable=1  nPoints=8
 * [x] Summarise at the start of the *.out* file the main GA settings: the job number doesn't explain much about what the run was about, esp. during debugging stages
   * [x] GAEngine::print_config
   * [x] VEGroup::print_summary
-* [ ] Display allele vals in **scientific notation**
+* [x] Display allele vals in **scientific notation**
 
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
