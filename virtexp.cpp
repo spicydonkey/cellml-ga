@@ -256,6 +256,12 @@ bool VirtualExperiment::isValid()
 }
 
 
+int VirtualExperiment::datasize() const
+{
+	return m_Timepoints.size();		// number of data points
+}
+
+
 // Compile and run an ODE solver to simulate the configured CellML model
 // Select local estimation points from the result 
 // Return the model's deviation to virt-experiment as Residual Sum of Squares
@@ -454,11 +460,12 @@ void VEGroup::add(VirtualExperiment *p)
 
 void VEGroup::print_summary()
 {
-	// TODO Virtual experiments
+	printf("Experiments:\n");
+
+	// Virtual experiment list
 	for(int i=0;i<experiments.size();i++)
 	{
-		std::cout << "DEBUG:" << std::endl; 
 		// Model, Variable, # assess points
-		std::cout << "Model=" << experiments[i]->model() << std::endl;
+		printf("Model=%s  Variable=%d  nPoints=%d\n",experiments[i]->model().c_str(),experiments[i]->resultcol(),experiments[i]->datasize());
 	}
 }

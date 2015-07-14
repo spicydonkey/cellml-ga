@@ -153,6 +153,12 @@ class VirtualExperiment
 		// Check for invalid VE settings
 		bool isValid();
 
+		// Get CellML model name
+		std::string model() const { return m_strModelName; }
+
+		// Get data size
+		int datasize() const;
+
         int resultcol() const { return m_nResultColumn; }
         void resultcol(int r) { m_nResultColumn=r; }
 
@@ -164,9 +170,6 @@ class VirtualExperiment
 
         void Run();
 
-		// Get CellML model name
-		const std::string& model() { return m_strModelName; }
-
 	private:
         struct Runner
         {
@@ -175,7 +178,7 @@ class VirtualExperiment
 
            VirtualExperiment *pOwner;
         };
-
+		//friend class VEGroup;
         friend class Runner;
 
 		// Calculate the normalised Sum of Square Residuals (SSR) of the simulation against v-experimental data
