@@ -1457,7 +1457,8 @@ kf5=1.66055e-08  kf4=2.30517e+00  kf16=5.01745e+02  Rpc=7.06914e+02
   * [x] VEGroup::print_summary
 * [x] Display allele vals in **scientific notation**
 
-* [ ] Tidy virtexp files: VariablesHolder class
+* [x] Tidy virtexp files: VariablesHolder class
+
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
 * [ ] Test the code with multiple experiments (multiple curve fitting)
