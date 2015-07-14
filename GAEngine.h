@@ -146,7 +146,7 @@ class GAEngine
         void RunGenerations(int gener);
 
 		// Print settings specific to the GA Engine
-		void print_config();
+		void print_config(const int gener) const;
 
     private:
         typedef std::map<std::wstring,std::pair<double,double> > LIMITS;

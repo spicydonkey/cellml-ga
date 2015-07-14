@@ -458,9 +458,10 @@ void GAEngine<COMP>::RunGenerations(int gener)
 }
 
 template<class COMP>
-void GAEngine<COMP>::print_config()
+void GAEngine<COMP>::print_config(const int gener) const
 {
-	printf("Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
+	printf("Genetic Algorithm:\n");
+	printf("Generations=%d  Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",gener,m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
 	
 	// Allele list	
 	for(int i=0;i<m_AlleleList.size();i++)
