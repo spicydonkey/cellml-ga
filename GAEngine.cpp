@@ -463,11 +463,9 @@ void GAEngine<COMP>::print_config(const int gener)
 	printf("Generations=%d  Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",gener,m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
 		
 	// Allele list	
-	std::cout.precision(3);
 	for(int i=0;i<m_AlleleList.size();i++)
 	{
-		//printf("* %s: [%lf,%lf]\n",convert(m_AlleleList[i]).c_str(),m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
-		std::cout << std::scientific << "* " << convert(m_AlleleList[i]) << ": [" << m_Limits[m_AlleleList[i]].first << "," << m_Limits[m_AlleleList[i]].second << "]" << std::endl;  
+		printf("* %s: [%.3e,%.3e]\n",convert(m_AlleleList[i]).c_str(),m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
 	}
 }
 
@@ -478,18 +476,15 @@ void GAEngine<COMP>::print_genome(int ind_genome)
 	m_Population[ind_genome].var(v);	// store alleles data in a temporary variable
 	printf("[%d] ", ind_genome);		// print the genome's index
 
-	std::cout.precision(3);
 	for(int i=0;;i++)
 	{
 		std::wstring name=v.name(i);
 		// sequence all alleles in genome
 		if(name.empty())
 			break;
-		std::cout << convert(name) << "=" << std::scientific << v(name) << "   ";
-		//printf("%s=%lf   ",convert(name).c_str(),v(name));
+		printf("%s=%.3e   ",convert(name).c_str(),v(name));
 	}
 	std::cout << std::endl;
-	//printf("\n");
 }
 
 template<class COMP>

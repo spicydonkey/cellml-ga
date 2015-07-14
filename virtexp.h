@@ -102,7 +102,6 @@ class VariablesHolder
 			for(ALLELE::iterator it=m_Vars.begin();it!=m_Vars.end();++it)
 			{
 				fprintf(pfout,"%s=%.5e  ",convert(it->first).c_str(),it->second);
-				//fprintf(pfout,"%s=%lf  ",convert(it->first).c_str(),it->second);
 			}
 			fprintf(pfout,"\n");
 		}
