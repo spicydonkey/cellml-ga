@@ -1384,6 +1384,14 @@ Settings specific to a problem (VEs in our case):
 
 For simplicity, a print_config function will be added to each class: GAEngine and VEGroup.
 
+## 14.07.2015
+### Email meeting minutes
+* Merge patch onto master in Git
+* User readmes:
+  * What it is
+  * How to compile
+  * How to use
+* Release the up-to-date version on GitHub by Thursday
 
 
 ### TODO
@@ -1400,3 +1408,11 @@ For simplicity, a print_config function will be added to each class: GAEngine an
   * Force an INF and find out whether they are being handled properly
 * [ ] Test the code with multiple experiments (multiple curve fitting)
 * [ ] What makes a slurm job blow up?
+
+### Packaging TODO
+* [ ] Merge patch onto master in Git
+* [ ] User readmes:
+  * [ ] What it is
+  * [ ] How to compile
+  * [ ] How to use
+* [ ] Latest version release on Github (by Thursday)
