@@ -475,13 +475,15 @@ void GAEngine<COMP>::print_genome(int ind_genome)
 	VariablesHolder v;
 	m_Population[ind_genome].var(v);	// store alleles data in a temporary variable
 	printf("[%d] ", ind_genome);		// print the genome's index
+
+	std::cout.precision(3);
 	for(int i=0;;i++)
 	{
 		std::wstring name=v.name(i);
 		// sequence all alleles in genome
 		if(name.empty())
 			break;
-		std::cout << name << "=" << std::setprecision(3) << std::scientific << v(name) << "   ";
+		std::cout << name << "=" << std::scientific << v(name) << "   ";
 		//printf("%s=%lf   ",convert(name).c_str(),v(name));
 	}
 	std::cout << std::endl;
