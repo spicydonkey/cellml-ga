@@ -481,9 +481,11 @@ void GAEngine<COMP>::print_genome(int ind_genome)
 		// sequence all alleles in genome
 		if(name.empty())
 			break;
-		printf("%s=%lf   ",convert(name).c_str(),v(name));
+		std::cout << name << "=" << std::setprecision(3) << std::scientific << v(name) << "   ";
+		//printf("%s=%lf   ",convert(name).c_str(),v(name));
 	}
-	printf("\n");
+	std::cout << std::endl;
+	//printf("\n");
 }
 
 template<class COMP>
