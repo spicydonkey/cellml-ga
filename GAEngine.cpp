@@ -458,7 +458,7 @@ void GAEngine<COMP>::RunGenerations(int gener)
 }
 
 template<class COMP>
-void GAEngine<COMP>::print_config(const int gener) const
+void GAEngine<COMP>::print_config(const int gener)
 {
 	printf("Genetic Algorithm:\n");
 	printf("Generations=%d  Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",gener,m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
