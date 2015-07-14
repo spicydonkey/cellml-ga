@@ -1393,6 +1393,19 @@ For simplicity, a print_config function will be added to each class: GAEngine an
   * How to use
 * Release the up-to-date version on GitHub by Thursday
 
+### Summary of GA configuration contd
+#### GA Output
+A summary of the GA configuration settings is logged at the start of the output file:
+```
+Generations=1000  Population=200  MutationRate=0.600000  CrossoverRate=0.700000  RNG=1
+* kf5: [0.000001,100.000000]
+* kf4: [0.000001,100.000000]
+* kf16: [0.000001,100.000000]
+* Rpc: [0.000001,100.000000]
+```
+
+#### Experiment
+
 
 ### TODO
 * [x] Implement the log selection method to mutate alleles
