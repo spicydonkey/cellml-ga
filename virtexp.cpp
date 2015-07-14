@@ -454,7 +454,11 @@ void VEGroup::add(VirtualExperiment *p)
 
 void VEGroup::print_summary()
 {
-	std::cout << "Model=" << "DEBUG: --insert-model-name-here--" << std::endl;
 	// TODO Virtual experiments
-	// Variable name, # assess points
+	for(int i=0;i<experiments.size();i++)
+	{
+		std::cout << "DEBUG:" << std::endl; 
+		// Model, Variable, # assess points
+		std::cout << "Model=" << experiments[i]->model() << std::endl;
+	}
 }

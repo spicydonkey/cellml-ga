@@ -164,6 +164,9 @@ class VirtualExperiment
 
         void Run();
 
+		// Get CellML model name
+		const std::string& model() { return m_strModelName; }
+
 	private:
         struct Runner
         {
