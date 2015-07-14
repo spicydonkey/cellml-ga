@@ -1405,16 +1405,20 @@ Generations=1000  Population=200  MutationRate=0.600000  CrossoverRate=0.700000 
 ```
 
 #### Experiment
-
+```
+Experiments:
+Model=ip3model.cellml  Variable=9  nPoints=8
+Model=ip3model.cellml  Variable=1  nPoints=8
+```
 
 ### TODO
 * [x] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
     * [x] User-selectable
 	* [x] Default to linear-type RNG
-* [ ] Summarise at the start of the *.out* file the main GA settings: the job number doesn't explain much about what the run was about, esp. during debugging stages
+* [x] Summarise at the start of the *.out* file the main GA settings: the job number doesn't explain much about what the run was about, esp. during debugging stages
   * [x] GAEngine::print_config
-  * [ ] VEGroup::print_summary
+  * [x] VEGroup::print_summary
 * [ ] Display allele vals in **scientific notation**
 
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?

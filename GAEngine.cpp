@@ -132,7 +132,6 @@ void Genome::set(VariablesHolder& v)
 }
 
 
-// TODO How to override class definition by template
 template<class COMP>
 GAEngine<COMP>::GAEngine():m_MaxPopulation(0),m_Generations(1),
 					m_CrossProbability(0.2),m_MutationProbability(0.01),
@@ -553,7 +552,7 @@ void GAEngine<COMP>::mutate(const std::wstring& name,Genome& g,bool mutate_all)
 			LIMITS::iterator it=m_Limits.find(g.name(i));	// check for param limits of this allele
 			double val;
 
-			// TODO selection of RNG implementation
+			// Selection of RNG implementation
 			if(m_RNG==0)
 			{
 				// Default linear RNG
