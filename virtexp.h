@@ -33,7 +33,7 @@ class VariablesHolder
 	public:
 		VariablesHolder();
 		VariablesHolder(const VariablesHolder& other);	//copy other VarHolder's variables into this one
-		~VariablesHolder() {}
+		~VariablesHolder();
 
 		VariablesHolder& operator=(const VariablesHolder& other);
 
