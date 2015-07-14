@@ -215,6 +215,9 @@ class VEGroup
 		// Add a VE object onto experiments
 		void add(VirtualExperiment *p);
 
+		// Print summary
+		void print_summary();
+
     protected:
         typedef std::vector<VirtualExperiment *> VE;
         
