@@ -31,95 +31,36 @@ class VariablesHolder
 		ALLELE m_Vars;	//the member that stores alleles in a chromosome form ( i.e. vector <allele=pair<wstring allele_name,double allele_value> > )
 
 	public:
-		VariablesHolder() {}
-		VariablesHolder(const VariablesHolder& other) { m_Vars.assign(other.m_Vars.begin(),other.m_Vars.end()); }	//copy other VarHolder's variables into this one
+		VariablesHolder();
+		VariablesHolder(const VariablesHolder& other);	//copy other VarHolder's variables into this one
 		~VariablesHolder() {}
 
-		VariablesHolder& operator=(const VariablesHolder& other)
-		{
-			if(&other!=this)
-			   m_Vars.assign(other.m_Vars.begin(),other.m_Vars.end());
-			return *this;
-		}
+		VariablesHolder& operator=(const VariablesHolder& other);
 
 		// indexing an allele's value stored by its name
 			// 0.0 returned if an allele by the supplied name does not exist
-		double operator()(const std::wstring& name)
-		{
-			ALLELE::iterator it=find_if(m_Vars.begin(),m_Vars.end(),
-				  bind1st(pair_equal_to<std::wstring,double>(),name));	//find iterator to the pair in m_Vars for which the "first" member equals name (end if no such pair)
-			return (it==m_Vars.end()?double(0.0):it->second);
-		}
+		double operator()(const std::wstring& name);
 
 		// Update an allele in m_Var member and return updated allele value
-		double operator()(const std::wstring& name,double val)
-		{
-			// find if matching allele already exists in VarHold
-			ALLELE::iterator it=find_if(m_Vars.begin(),m_Vars.end(),
-			   bind1st(pair_equal_to<std::wstring,double>(),name));
-			
-			if(it!=m_Vars.end())
-			   it->second=val;	// update the existing allele
-			else
-			   m_Vars.push_back(std::make_pair<std::wstring,double>(std::wstring(name),double(val)));	// add the allele
-	    
-			return val;
-		}
+		double operator()(const std::wstring& name,double val);
 
 		// Search allele by index and return its name, if any
-		std::wstring name(int index)
-		{
-			return (index>=0 && index<m_Vars.size())?m_Vars[index].first:std::wstring();
-		}
+		std::wstring name(int index);
 
 		// Existence of allele of given name
-		bool exists(const std::wstring& name)
-		{
-			ALLELE::iterator it=find_if(m_Vars.begin(),m_Vars.end(),
-			   bind1st(pair_equal_to<std::wstring,double>(),name));
-			return (it!=m_Vars.end());
-		}
+		bool exists(const std::wstring& name);
 
 		// Size of a VariablesHolder object (number of alleles stored)
-		size_t size()
-		{
-			// is the size of m_Vars vector i.e. number of alleles in stored in the m_Vars vector
-			return m_Vars.size();
-		}
+		size_t size();
 
 		// Collate the genome sequence into a vector
-		void collate(std::vector<double>& v)
-		{
-			for(ALLELE::iterator it=m_Vars.begin();it!=m_Vars.end();++it)
-			{
-				v.push_back(it->second);
-			}
-		}
+		void collate(std::vector<double>& v);
 
 		// print all alleles held in m_Vars to file
-		void print(FILE *pfout)
-		{
-			for(ALLELE::iterator it=m_Vars.begin();it!=m_Vars.end();++it)
-			{
-				fprintf(pfout,"%s=%.5e  ",convert(it->first).c_str(),it->second);
-			}
-			fprintf(pfout,"\n");
-		}
+		void print(FILE *pfout);
 
 		// Fill-up the chromosome with a supplied vector of allele values. Return true iff executed correctly
-		bool fillup(std::vector<double>& v)
-		{
-			// check if the sizes are equal
-			if(v.size()!=m_Vars.size())
-				return false;
-
-			// assign allele values
-			for(int i=0;i<v.size();i++)
-			{
-				m_Vars[i].second=v[i];
-			}
-			return true;
-		}
+		bool fillup(std::vector<double>& v);
 };
 
 
