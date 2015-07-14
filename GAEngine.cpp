@@ -461,11 +461,13 @@ void GAEngine<COMP>::print_config(const int gener)
 {
 	printf("Genetic Algorithm:\n");
 	printf("Generations=%d  Population=%d  MutationRate=%lf  CrossoverRate=%lf  RNG=%d\n",gener,m_MaxPopulation,m_MutationProbability,m_CrossProbability,m_RNG);
-	
+		
 	// Allele list	
+	std::cout.precision(3);
 	for(int i=0;i<m_AlleleList.size();i++)
 	{
-		printf("* %s: [%lf,%lf]\n",convert(m_AlleleList[i]).c_str(),m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
+		//printf("* %s: [%lf,%lf]\n",convert(m_AlleleList[i]).c_str(),m_Limits[m_AlleleList[i]].first,m_Limits[m_AlleleList[i]].second);
+		std::cout << std::scientific << "* " << convert(m_AlleleList[i]) << ": [" << m_Limits[m_AlleleList[i]].first << "," << m_Limits[m_AlleleList[i]].second << "]" << std::endl;  
 	}
 }
 
@@ -483,7 +485,7 @@ void GAEngine<COMP>::print_genome(int ind_genome)
 		// sequence all alleles in genome
 		if(name.empty())
 			break;
-		std::cout << name << "=" << std::scientific << v(name) << "   ";
+		std::cout << convert(name) << "=" << std::scientific << v(name) << "   ";
 		//printf("%s=%lf   ",convert(name).c_str(),v(name));
 	}
 	std::cout << std::endl;
