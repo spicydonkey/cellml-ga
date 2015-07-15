@@ -129,6 +129,12 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
       m_Results.insert(m_Results.end(),results.begin(),results.end());
   }
 
+  // Get index of the variable in the sequence of result entries
+  int GetVariableIndex(std::string& variable)
+  {
+	  return 42;
+  }
+
 //Public interface to the observer data
 //
 //results of the computations are returned in res vector

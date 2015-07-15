@@ -143,7 +143,7 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 		// TODO
 		// Set model variable of interest (target)
 		vx->m_Variable=elem.GetAttribute("Variable").GetValue().c_str();
-		std::cout << "DEBUG: " << vx->m_Variable << std::endl;
+		std::cout << "DEBUG: VirtualExperiment::LoadExperiment: Variable=" << vx->m_Variable << std::endl;
 
 		// Set accuracy
         if(elem.GetAttribute("Accuracy").GetValue().size())
@@ -444,7 +444,16 @@ double VirtualExperiment::Evaluate()
 					   }
 				   }
 			   }
-			   // TODO get m_nResultColumn here from m_Variable
+
+			   // TODO get m_nResultColumn here from m_Variable JUST ONCE!
+			   //if(m_nResultColumn<0) 
+			   if(true)
+			   {
+				   // TODO get m_nResultsColumn from m_Variable from CellML API's LocalProgressObserver
+				   //m_nResultColumn=po->GetVariableIndex(m_Variable);
+				   int dummy=po->GetVariableIndex(m_Variable);
+				   std::cout << "Debug: dummy=" << dummy << std::endl;
+			   }
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
 #ifdef DEBUG_BUILD
 			   // print assessment time and sim-time
