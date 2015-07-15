@@ -1,5 +1,6 @@
 #include "cellml_observer.h"
 
+
 LocalProgressObserver::LocalProgressObserver(iface::cellml_services::CellMLCompiledModel* aCCM):
 	mRefcount(1),bFinished(false),bFailed(false)
 {

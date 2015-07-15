@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "IfaceCIS.hxx"
 #include "cellml-api-cxx-support.hpp"
 #include "IfaceCellML_APISPEC.hxx"
 #include "CellMLBootstrap.hpp"
+#include "CISBootstrap.hpp"
 #include <string>
 #include "utils.h"
 
