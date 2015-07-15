@@ -40,6 +40,7 @@ public:
         std::string n = convert(source->name());
 
 		//TODO DEBUG
+		std::cout << "DEBUG: " << m_Variable << std::endl;
 		std::cout << "var_count:" << var_count << "assignedIndex:" << ct->assignedIndex() << "name:" << n << std::endl;
 		var_count++;
 
@@ -172,6 +173,7 @@ private:
   bool bFinished;
   bool bFailed;
   std::vector<double> m_Results;
+  std::string m_Variable{"hello world!\n"};
 };
 
 #endif
