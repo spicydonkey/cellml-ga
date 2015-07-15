@@ -1457,6 +1457,19 @@ Done. Used CellML API.
 
 * m_nResultColumn of a given variable (Variable attribute: case-sensitive, must be exact match, etc. e.g. IP3, Ca)
 
+## 16.07.2015
+### TODO PLANNER
+* [ ] Quickly tidy LocalProgressObserver::GetVariableIndex
+
+* [ ] Package the codebase for release
+  * [ ] Tidy all source/headers
+  * [ ] Tidy directory hierarchy, etc.
+  * [ ] Gather all dependent libraries. e.g. CellML API
+
+* [ ] Push the release
+
+* [ ] Write doc for user
+
 
 ### TODO
 * [x] Implement the log selection method to mutate alleles
