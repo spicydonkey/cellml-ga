@@ -62,9 +62,7 @@ throw (std::exception&)
 	if(iface=="xpcom::IObject")
 		return static_cast<::iface::XPCOM::IObject*>(this);
 	else if(iface=="cellml_services::IntegrationProgressObserver")
-		return
-		static_cast<::iface::cellml_services::IntegrationProgressObserver*>
-		(this);
+		return static_cast<::iface::cellml_services::IntegrationProgressObserver*>(this);
 	return NULL;
 }
 
@@ -90,8 +88,6 @@ throw (std::exception&)
 		ct->release_ref();
 	}
 	cti->release_ref();
-#else
-	std::cout << "Error: LocalProgressObserver::computedConstants: Undefined" << std::endl;
 #endif
 }
 
