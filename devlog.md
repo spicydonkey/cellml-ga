@@ -1459,7 +1459,9 @@ Done. Used CellML API.
 
 ## 16.07.2015
 ### TODO PLANNER
-* [ ] Quickly tidy LocalProgressObserver::GetVariableIndex
+* [x] Quickly tidy LocalProgressObserver::GetVariableIndex
+
+* [ ] Define functions in cellml_observer.h in .cpp
 
 * [ ] Package the codebase for release
   * [ ] Tidy all source/headers
