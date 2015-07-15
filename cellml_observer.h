@@ -24,6 +24,7 @@ public:
 
     iface::cellml_services::ComputationTargetIterator* cti =
       mCI->iterateTargets();
+	int var_count=0;
     while (true)
     {
       iface::cellml_services::ComputationTarget* ct = cti->nextComputationTarget();
@@ -36,6 +37,11 @@ public:
       {
         iface::cellml_api::CellMLVariable* source = ct->variable();
         std::string n = convert(source->name());
+
+		//TODO DEBUG
+		std::cout << var_count << ":" << n << std::endl;
+		var_count++;
+
         source->release_ref();
       }
       ct->release_ref();
