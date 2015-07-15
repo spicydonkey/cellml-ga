@@ -60,9 +60,11 @@ void* LocalProgressObserver::query_interface(const std::string& iface)
 throw (std::exception&)
 {
 	if(iface=="xpcom::IObject")
-		return static_cast<::iface::XPCOM::IObject*>(this);
+		//return static_cast<::iface::XPCOM::IObject*>(this);
+		return static_cast<iface::XPCOM::IObject*>(this);
 	else if(iface=="cellml_services::IntegrationProgressObserver")
-		return static_cast<::iface::cellml_services::IntegrationProgressObserver*>(this);
+		//return static_cast<::iface::cellml_services::IntegrationProgressObserver*>(this);
+		return static_cast<iface::cellml_services::IntegrationProgressObserver*>(this);
 	return NULL;
 }
 
