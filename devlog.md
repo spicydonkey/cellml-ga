@@ -1452,6 +1452,11 @@ For simplicity, a *few* variables showing "interesting" temporal behaviour will 
 
 But currently, we do not know how to map a variable in a CellML file to a corresponding ResultColumn value.
 
+### Variable to ResultColumn mapping
+Done. Used CellML API.
+
+* m_nResultColumn of a given variable (Variable attribute: case-sensitive, must be exact match, etc. e.g. IP3, Ca)
+
 
 ### TODO
 * [x] Implement the log selection method to mutate alleles
@@ -1465,7 +1470,7 @@ But currently, we do not know how to map a variable in a CellML file to a corres
 
 * [x] Tidy virtexp files: VariablesHolder class
 
-* [ ] Map CellML model variable to corresponding ResultColumn val
+* [x] Map CellML model variable to corresponding ResultColumn val
 
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
