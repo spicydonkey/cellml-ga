@@ -148,6 +148,8 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
 			  break;
 		  }
 
+		  std::cout << "DEBUG: variable=" << variable << "  =?  " << convert(ct->variable()->name()) << std::endl;
+
 		  if(variable==convert(ct->variable()->name()))
 		  {
 			  int tmp;
