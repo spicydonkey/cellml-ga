@@ -138,7 +138,8 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 
 		// TODO preferably get rid of this
 		// Set model variable of interest (variable corresponding to the 'target' variable in data)
-        vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
+        //vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
+		std::cout << "DEBUG: skip getting m_nResultColumn from XML" << std::endl;
 
 		// TODO
 		// Set model variable of interest (target)
@@ -446,13 +447,13 @@ double VirtualExperiment::Evaluate()
 			   }
 
 			   // TODO get m_nResultColumn here from m_Variable JUST ONCE!
-			   //if(m_nResultColumn<0) 
-			   if(true)
+			   if(m_nResultColumn<0)
 			   {
+				   std::cout << "DEBUG: Should run once per VE!" << std::endl;
 				   // TODO get m_nResultsColumn from m_Variable from CellML API's LocalProgressObserver
-				   //m_nResultColumn=po->GetVariableIndex(m_Variable);
-				   int dummy=po->GetVariableIndex(m_Variable);
-				   std::cout << "Debug: dummy=" << dummy << std::endl;
+				   m_nResultColumn=po->GetVariableIndex(m_Variable);
+				   /*int dummy=po->GetVariableIndex(m_Variable);
+				   std::cout << "Debug: dummy=" << dummy << std::endl;*/
 			   }
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
 #ifdef DEBUG_BUILD
