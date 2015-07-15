@@ -97,8 +97,6 @@ throw (std::exception&)
 		ct->release_ref();
 	}
 	cti->release_ref();
-#else
-	std::cerr << "Error: LocalProgressObserver::computedConstants: Undefined" << std::endl;
 #endif
 }
 
