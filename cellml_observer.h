@@ -22,19 +22,17 @@ public:
     mCCM->add_ref();
     mCI = mCCM->codeInformation();
 
-    iface::cellml_services::ComputationTargetIterator* cti =
-      mCI->iterateTargets();
+    iface::cellml_services::ComputationTargetIterator* cti = mCI->iterateTargets();
+
+	// TODO set-up a var string vector
 	int var_count=0;
     while (true)
     {
       iface::cellml_services::ComputationTarget* ct = cti->nextComputationTarget();
       if (ct == NULL)
         break;
-      /*if ((ct->type() == iface::cellml_services::STATE_VARIABLE ||
-           ct->type() == iface::cellml_services::ALGEBRAIC ||
-           ct->type() == iface::cellml_services::VARIABLE_OF_INTEGRATION) &&
-          ct->degree() == 0)*/
 	  if((ct->type() == iface::cellml_services::STATE_VARIABLE ||
+		  ct->type() == iface::cellml_services::ALGEBRAIC ||
 		  ct->type() == iface::cellml_services::VARIABLE_OF_INTEGRATION) &&
 		  ct->degree() == 0)
       {
@@ -42,7 +40,7 @@ public:
         std::string n = convert(source->name());
 
 		//TODO DEBUG
-		std::cout << var_count << ":" << n << std::endl;
+		std::cout << "var_count:" << var_count << "assignedIndex:" << ct->assignedIndex() << "name:" << n << std::endl;
 		var_count++;
 
         source->release_ref();
