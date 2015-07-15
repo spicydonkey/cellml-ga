@@ -135,16 +135,16 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
     }
     else
     {	// Model loaded correctly - read the VE data
-
-		// TODO preferably get rid of this
-		// Set model variable of interest (variable corresponding to the 'target' variable in data)
-        //vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
-		std::cout << "DEBUG: skip getting m_nResultColumn from XML" << std::endl;
-
-		// TODO
 		// Set model variable of interest (target)
-		vx->m_Variable=elem.GetAttribute("Variable").GetValue().c_str();
-		std::cout << "DEBUG: VirtualExperiment::LoadExperiment: Variable=" << vx->m_Variable << std::endl;
+		if(!elem.GetAttribute("Variable").GetValue().size())
+		{
+			vx->b_Error=true;
+			std::cerr << "Error: VirtualExperiment::LoadExperiment: Variable is unspecified: raising error flag: " << currentDateTime() << std::endl;
+		}
+		else
+		{
+			vx->m_Variable=elem.GetAttribute("Variable").GetValue().c_str();
+		}
 
 		// Set accuracy
         if(elem.GetAttribute("Accuracy").GetValue().size())
@@ -153,7 +153,7 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
 		// Set maximum time limit on simulator (no time limit on default)
         vx->m_MaxTime=atoi(elem.GetAttribute("MaxSecondsForSimulation").GetValue().c_str());
 
-		// TODO ReportStep needs to be supplied by user for each VirtualExperiment
+		// ReportStep needs to be supplied by user for each VirtualExperiment
 			// For convenience, 0.0 should be the default ReportStep for which ODE solver output will not be optimised
         if(!elem.GetAttribute("ReportStep").GetValue().size())
 		{
@@ -446,39 +446,18 @@ double VirtualExperiment::Evaluate()
 				   }
 			   }
 
-			   // TODO get m_nResultColumn here from m_Variable JUST ONCE!
+			   // Get m_nResultColumn from m_Variable just once per VE
 			   if(m_nResultColumn<0)
 			   {
-				   std::cout << "DEBUG: Should run once per VE!" << std::endl;
-				   // TODO get m_nResultsColumn from m_Variable from CellML API's LocalProgressObserver
 				   m_nResultColumn=po->GetVariableIndex(m_Variable);
-				   /*int dummy=po->GetVariableIndex(m_Variable);
-				   std::cout << "Debug: dummy=" << dummy << std::endl;*/
+				   if(m_nResultColumn==-1)
+				   {
+					   std::cerr << "Error: VirtualExperiment::Evaluate: Variable " << m_Variable << " does not exist in model: " << currentDateTime() << std::endl;
+					   return INFINITY;
+				   }
 			   }
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
-#ifdef DEBUG_BUILD
-			   // print assessment time and sim-time
-			   fprintf(stderr,"<Assessment time,best_est>=<%lf,%lf>\n",m_Timepoints[i].first,vd[best_est]);
-#endif
 		   }
-
-#ifdef DEBUG_BUILD
-		   // print assessment points and results vector
-		   std::cerr << "----------------------------------------\n";
-		   std::cerr << "DEBUG:\n";
-		   std::cerr << "m_Timepoints: ";
-		   for(int i=0;i<m_Timepoints.size();i++)
-		   {
-			   std::cerr << "(" << m_Timepoints[i].first << "," << m_Timepoints[i].second << "), ";
-		   }
-		   std::cerr << std::endl;
-		   std::cerr << "results: ";
-		   for(int i=0;i<results.size();i++)
-		   {
-			   std::cerr << "(" << results[i].first << "," << results[i].second << "), ";
-		   }
-		   std::cerr << std::endl;
-#endif
 
 		   // Evaluate the squared-sum-residual of the model
 		   res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
@@ -551,7 +530,7 @@ double VEGroup::Evaluate(VariablesHolder& v)
         }
 		else
 		{
-			std::cerr << "Error: VEGroup::Evaluate: error in evaluating Experiment[" << i << "] with parameters: ";
+			std::cerr << "Error: VEGroup::Evaluate: error in evaluating Experiment[" << i << "] with parameters: " << currentDateTime() << std::endl;
 			v.print(stderr);	// print model parameters
 			std::cerr << ": " << currentDateTime() << std::endl;
 			return INFINITY;
