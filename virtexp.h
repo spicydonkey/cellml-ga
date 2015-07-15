@@ -130,7 +130,8 @@ class VirtualExperiment
         ObjRef<iface::cellml_api::Model> m_Model;	// CellML model corresponding to this experiment
 	
 		int m_nResultColumn;			// indicator for the variable of interest 
-        
+        std::string m_Variable;			// variable of interest in experiment
+
 		typedef std::map<std::wstring,double>	PARAMS;
         typedef std::pair<double,double>		POINT;
         typedef std::vector<POINT>				TIMEPOINTS;

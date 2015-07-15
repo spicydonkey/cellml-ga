@@ -135,8 +135,15 @@ VirtualExperiment *VirtualExperiment::LoadExperiment(const AdvXMLParser::Element
     }
     else
     {	// Model loaded correctly - read the VE data
+
+		// TODO preferably get rid of this
 		// Set model variable of interest (variable corresponding to the 'target' variable in data)
         vx->m_nResultColumn=atoi(elem.GetAttribute("ResultColumn").GetValue().c_str());
+
+		// TODO
+		// Set model variable of interest (target)
+		vx->m_Variable=elem.GetAttribute("Variable").GetValue().c_str();
+		std::cout << "DEBUG: " << vx->m_Variable << std::endl;
 
 		// Set accuracy
         if(elem.GetAttribute("Accuracy").GetValue().size())
@@ -437,6 +444,7 @@ double VirtualExperiment::Evaluate()
 					   }
 				   }
 			   }
+			   // TODO get m_nResultColumn here from m_Variable
 			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
 #ifdef DEBUG_BUILD
 			   // print assessment time and sim-time
