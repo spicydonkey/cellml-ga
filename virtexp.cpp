@@ -554,6 +554,6 @@ void VEGroup::print_summary()
 	for(int i=0;i<experiments.size();i++)
 	{
 		// Model, Variable, # assess points
-		printf("Model=%s  Variable=%d  nPoints=%d\n",experiments[i]->model().c_str(),experiments[i]->resultcol(),experiments[i]->datasize());
+		printf("Model=%s  Variable=%s  nPoints=%d\n",experiments[i]->model().c_str(),experiments[i]->variable().c_str(),experiments[i]->datasize());
 	}
 }
