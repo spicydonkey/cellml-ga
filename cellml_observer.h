@@ -30,10 +30,13 @@ public:
       iface::cellml_services::ComputationTarget* ct = cti->nextComputationTarget();
       if (ct == NULL)
         break;
-      if ((ct->type() == iface::cellml_services::STATE_VARIABLE ||
+      /*if ((ct->type() == iface::cellml_services::STATE_VARIABLE ||
            ct->type() == iface::cellml_services::ALGEBRAIC ||
            ct->type() == iface::cellml_services::VARIABLE_OF_INTEGRATION) &&
-          ct->degree() == 0)
+          ct->degree() == 0)*/
+	  if((ct->type() == iface::cellml_services::STATE_VARIABLE ||
+		  ct->type() == iface::cellml_services::VARIABLE_OF_INTEGRATION) &&
+		  ct->degree() == 0)
       {
         iface::cellml_api::CellMLVariable* source = ct->variable();
         std::string n = convert(source->name());
