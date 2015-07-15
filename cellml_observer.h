@@ -187,7 +187,10 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
 				  index=-1;
 				  break;
 			  }
+
 			  index+=tmp;
+			  ct->release_ref();
+			  break;
 		  }
 		  ct->release_ref();
 	  }
