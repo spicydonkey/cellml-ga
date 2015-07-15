@@ -24,8 +24,6 @@ public:
 
     iface::cellml_services::ComputationTargetIterator* cti = mCI->iterateTargets();
 
-	// TODO set-up a var string vector
-	int var_count=0;
     while (true)
     {
       iface::cellml_services::ComputationTarget* ct = cti->nextComputationTarget();
@@ -38,10 +36,6 @@ public:
       {
         iface::cellml_api::CellMLVariable* source = ct->variable();
         std::string n = convert(source->name());
-
-		//TODO DEBUG
-		std::cout << "var_count:" << var_count << "   assignedIndex:" << ct->assignedIndex() << "   name:" << n << std::endl;
-		var_count++;
 
         source->release_ref();
       }
@@ -129,7 +123,7 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
       m_Results.insert(m_Results.end(),results.begin(),results.end());
   }
 
-  // TODO Get index of the variable in the sequence of result entries
+  // Get index of the variable in the sequence of result entries
   int GetVariableIndex(std::string& variable)
   {
 	  int index;
@@ -143,17 +137,17 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
 		  iface::cellml_services::ComputationTarget* ct = cti->nextComputationTarget();
 		  if(ct == NULL)
 		  {
-			  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: Could not find the variable " << variable << " in the model" << std::endl;
+			  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: Could not find the variable " << variable << " in the model: " << currentDateTime() << std::endl;
 			  index=-1;
 			  break;
 		  }
 
-		  //std::cout << "DEBUG: variable=" << variable << "  =?  " << convert(ct->variable()->name()) << std::endl;
-
 		  if(variable==convert(ct->variable()->name()))
 		  {
-			  int tmp;
 			  index=ct->assignedIndex();
+
+			  // Evaluate the type-shift factor
+			  int tmp;
 			  if(ct->type() == iface::cellml_services::STATE_VARIABLE)
 			  {
 				  if(ct->degree() == 0)
@@ -166,7 +160,7 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
 				  }
 				  else
 				  {
-					  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: state variable " << variable << " has >1 degree" << std::endl;
+					  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: state variable " << variable << " has >1 degree: " << currentDateTime() << std::endl;
 					  index=-1;
 					  break;
 				  }
@@ -177,18 +171,18 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
 			  }
 			  else if(ct->type() == iface::cellml_services::VARIABLE_OF_INTEGRATION)
 			  {
-				  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: VOI " << variable << " detected as target" << std::endl;
+				  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: VOI " << variable << " detected as target: " << currentDateTime() << std::endl;
 				  index=0;
 				  break;
 			  }
 			  else
 			  {
-				  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: Variable " << variable << " must be either VOI, State/rate or algebraic" << std::endl;
+				  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: Variable " << variable << " must be either VOI, State/rate or algebraic: " << currentDateTime() << std::endl;
 				  index=-1;
 				  break;
 			  }
 
-			  index+=tmp;
+			  index+=tmp;	// apply the shift
 			  ct->release_ref();
 			  break;
 		  }
