@@ -8,7 +8,8 @@ LocalProgressObserver::LocalProgressObserver(iface::cellml_services::CellMLCompi
 	mCCM->add_ref();
 	mCI = mCCM->codeInformation();
 
-	iface::cellml_services::ComputationTargetIterator* cti = mCI->iterateTargets();
+	// Below loop not doing anything; possibly a debug routine
+	/*iface::cellml_services::ComputationTargetIterator* cti = mCI->iterateTargets();
 
 	while(true)
 	{
@@ -27,7 +28,7 @@ LocalProgressObserver::LocalProgressObserver(iface::cellml_services::CellMLCompi
 		}
 		ct->release_ref();
 	}
-	cti->release_ref();
+	cti->release_ref();*/
 }
 
 LocalProgressObserver::~LocalProgressObserver()
@@ -198,4 +199,3 @@ throw (std::exception&)
 	bFinished = true;
 	bFailed=true;
 }
-
