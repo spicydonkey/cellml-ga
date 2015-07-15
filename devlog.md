@@ -1446,6 +1446,12 @@ BEST GENOME (0.511541):
 kf5=1.66055e-08  kf4=2.30517e+00  kf16=5.01745e+02  Rpc=7.06914e+02
 ```
 
+## 15.07.2015
+### Multiple experiments
+For simplicity, a *few* variables showing "interesting" temporal behaviour will be selected from the default ip3model settings:
+
+But currently, we do not know how to map a variable in a CellML file to a corresponding ResultColumn value.
+
 
 ### TODO
 * [x] Implement the log selection method to mutate alleles
@@ -1458,6 +1464,8 @@ kf5=1.66055e-08  kf4=2.30517e+00  kf16=5.01745e+02  Rpc=7.06914e+02
 * [x] Display allele vals in **scientific notation**
 
 * [x] Tidy virtexp files: VariablesHolder class
+
+* [ ] Map CellML model variable to corresponding ResultColumn val
 
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
