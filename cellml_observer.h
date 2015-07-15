@@ -129,10 +129,69 @@ virtual std::vector<std::string> supported_interfaces() throw (std::exception&)
       m_Results.insert(m_Results.end(),results.begin(),results.end());
   }
 
-  // Get index of the variable in the sequence of result entries
+  // TODO Get index of the variable in the sequence of result entries
   int GetVariableIndex(std::string& variable)
   {
-	  return 42;
+	  int index;
+	  uint32_t aic = mCI->algebraicIndexCount();
+	  uint32_t ric = mCI->rateIndexCount();
+
+	  iface::cellml_services::ComputationTargetIterator* cti = mCI->iterateTargets();
+
+	  while(true)
+	  {
+		  iface::cellml_services::ComputationTarget* ct = cti->nextComputationTarget();
+		  if(ct == NULL)
+		  {
+			  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: Could not find the variable " << variable << " in the model" << std::endl;
+			  index=-1;
+			  break;
+		  }
+
+		  if(variable==convert(ct->variable()->name()))
+		  {
+			  int tmp;
+			  index=ct->assignedIndex();
+			  if(ct->type() == iface::cellml_services::STATE_VARIABLE)
+			  {
+				  if(ct->degree() == 0)
+				  {
+					  tmp=1;
+				  }
+				  else if(ct->degree() == 1)
+				  {
+					  tmp=1+ric;
+				  }
+				  else
+				  {
+					  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: state variable " << variable << " has >1 degree" << std::endl;
+					  index=-1;
+					  break;
+				  }
+			  }
+			  else if(ct->type() == iface::cellml_services::ALGEBRAIC)
+			  {
+				  tmp=1+2*ric;
+			  }
+			  else if(ct->type() == iface::cellml_services::VARIABLE_OF_INTEGRATION)
+			  {
+				  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: VOI " << variable << " detected as target" << std::endl;
+				  index=0;
+				  break;
+			  }
+			  else
+			  {
+				  std::cerr << "Error: LocalProgressObserver::GetVariableIndex: Variable " << variable << " must be either VOI, State/rate or algebraic" << std::endl;
+				  index=-1;
+				  break;
+			  }
+			  index+=tmp;
+		  }
+		  ct->release_ref();
+	  }
+	  cti->release_ref();
+
+	  return index;
   }
 
 //Public interface to the observer data
