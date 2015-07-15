@@ -1457,22 +1457,6 @@ Done. Used CellML API.
 
 * m_nResultColumn of a given variable (Variable attribute: case-sensitive, must be exact match, etc. e.g. IP3, Ca)
 
-## 16.07.2015
-### TODO PLANNER
-* [x] Quickly tidy LocalProgressObserver::GetVariableIndex
-
-* [ ] Define functions in cellml_observer.h in .cpp
-
-* [ ] Package the codebase for release
-  * [ ] Tidy all source/headers
-  * [ ] Tidy directory hierarchy, etc.
-  * [ ] Gather all dependent libraries. e.g. CellML API
-
-* [ ] Push the release
-
-* [ ] Write doc for user
-
-
 ### TODO
 * [x] Implement the log selection method to mutate alleles
   * Make it user-selecatble with default "linear" case
@@ -1487,6 +1471,24 @@ Done. Used CellML API.
 
 * [x] Map CellML model variable to corresponding ResultColumn val
 
+## 16.07.2015
+### TODO PLANNER
+* [x] Quickly tidy LocalProgressObserver::GetVariableIndex
+
+* [x] Define functions in cellml_observer.h in .cpp
+* [x] Update makefile (makefile-patch)
+
+* [ ] Package the codebase for release
+  * [ ] Tidy all source/headers
+  * [ ] Tidy directory hierarchy, etc.
+  * [ ] Gather all dependent libraries. e.g. CellML API
+
+* [ ] Push the release
+
+* [ ] Write doc for user
+
+
+### TODO
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
 * [ ] Test the code with multiple experiments (multiple curve fitting)
