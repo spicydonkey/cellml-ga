@@ -9,7 +9,7 @@
 		</Alleles>
 	</GA>
 	<VirtualExperiments>
-		<VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="9" ReportStep="50.0">
+		<VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="9" Variable="IP3" ReportStep="50.0">
 		<!-- note this VE doesn't have any Parameters to set, but next VE does (ie optional Parameters entity here) -->
 			<AssessmentPoints>
 				<AssessmentPoint time="100.0" target="0.026761882" />
@@ -22,7 +22,7 @@
 				<AssessmentPoint time="10000.0" target="0.015490316" />
 			</AssessmentPoints>
 		</VirtualExperiment>
-		<VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="1" ReportStep="50.0">
+		<VirtualExperiment ModelFilePath="ip3model.cellml" ResultColumn="1" Variable="Who-Knows" ReportStep="50.0">
 			<Parameters>
 				<Parameter ToSet="Ls" Value="5.0"/>
 			</Parameters>
