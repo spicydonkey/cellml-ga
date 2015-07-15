@@ -29,15 +29,7 @@ public:
 
   void* query_interface(const std::string& iface) throw (std::exception&);
 
-  virtual std::vector<std::string> supported_interfaces()
-	  throw (std::exception&)
-  {
-	  std::vector<std::string> v;
-
-	  v.push_back("xpcom::IObject");
-	  v.push_back("cellml_services::IntegrationProgressObserver");
-	  return v;
-  }
+  virtual std::vector<std::string> supported_interfaces() throw (std::exception&);
 
   void computedConstants(const std::vector<double>& results) throw (std::exception&);
 

@@ -60,12 +60,19 @@ void* LocalProgressObserver::query_interface(const std::string& iface)
 throw (std::exception&)
 {
 	if(iface=="xpcom::IObject")
-		//return static_cast<::iface::XPCOM::IObject*>(this);
 		return static_cast<iface::XPCOM::IObject*>(this);
 	else if(iface=="cellml_services::IntegrationProgressObserver")
-		//return static_cast<::iface::cellml_services::IntegrationProgressObserver*>(this);
 		return static_cast<iface::cellml_services::IntegrationProgressObserver*>(this);
 	return NULL;
+}
+
+std::vector<std::string> LocalProgressObserver::supported_interfaces() throw (std::exception&)
+{
+	std::vector<std::string> v;
+
+	v.push_back("xpcom::IObject");
+	v.push_back("cellml_services::IntegrationProgressObserver");
+	return v;
 }
 
 void LocalProgressObserver::computedConstants(const std::vector<double>& results)
@@ -90,6 +97,8 @@ throw (std::exception&)
 		ct->release_ref();
 	}
 	cti->release_ref();
+#else
+	std::cerr << "Error: LocalProgressObserver::computedConstants: Undefined" << std::endl;
 #endif
 }
 
