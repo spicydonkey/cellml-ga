@@ -1494,6 +1494,13 @@ Done. Used CellML API.
 * [ ] Write doc for user
 
 
+## 17.07.2015
+### Fix pesky bugs
+* [x] negative allele range causes error at the log-type selection.
+  * Just use the lin-type if neg range is given
+* [ ] SetAndInitEngine: only zero-lim iflog-type is appropriate!
+  * [ ] Must check if log-type is appropriate
+
 ### TODO
 * [ ] Why haven't we seen **inf** genomes in the latest ip3model tests?
   * Force an INF and find out whether they are being handled properly
@@ -1506,4 +1513,5 @@ Done. Used CellML API.
   * [x] How to compile
   * [x] How to use
 * [x] Merge patch onto master in Git
-* [ ] Latest version release on Github (by Thursday)
+* [x] Latest version release on Github (by Thursday)
+* [ ] Write example xml test-file

@@ -22,19 +22,21 @@ the example below was built with Intel compiler and Intel MPI)
 #SBATCH -A uoa99999
 #SBATCH --time=00:30:00     # Walltime
 #SBATCH --ntasks=64
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=4096  # memory/cpu (in MB)
-#SBATCH -o exper_cellml.out       # OPTIONAL
-#SBATCH -e exper_cellml.err       # OPTIONAL
+#SBATCH -o exper_cellml_%j.out		# OPTIONAL
+#SBATCH -e exper_cellml_%j.err		# OPTIONAL
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=g.soudlenkov@auckland.ac.nz
+#SBATCH --mail-user=user.email@auckland.ac.nz
 #SBATCH -C sb
 ######################################################
 
 module load intel/ics-2013
-module load impi
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gsou008/work/UoA/mike.cooling/cellml-sdk/lib/
-export LIBRARY_PATH=$LIBRARY_PATH:/home/gsou008/work/UoA/mike.cooling/cellml-sdk/lib/
-srun ./experiment xp.xml
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/PATH/TO/YOUR/cellml-sdk/lib/
+export LIBRARY_PATH=$LIBRARY_PATH:/PATH/TO/YOUR/cellml-sdk/lib/
+
+srun PATH/TO/YOUR/experiment TEST_FILE [-v [...]]
 ```
 
 Performance improvement (population: 100, 50 generations):
@@ -47,7 +49,6 @@ Cores  Runtime, min
 64      01:32
 128	00:59
 
-Note:
 
 ## How to use
 ### Required packages
@@ -97,7 +98,9 @@ Edit the exemplar slurm file - short.sl.
 Since CellML compiler relies on GCC compiler to build the code, LIBRARY_PATH and LD_LIBRARY_PATH 
 should be configured by pointing to CellML library directory.
 
-Finally, batch the slurm job file, which runs the ip3-short.xml test on a single processor.
+Finally, batch the slurm job file, which runs the ip3-short.xml test on a **single processor**.
 ```
 sbatch short.sl
 ```
+
+**NOTE**: when submitting a job using MPI library to NeSI, you must import a suitable library e.g. **ictce/5.4.0**/**impi**/**intel/ics-2013** at the Slurm job. The exemplar job description above shows this.
