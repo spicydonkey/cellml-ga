@@ -117,7 +117,7 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 
 		// TODO
 		// Check for negative allele range for log-type RNG
-		if(min_lim<0.0||RNG_type==1)
+		if((min_lim<0.0)&&(RNG_type==1))
 		{
 			std::cerr << "Error: SetAndInitEngine: Log-type RNG method does not support negative range: resetting RNG to linear-type (0): " << currentDateTime() << std::endl;
 			
