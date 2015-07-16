@@ -56,7 +56,8 @@ Note:
 ```
 module load intel/ics2013
 ``` 
-	Note: You must be logged onto one of NeSI's "build-nodes" to load a module and compiling
+
+**Note**: You must be logged onto one of NeSI's "build-nodes" to load a module and compiling
 
 #### Required libraries:
 * CellML-API
