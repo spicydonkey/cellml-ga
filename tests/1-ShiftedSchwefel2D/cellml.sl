@@ -10,7 +10,7 @@
 #SBATCH -C sb
 ######################################################
 
-module load impi
+module load intel/ics-2013 
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/PATH_TO_CELLML_API_LIB/
 export LIBRARY_PATH=$LIBRARY_PATH:/PATH_TO_CELLML_API_LIB/
