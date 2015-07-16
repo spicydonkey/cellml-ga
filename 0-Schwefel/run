@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#Usage:
-#	./run XML_FILENAME 
-
-
-FILENAME=$1
-../experiment ${FILENAME} -v -v > ${FILENAME%.*}.out;
-

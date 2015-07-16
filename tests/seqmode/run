@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#Usage:
-#	./run XML_FILENAME 
-PROJ_PATH=/projects/uoa00322/david.shin/cellml-ga
-
-FILENAME=$1
-${PROJ_PATH}/experiment ${FILENAME} -v -v -v > ${FILENAME%.*}.out;
-
