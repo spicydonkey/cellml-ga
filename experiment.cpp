@@ -133,7 +133,6 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
     ga.set_borders(initPopulation);		// set max population of GA and initialise the population with default genomes
 
 	// return the num of generations to run GA
-    //return (generations?generations:1);	// default number of generations to run is 1
 	return generations;
 }
 
