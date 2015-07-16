@@ -99,7 +99,7 @@ class GAEngine
         double m_bestFitness;
         bool m_bBestFitnessAssigned;
         VariablesHolder m_bestVariables;
-		int m_RNG;
+		int m_RNG;		// switch for altenative RNG method
 
     public:
         typedef Genome GENOME;

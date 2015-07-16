@@ -1,5 +1,6 @@
 #include "GAEngine.h"
 
+
 bool reverse_compare(const Genome& v1,const Genome& v2) 
 {
 	return (v1<v2); 
@@ -315,11 +316,6 @@ void GAEngine<COMP>::RunGenerations(int gener)
 				// Output genomes in arena pre-crossover
 				if(verbosity>3)
 				{
-					/* output format
-					CROSSOVER
-					-[i] x1=_________ x2=__________
-					-[j] x1=_________ x2=__________
-					*/
 					printf("CROSSOVER:\n");
 					for(int j=0;j<arena.size();j++)
 					{
@@ -336,11 +332,6 @@ void GAEngine<COMP>::RunGenerations(int gener)
 				// Output genomes in arena post-crossover
 				if(verbosity>3)
 				{
-					/*
-					+[i] x1=_________ x2=__________
-					+[j] x1=_________ x2=__________
-					-----------------------------------
-					*/
 					for(int j=0;j<arena.size();j++)
 					{
 						printf("+");
@@ -395,12 +386,6 @@ void GAEngine<COMP>::RunGenerations(int gener)
 				// Output genomes pre-mutation
 				if(verbosity>3)
 				{
-					/*
-					MUTATION:
-					-[i] x1=_________ x2=__________
-					+[i] x1=_________ x2=__________
-					-----------------------------------
-					*/
 					printf("MUTATION:\n");
 					printf("-");
 					print_genome(sample[i]);
