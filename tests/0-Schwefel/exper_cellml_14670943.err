@@ -1,0 +1,9 @@
+Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: Error: VirtualExperiment::LoadExperiment: ReportStep is unspecified - set to 0.0 if unknown: raising error flag: 2015-07-16.14:15:462015-07-16.14:15:46
+2015-07-16.14:15:46
+
+2015-07-16.14:15:46
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-16.14:15:46
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-16.14:15:46
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-16.14:15:46
+Error: VirtualExperiment::isValid: error flag is raised: 2015-07-16.14:15:46
+srun: error: compute-d1-054: tasks 0-3: Exited with exit code 255
