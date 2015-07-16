@@ -90,7 +90,14 @@ Test the program by running a short run of the ip3model problem:
 
 ```
 cd tests/3-ip3model
-sbatch short.sl
 ```
 
-which runs the ip3-short.xml test on a single processor.
+Edit the exemplar slurm file - short.sl.
+
+Since CellML compiler relies on GCC compiler to build the code, LIBRARY_PATH and LD_LIBRARY_PATH 
+should be configured by pointing to CellML library directory.
+
+Finally, batch the slurm job file, which runs the ip3-short.xml test on a single processor.
+```
+sbatch short.sl
+```
