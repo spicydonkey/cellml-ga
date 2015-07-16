@@ -1478,7 +1478,7 @@ Done. Used CellML API.
 * [x] Define functions in cellml_observer.h in .cpp
 * [x] Update makefile (makefile-patch)
 
-* [ ] Package the codebase for release
+* [x] Package the codebase for release
   * [x] Tidy all source/headers
   * [x] Tidy directory hierarchy, etc.
   * [x] Gather all dependent libraries. e.g. CellML API
@@ -1505,5 +1505,5 @@ Done. Used CellML API.
   * [x] What it is
   * [x] How to compile
   * [x] How to use
-* [ ] Merge patch onto master in Git
+* [x] Merge patch onto master in Git
 * [ ] Latest version release on Github (by Thursday)
