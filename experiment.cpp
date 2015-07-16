@@ -115,7 +115,6 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 			return -1;
 		}
 
-		// TODO
 		// Check for negative allele range for log-type RNG
 		if((min_lim<0.0)&&(RNG_type==1))
 		{
@@ -126,6 +125,7 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 			ga.RNG_method()=0;
 		}
 
+		// TODO do below iff log-type is appropriate
 		// reassign zero bounds to ZERO_LIM
 		if(min_lim==0.0)
 		{
