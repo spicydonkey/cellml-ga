@@ -16,7 +16,7 @@ The example of Slurm job description file is given below (note the use of module
 the example below was built with Intel compiler and Intel MPI)
 
 
-
+```
 #!/bin/bash
 #SBATCH -J CellML_Test
 #SBATCH -A uoa99999
@@ -35,7 +35,7 @@ module load impi
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gsou008/work/UoA/mike.cooling/cellml-sdk/lib/
 export LIBRARY_PATH=$LIBRARY_PATH:/home/gsou008/work/UoA/mike.cooling/cellml-sdk/lib/
 srun ./experiment xp.xml
-
+```
 
 Performance improvement (population: 100, 50 generations):
 
