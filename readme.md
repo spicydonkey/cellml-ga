@@ -78,4 +78,19 @@ e.g.
 CELLML_PATH=/projects/uoa00322/your_personal_project_dir/CELLML_API_DIRECTORY
 ```
 
+### Compile
+Compile the project by running the makefile:
+```
+make
+```
+which should generate the binary **experiment**
 
+### Testing
+Test the program by running a short run of the ip3model problem:
+
+```
+cd tests/3-ip3model
+sbatch short.sl
+```
+
+which runs the ip3-short.xml test on a single processor.
