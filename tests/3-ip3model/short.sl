@@ -10,9 +10,7 @@
 #SBATCH -C sb
 ######################################################
 
-#module load intel/ics-2013
-#module load impi
-#module load ictce/5.4.0
+module load ictce/5.4.0
 
 #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:
 #export LIBRARY_PATH=$LIBRARY_PATH:
