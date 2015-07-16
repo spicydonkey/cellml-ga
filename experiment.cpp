@@ -109,12 +109,23 @@ int SetAndInitEngine(GAEngine<COMP_FUNC >& ga, const Element& elem)
 		double min_lim=atof(al.GetAttribute("LowerBound").GetValue().c_str());
 		double max_lim=atof(al.GetAttribute("UpperBound").GetValue().c_str());
 		
-		if((min_lim>max_lim)||(min_lim<0.0))
+		if(min_lim>max_lim)
 		{
-			std::cerr << "Error: SetAndInitEngine: invalid limits for Allele[" << i << "]: limits should be non-negative: " << currentDateTime() << std::endl;
-			return -1;	// GA should NOT be run!
+			std::cerr << "Error: SetAndInitEngine: invalid limits for Allele[" << i << "]: UpperBound should not be less than LowerBound: " << currentDateTime() << std::endl;
+			return -1;
 		}
-		
+
+		// TODO
+		// Check for negative allele range for log-type RNG
+		if(min_lim<0.0||RNG_type==1)
+		{
+			std::cerr << "Error: SetAndInitEngine: Log-type RNG method does not support negative range: resetting RNG to linear-type (0): " << currentDateTime() << std::endl;
+			
+			// set RNG method to negative compatible linear-type
+			RNG_type=0;
+			ga.RNG_method()=0;
+		}
+
 		// reassign zero bounds to ZERO_LIM
 		if(min_lim==0.0)
 		{
