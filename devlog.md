@@ -1479,7 +1479,7 @@ Done. Used CellML API.
 * [x] Update makefile (makefile-patch)
 
 * [ ] Package the codebase for release
-  * [ ] Tidy all source/headers
+  * [x] Tidy all source/headers
   * [ ] Tidy directory hierarchy, etc.
   * [ ] Gather all dependent libraries. e.g. CellML API
 
