@@ -21,10 +21,6 @@
 typedef std::vector<std::pair<std::wstring,double> > ALLELE;
 
 
-/**
- *	VariablesHolder
- *		m_Vars : a storage for ALLELE variable
- **/
 class VariablesHolder
 {
 	private:
@@ -64,12 +60,6 @@ class VariablesHolder
 };
 
 
-/**
- *	VirtualExperiment
- *	
- *	
- *	
- **/
 class VirtualExperiment
 {
     public:
@@ -123,7 +113,6 @@ class VirtualExperiment
 
            VirtualExperiment *pOwner;
         };
-		//friend class VEGroup;
         friend class Runner;
 
 		// Calculate the normalised Sum of Square Residuals (SSR) of the simulation against v-experimental data
@@ -173,9 +162,7 @@ class VEGroup
     protected:
         typedef std::vector<VirtualExperiment *> VE;
         
-		// a vector of pointers to virtual experiments
-		VE experiments;
+		VE experiments;		// the storage for virtual experiment members
 };
 
 #endif
-

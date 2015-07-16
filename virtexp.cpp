@@ -39,8 +39,9 @@ VariablesHolder& VariablesHolder::operator=(const VariablesHolder& other)
 
 double VariablesHolder::operator()(const std::wstring& name)
 {
+	// get iterator to the pair in m_Vars for which the first member equals name (end if no such pair)
 	ALLELE::iterator it=find_if(m_Vars.begin(),m_Vars.end(),
-								bind1st(pair_equal_to<std::wstring,double>(),name));	//find iterator to the pair in m_Vars for which the "first" member equals name (end if no such pair)
+								bind1st(pair_equal_to<std::wstring,double>(),name));
 	return (it==m_Vars.end()?double(0.0):it->second);
 }
 
@@ -372,99 +373,99 @@ double VirtualExperiment::Evaluate()
     ObjRef<iface::cellml_services::ODESolverRun> osr;
     time_t calc_started;
 
-    try
-    {
+	try
+	{
 		// Set up the ODE solver
-       compiledModel=cis->compileModelODE(m_Model);
-       osr=cis->createODEIntegrationRun(compiledModel);
-       LocalProgressObserver *po=new LocalProgressObserver(compiledModel);
+		compiledModel=cis->compileModelODE(m_Model);
+		osr=cis->createODEIntegrationRun(compiledModel);
+		LocalProgressObserver *po=new LocalProgressObserver(compiledModel);
 
-       osr->setProgressObserver(po);
-       po->release_ref();
-       osr->stepType(iface::cellml_services::BDF_IMPLICIT_1_5_SOLVE);
-       osr->setStepSizeControl(1e-6,1e-6,1.0,0.0,1.0);
-       osr->setResultRange(0.0,m_Timepoints[m_Timepoints.size()-1].first,m_Timepoints[m_Timepoints.size()-1].first);	// TODO Maximum point density?
-       
-	   // Set ODE solver's reporting timestep to match that of the experiment
-	   if(m_ReportStep!=0.0)
-		   osr->setTabulationStepControl(m_ReportStep,true);
-	   else
-		   osr->setTabulationStepControl(1.0,true);		// default to reporting result every 1 second
+		osr->setProgressObserver(po);
+		po->release_ref();
+		osr->stepType(iface::cellml_services::BDF_IMPLICIT_1_5_SOLVE);
+		osr->setStepSizeControl(1e-6,1e-6,1.0,0.0,1.0);
+		osr->setResultRange(0.0,m_Timepoints[m_Timepoints.size()-1].first,m_Timepoints[m_Timepoints.size()-1].first);	// TODO Maximum point density?
+
+		// Set ODE solver's reporting timestep to match that of the experiment
+		if(m_ReportStep!=0.0)
+			osr->setTabulationStepControl(m_ReportStep,true);
+		else
+			osr->setTabulationStepControl(1.0,true);	// default to reporting result every 1 second
 
 		// Run the solver
-       calc_started=time(NULL);		// solver start time
-       osr->start();
-	   
-	   // Wait until the solver has completed
-       while(!po->finished())
-       {
-           usleep(1000);	// wait 1ms for the ODE solver
-           if(m_MaxTime)
-           {
-               time_t t=time(NULL);		// current time
-			   // Check if the solver is running over maximum time
-               if((unsigned long)(t-calc_started)>m_MaxTime)
-               {
-                   po->failed("Took too long to integrate");
-                   throw CellMLException();
-               }
-           }
-       }      
+		calc_started=time(NULL);		// solver start time
+		osr->start();
 
-	   // Regression analysis
-       if(!po->failed())
-       {
-           std::vector<double> vd;
-           std::vector<std::pair<int,double> > results;
-           int recsize=po->GetResults(vd);	// get ODE simulation result as 1D-vector and record size
- 
-		   // Construct model estimation vector by collating points from simulation closest to the VE data with respect to time
-		   for(int i=0;i<m_Timepoints.size();i++)
-		   {
-			   bool b_match=false;
-			   double diff;
-			   double t_target=m_Timepoints[i].first;
-			   int best_est;
+		// Wait until the solver has completed
+		while(!po->finished())
+		{
+			usleep(1000);	// wait 1ms for the ODE solver
+			if(m_MaxTime)
+			{
+				time_t t=time(NULL);		// current time
+				// Check if the solver is running over maximum time
+				if((unsigned long)(t-calc_started)>m_MaxTime)
+				{
+					po->failed("Took too long to integrate");
+					throw CellMLException();
+				}
+			}
+		}
 
-			   // Get an estimation from simulation result
-			   for(int j=0;j<vd.size();j+=recsize)
-			   {
-				   if (!b_match)
-				   {
+		// Regression analysis
+		if(!po->failed())
+		{
+			std::vector<double> vd;
+			std::vector<std::pair<int,double> > results;
+			int recsize=po->GetResults(vd);	// get ODE simulation result as 1D-vector and record size
+
+			// Construct model estimation vector by collating points from simulation closest to the VE data with respect to time
+			for(int i=0;i<m_Timepoints.size();i++)
+			{
+				bool b_match=false;
+				double diff;
+				double t_target=m_Timepoints[i].first;
+				int best_est;
+
+				// Get an estimation from simulation result
+				for(int j=0;j<vd.size();j+=recsize)
+				{
+					if(!b_match)
+					{
 						diff=fabs(vd[j]-t_target);
 						b_match=true;
 						best_est=j;
-				   }
-				   else
-				   {
-					   // Update best estimate
-					   if(diff>fabs(vd[j]-t_target))
-					   {
-						   diff=fabs(vd[j]-t_target);
-						   best_est=j;
-					   }
-				   }
-			   }
+					}
+					else
+					{
+						// Update best estimate
+						if(diff>fabs(vd[j]-t_target))
+						{
+							diff=fabs(vd[j]-t_target);
+							best_est=j;
+						}
+					}
+				}
 
-			   // Get m_nResultColumn from m_Variable just once per VE
-			   if(m_nResultColumn<0)
-			   {
-				   m_nResultColumn=po->GetVariableIndex(m_Variable);
-				   if(m_nResultColumn==-1)
-				   {
-					   std::cerr << "Error: VirtualExperiment::Evaluate: Variable " << m_Variable << " does not exist in model: " << currentDateTime() << std::endl;
-					   return INFINITY;
-				   }
-			   }
-			   results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
-		   }
+				// Get m_nResultColumn from m_Variable just once per VE
+				if(m_nResultColumn<0)
+				{
+					m_nResultColumn=po->GetVariableIndex(m_Variable);
+					if(m_nResultColumn==-1)
+					{
+						std::cerr << "Error: VirtualExperiment::Evaluate: Variable " << m_Variable << " does not exist in model: " << currentDateTime() << std::endl;
+						return INFINITY;
+					}
+				}
+				results.push_back(make_pair(i,vd[best_est+m_nResultColumn]));	// add the var of interest
+			}
 
-		   // Evaluate the squared-sum-residual of the model
-		   res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
-	   }
-       else
-           res=INFINITY;	// return INF if simulation failed
-    }
+			// Evaluate the squared-sum-residual of the model
+			res=((results.size()==m_Timepoints.size())?getSSRD(results):INFINITY);
+		}
+		else
+			res=INFINITY;	// return INF if simulation failed
+	}
     catch(CellMLException e)
     {
 		std::cerr << "Error: VirtualExperiment::Evaluate: error evaluating model: " << currentDateTime() << std::endl;
@@ -497,18 +498,16 @@ VEGroup& VEGroup::instance()
 }
 
 
-/**
- *	Evaluate the fitness for the set of model parameters based on the average fitness from supplied VEs
- *	
- *	v contains a list of parameters to characterise a CellML model
- *	
- *	Returns INFINITY if any virtual experiment causes error (by returning inf)	
- *	0.0 returned when the VEGroup object contains no virtual experiments
- **/
+// Evaluate the fitness for the set of model parameters based on the average fitness from supplied VEs
+//
+// v contains a list of parameters to characterise a CellML model
+// 
+// Returns INFINITY if any virtual experiment causes error (by returning inf)	
+// 0.0 returned when the VEGroup object contains no virtual experiments
 double VEGroup::Evaluate(VariablesHolder& v)
 {
     double res=0.0;		// initialise the total residual from all models and VE data points
-    int count=0;	// counter for the number of experiments that yield a finite residual
+    int count=0;		// counter for the number of experiments that yield a finite residual
 
     if(!experiments.size())
         return 0.0;		// no virtual experiments to reference
