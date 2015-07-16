@@ -54,7 +54,7 @@ Note:
 #### Required compiler:
 * mpiicpc: an Intel MPI C++ compiler to compile the codebase. Load onto Pan Cluster's **build node** by:
 ```
-module load intel/ics2013
+module load intel/ics-2013
 ``` 
 
 **Note**: You must be logged onto one of NeSI's "build-nodes" to load a module and compiling
