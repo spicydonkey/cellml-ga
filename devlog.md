@@ -1480,8 +1480,14 @@ Done. Used CellML API.
 
 * [ ] Package the codebase for release
   * [x] Tidy all source/headers
-  * [ ] Tidy directory hierarchy, etc.
-  * [ ] Gather all dependent libraries. e.g. CellML API
+  * [x] Tidy directory hierarchy, etc.
+  * [x] Gather all dependent libraries. e.g. CellML API
+    * MPI suitable c++ compiler: mpiicpc
+	  * intel/ics2013
+    * AdvXMLParser
+	  * Path to ...
+	* cellml-sdk
+	  * Path to ...
 
 * [ ] Push the release
 
@@ -1495,9 +1501,9 @@ Done. Used CellML API.
 * [ ] What makes a slurm job blow up?
 
 ### Packaging TODO
+* [x] User readmes:
+  * [x] What it is
+  * [x] How to compile
+  * [x] How to use
 * [ ] Merge patch onto master in Git
-* [ ] User readmes:
-  * [ ] What it is
-  * [ ] How to compile
-  * [ ] How to use
 * [ ] Latest version release on Github (by Thursday)
