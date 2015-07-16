@@ -13,23 +13,23 @@ std::wstring convert(const std::string& str);	// convert string to a wstring
 double rnd_generate(double min, double max);
 
 
-//pair_equal_to
-//contains the binary operator to evaluate if a pair is equal to an obj (type of first memb)
+// Evaluate equality of pair by comparing the first member
 template<class T,class S> struct pair_equal_to:std::binary_function<T,std::pair<T,S>,bool> {
 	bool operator()(const T& y, const std::pair<T,S>& x) const
 	{
-		return x.first==y;	//pair equal to &T iff its first member is equal to &T
+		return x.first==y;
 	}
 };
 
 
-//returns true if value is within +/- eps from point
+// Evaluate if value is within eps range from point
 inline bool in_range(double point, double value, double eps)
 {
     return (point>=value-eps && point<=value+eps);
 }
 
-#endif
 
-// Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+// Get current date/time: YYYY-MM-DD.HH:mm:ss
 const std::string currentDateTime();
+
+#endif
