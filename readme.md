@@ -126,7 +126,7 @@ Finally, batch the slurm job file! As an example, running `sbatch short.sl` will
 
 ## Creating your own 'Virtual Experiment'
 Quickest way is by looking at an example: adapted from *short.xml* in IP3model problem...
-```
+```xml
 <?xml version="1.0"?>
 <CellMLTimeSeriesFit>
         <GA InitialPopulation="10" Generations="10" Mutation_proportion="0.4" Crossover_proportion="0.30" RNG="1">
