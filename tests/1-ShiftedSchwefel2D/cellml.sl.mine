@@ -14,4 +14,5 @@ module load intel/ics-2013
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/gpfs1m/projects/uoa00322/david.shin/cellml-sdk/lib/
 export LIBRARY_PATH=$LIBRARY_PATH:/gpfs1m/projects/uoa00322/david.shin/cellml-sdk/lib/
+
 srun ../../experiment test.xml -v -v 
