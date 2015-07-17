@@ -50,63 +50,73 @@ Cores  Runtime, min
 128	00:59
 
 
-## How to use
+## Where to start?
 ### Required packages
-#### Required compiler:
-* mpiicpc: an Intel MPI C++ compiler to compile the codebase. Load onto Pan Cluster's **build node** by:
+#### Compiler
+* ***mpiicpc***: an Intel MPI C++ compiler to compile the codebase. Load onto Pan Cluster's *build node* by:
 ```
 module load intel/ics-2013
 ``` 
 
-**Note**: You must be logged onto one of NeSI's "build-nodes" to load a module and compiling
+**Note**: You must be logged onto one of NeSI's "**build-nodes**" to load module and build projects
 
-#### Required libraries:
+#### Libraries
 * CellML-API
 * AdvXMLParser
 
 ---
 
 ### Before you compile
-The first thing you should do is to configure the makefile:
+The first thing you should do is to configure the include paths in **makefile**: *XMLPARSER_PATH* and *CELLML_PATH*.
 
-Configure *XMLPARSER_PATH* to point directly to the **AdvXMLParser** directory. 
+Set *XMLPARSER_PATH* to point directly to the **AdvXMLParser** directory. 
 
 Example:
 ```
-XMLPARSER_PATH=/gpfs1m/projects/uoa00322/mike.cooling/AdvXMLParser
+XMLPARSER_PATH=/projects/uoa00322/mike.cooling/AdvXMLParser
 ```
 
 Configure *CELLML_PATH* to point directly to the **CellML-API** directory.
 
 Example:
 ```
-CELLML_PATH=/gpfs1m/projects/uoa00322/mike.cooling/cellml-sdk
+CELLML_PATH=/projects/uoa00322/mike.cooling/cellml-sdk
 ```
 
 ---
 
-### Compile
-Compile the project by running the makefile:
+### Ready to compile
+Compile the project with the *makefile*:
 ```
 make
 ```
-which should generate the binary **experiment**
+which should generate the binary **experiment** in your current directory.
+
+---
 
 ### Testing
-Test the program by running a short run of the ip3model problem:
+Test the program with some supplied problems in the *tests* sub-directory (No examples for 2D-Ramp model has been supplied):
 
+Jump into any available test folder: 
+
+Example: IP3 model
 ```
 cd tests/3-ip3model
 ```
 
-Edit the exemplar slurm file - short.sl.
+Feel free to look into the example test (XML) and job (Slurm) files.
+
+Before batching any job with the example Slurm files, make sure you configure the library paths!
 
 Since CellML compiler relies on GCC compiler to build the code, LIBRARY_PATH and LD_LIBRARY_PATH 
-should be configured by pointing to CellML library directory.
+should be configured by pointing to CellML **library** directory. For example:
 
-Finally, batch the slurm job file, which runs the ip3-short.xml test on a **single processor**.
 ```
-sbatch short.sl
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
+LIBRARY_PATH=$LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
 ```
+
+Finally, batch the slurm job file! As an example, running `sbatch short.sl` will batch the example test *short.xml* on a single processor.
+
 
 **NOTE**: when submitting a job using MPI library to NeSI, you must import a suitable library e.g. **ictce/5.4.0**/**impi**/**intel/ics-2013** at the Slurm job. The exemplar job description above shows this.
