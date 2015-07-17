@@ -27,7 +27,7 @@ the example below was built with Intel compiler and Intel MPI)
 #SBATCH -o exper_cellml_%j.out		# OPTIONAL
 #SBATCH -e exper_cellml_%j.err		# OPTIONAL
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=user.email@auckland.ac.nz
+#SBATCH --mail-user=user.email@auckland.ac.nz	# Email alerts
 #SBATCH -C sb
 ######################################################
 
@@ -64,20 +64,26 @@ module load intel/ics-2013
 * CellML-API
 * AdvXMLParser
 
+---
+
 ### Before you compile
 The first thing you should do is to configure the makefile:
 
-Configure *PROJ_PATH* to point to the project directory in which the *AdvXMLParser* library is located.
-e.g.
+Configure *XMLPARSER_PATH* to point directly to the **AdvXMLParser** directory. 
+
+Example:
 ```
-PROJ_PATH=/projects/uoa00322/your_personal_project_dir
+XMLPARSER_PATH=/gpfs1m/projects/uoa00322/mike.cooling/AdvXMLParser
 ```
 
-Configure *CELLML_PATH* to point to the installed CellML-API directory.
-e.g.
+Configure *CELLML_PATH* to point directly to the **CellML-API** directory.
+
+Example:
 ```
-CELLML_PATH=/projects/uoa00322/your_personal_project_dir/CELLML_API_DIRECTORY
+CELLML_PATH=/gpfs1m/projects/uoa00322/mike.cooling/cellml-sdk
 ```
+
+---
 
 ### Compile
 Compile the project by running the makefile:
