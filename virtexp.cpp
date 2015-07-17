@@ -512,6 +512,18 @@ double VEGroup::Evaluate(VariablesHolder& v)
     if(!experiments.size())
         return 0.0;		// no virtual experiments to reference
 
+
+	// TODO force an INFINITY if any value is greater than 10
+	for(int i=0;i<v.size();i++)
+	{
+		if(v(v.name(i))>10.0)
+		{
+			std::cerr << "Warning: VEGroup::Evaluate: forcing INFINITY" << currentDateTime() << std::endl;
+			return INFINITY;
+		}
+	}
+
+
 	// iterate through each VE in group
     for(int i=0;i<experiments.size();i++)
     {
