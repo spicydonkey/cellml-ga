@@ -1491,14 +1491,19 @@ Done. Used CellML API.
 
 * [ ] Push the release
 
-* [ ] Write doc for user
+* [x] Write doc for user
 
+* Tidy files
+  * [x] PROJ_PATH --> XMLPARSER_PATH (to directory)
+  * [x] LIBRARY_PATH & LD_LIBRARY_PATH to the "lib" subfolder
+  * [x] Slurm examples (short.sl) should be minimal
 
 ## 17.07.2015
 ### Fix pesky bugs
 * [x] negative allele range causes error at the log-type selection.
   * Just use the lin-type if neg range is given
-* [ ] SetAndInitEngine: only zero-lim iflog-type is appropriate!
+
+* [ ] SetAndInitEngine: only zero-lim if log-type is appropriate!
   * [ ] Must check if log-type is appropriate
 
 ### TODO
@@ -1514,4 +1519,4 @@ Done. Used CellML API.
   * [x] How to use
 * [x] Merge patch onto master in Git
 * [x] Latest version release on Github (by Thursday)
-* [ ] Write example xml test-file
+* [x] Write example xml test-file
