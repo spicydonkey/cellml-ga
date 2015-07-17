@@ -1,13 +1,11 @@
 CC=mpiicpc
 
-# User-configuration
-##############################################
-PROJ_PATH=../AdvXMLParser	# path to the AdvXMLParser directory
-CELLML_PATH=../cellml-sdk	# path to CellML API directory (cellml-sdk)
-##############################################
+# User-configured path
+XMLPARSER_PATH=/gpfs1m/projects/uoa00322/david.shin/AdvXMLParser
+CELLML_PATH=/gpfs1m/projects/uoa00322/david.shin/cellml-sdk	
 
-CFLAGS=-I $(PROJ_PATH)/AdvXMLParser -I $(CELLML_PATH)/include -O
-LFLAGS=-L $(PROJ_PATH)/AdvXMLParser -ladvxml -L $(CELLML_PATH)/lib -lcellml -lcis -Wl,-rpath=$(CELLML_PATH)/lib 
+CFLAGS=-I $(XMLPARSER_PATH) -I $(CELLML_PATH)/include -O
+LFLAGS=-L $(XMLPARSER_PATH) -ladvxml -L $(CELLML_PATH)/lib -lcellml -lcis -Wl,-rpath=$(CELLML_PATH)/lib 
 
 SOURCES=experiment.cpp virtexp.cpp utils.cpp cellml_observer.cpp distributor.cpp 
 INCLUDES=virtexp.h utils.h GAEngine.h GAEngine.cpp cellml_observer.h distributor.h
