@@ -2,7 +2,7 @@ CC=mpiicpc
 
 # User-configured path
 XMLPARSER_PATH=/gpfs1m/projects/uoa00322/david.shin/AdvXMLParser
-CELLML_PATH=/gpfs1m/projects/uoa00322/david.shin/cellml-sdk	
+CELLML_PATH=/gpfs1m/projects/uoa00322/david.shin/cellml-sdk
 
 CFLAGS=-I $(XMLPARSER_PATH) -I $(CELLML_PATH)/include -O
 LFLAGS=-L $(XMLPARSER_PATH) -ladvxml -L $(CELLML_PATH)/lib -lcellml -lcis -Wl,-rpath=$(CELLML_PATH)/lib 
