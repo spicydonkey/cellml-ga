@@ -16,4 +16,4 @@ module load intel/ics-2013
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../../../cellml-sdk/lib/
 export LIBRARY_PATH=$LIBRARY_PATH:../../../cellml-sdk/lib/
 
-srun ../../experiment ip3-lge.xml -v -v 
+srun ../../experiment large.xml -v -v 
