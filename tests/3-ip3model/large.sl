@@ -10,8 +10,10 @@
 #SBATCH -C sb
 ######################################################
 
-module load ictce/5.4.0
+module load intel/ics-2013 
 
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
-#export LIBRARY_PATH=$LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
+# User-configured paths
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:
+export LIBRARY_PATH=$LIBRARY_PATH:
+
 srun ../../experiment ip3-lge.xml -v -v 

@@ -10,9 +10,10 @@
 #SBATCH -C sb
 ######################################################
 
-module load ictce/5.4.0
+module load intel/ics-2013 
 
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:
-#export LIBRARY_PATH=$LIBRARY_PATH:
+# User-configured paths
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:
+export LIBRARY_PATH=$LIBRARY_PATH:
 
 srun ../../experiment ip3-short.xml -v -v 
