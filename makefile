@@ -1,7 +1,10 @@
 CC=mpiicpc
 
-PROJ_PATH=/YOUR/PROJECT/PATH
-CELLML_PATH=/PATH/TO/CELLML_API/LIBRARY
+# User-configuration
+##############################################
+PROJ_PATH=/PATH/TO/ADVXMLPARSER/DIRECTORY	# path to the AdvXMLParser directory
+CELLML_PATH=/PATH/TO/CELLML_API/DIRECTORY	# path to CellML API directory (cellml-sdk)
+##############################################
 
 CFLAGS=-I $(PROJ_PATH)/AdvXMLParser -I $(CELLML_PATH)/include -O
 LFLAGS=-L $(PROJ_PATH)/AdvXMLParser -ladvxml -L $(CELLML_PATH)/lib -lcellml -lcis -Wl,-rpath=$(CELLML_PATH)/lib 
