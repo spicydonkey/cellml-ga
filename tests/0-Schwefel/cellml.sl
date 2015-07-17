@@ -10,8 +10,12 @@
 #SBATCH -C sb
 ######################################################
 
-module load impi
+module load intel/ics-2013 
 
+# User-configured paths
+######################################################
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/PATH/TO/CELLML-API/cellml-sdk/lib/
 export LIBRARY_PATH=$LIBRARY_PATH:/PATH/TO/CELLML-API/cellml-sdk/lib/
+######################################################
+
 srun ../../experiment test.xml -v -v 
