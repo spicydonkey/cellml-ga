@@ -118,5 +118,52 @@ LIBRARY_PATH=$LIBRARY_PATH:/projects/uoa00322/mike.cooling/cellml-sdk/lib/
 
 Finally, batch the slurm job file! As an example, running `sbatch short.sl` will batch the example test *short.xml* on a single processor.
 
+---
 
 **NOTE**: when submitting a job using MPI library to NeSI, you must import a suitable library e.g. **ictce/5.4.0**/**impi**/**intel/ics-2013** at the Slurm job. The exemplar job description above shows this.
+
+---
+
+## Creating your own 'Virtual Experiment'
+Quickest way is by looking at an example: adapted from *short.xml* in IP3model problem...
+```
+<?xml version="1.0"?>
+<CellMLTimeSeriesFit>
+        <GA InitialPopulation="10" Generations="10" Mutation_proportion="0.4" Crossover_proportion="0.30" RNG="1">
+                <Alleles>
+                        <Allele Name="kf5" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+                        <Allele Name="kf4" LowerBound="1.0e-8" UpperBound="9.999e2"/>
+                        ...
+                        <Allele Name="Rpc" LowerBound="1.0e-2" UpperBound="5e3"/>
+                </Alleles>
+        </GA>
+        <VirtualExperiments>
+                <VirtualExperiment ModelFilePath="ip3model.cellml" Variable="IP3" ReportStep="50.0">
+                <!-- note this VE doesn't have any Parameters to set, but next VE does (ie optional Parameters entity here) -->
+                        <AssessmentPoints>
+                                <AssessmentPoint time="100.0" target="0.026761882" />
+                                <AssessmentPoint time="200.0" target="0.032711469" />
+                                ...
+                                <AssessmentPoint time="10000.0" target="0.015490316" />
+                        </AssessmentPoints>
+                </VirtualExperiment>
+                <VirtualExperiment ModelFilePath="ip3model.cellml" Variable="Ca" ReportStep="50.0">
+                        <Parameters>
+                                <Parameter ToSet="Ls" Value="5.0"/>
+                        </Parameters>
+                        <AssessmentPoints>
+                                <AssessmentPoint time="100.0" target="0.1" />
+                                ...
+                                <AssessmentPoint time="10000.0" target="0.099907954" />
+                        </AssessmentPoints>
+                </VirtualExperiment>
+                <VirtualExperiment>
+                        ...
+                </VirtualExperiment>
+                ...
+                <VirtualExperiment>
+                        ...
+                </VirtualExperiment>
+        </VirtualExperiments>
+</CellMLTimeSeriesFit>
+```
